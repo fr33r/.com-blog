@@ -2,7 +2,7 @@
 title = "Building a Pi Cluster"
 date = "2022-08-06T21:22:01-07:00"
 author = "fr33r"
-cover = "raspberry-pi.png"
+cover = "cover.png"
 tags = ["build", "tutorial", "nerdy"]
 keywords = ["hardware", "raspberry", "pi", "cluster"]
 description = "My journey of building a Raspberry Pi cluster."

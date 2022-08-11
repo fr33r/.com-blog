@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>motivation on Terminal</title>
+    <link>/tags/motivation/</link>
+    <description>Recent content in motivation on Terminal</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 04 Aug 2022 20:07:09 -0700</lastBuildDate><atom:link href="/tags/motivation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Why Blog?</title>
+      <link>/posts/why-blog/</link>
+      <pubDate>Thu, 04 Aug 2022 20:07:09 -0700</pubDate>
+      
+      <guid>/posts/why-blog/</guid>
+      <description>being a successful software engineer requires solid communication bring others along for the ride; see your vision work through kinks of ideas; solutions are almost always too large to completely load up cognitively code reviews are excellent quality control and educations tools having a blog is a different way to sharpen the knife - expressing technical concepts so that they can digestable more broadly. want to find new ways to get better at this.</description>
+      <content>&lt;ul&gt;
+&lt;li&gt;being a successful software engineer requires solid communication
+&lt;ul&gt;
+&lt;li&gt;bring others along for the ride; see your vision&lt;/li&gt;
+&lt;li&gt;work through kinks of ideas; solutions are almost always too large to completely load up cognitively&lt;/li&gt;
+&lt;li&gt;code reviews are excellent quality control and educations tools&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;having a blog is a different way to sharpen the knife - expressing technical concepts
+so that they can digestable more broadly. want to find new ways to get better at this.&lt;/p&gt;
+&lt;p&gt;ever since my first days of coding, i&amp;rsquo;ve see a huge need to decomplexify complex topics.
+in college, it was common for academics to flex as a show of knowledge prowess, and i found
+it to be detrimental. i aspire to make various topics approachable.&lt;/p&gt;
+&lt;p&gt;it&amp;rsquo;s a way to get a fresh avenue of perspective and ideas! who knows who will comment on my stuff!&lt;/p&gt;
+&lt;p&gt;so much in tech is rework. an engineer could literally build the same application / components at every
+company they work at. blogs are my way of attempting to share whatever knowledge i have to help
+others not re-invent the wheel. let&amp;rsquo;s coordinate people!&lt;/p&gt;
+&lt;p&gt;lastly, it&amp;rsquo;s a great way to consolidate knowledge &amp;amp; learnings. i love learning new things,
+but time can be the enemy of retention. taking note of the details empowers me to come
+back up to speed on previous topics faster!&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

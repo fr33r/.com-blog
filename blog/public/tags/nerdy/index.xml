@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>nerdy on Terminal</title>
+    <link>/tags/nerdy/</link>
+    <description>Recent content in nerdy on Terminal</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 06 Aug 2022 21:22:01 -0700</lastBuildDate><atom:link href="/tags/nerdy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building a Pi Cluster</title>
+      <link>/posts/building-a-pi-cluster/</link>
+      <pubDate>Sat, 06 Aug 2022 21:22:01 -0700</pubDate>
+      
+      <guid>/posts/building-a-pi-cluster/</guid>
+      <description>Having been a software engineer for years, I had heard about Raspberry Pi computers, and the tinkering people were doing with them. Despite the chatter, I didn&amp;rsquo;t have any sort of project in mind, and honestly didn&amp;rsquo;t take the time learn about them. One year when the holiday season began rolling around, the team decided to partake in a &amp;ldquo;secret santa&amp;rdquo; gift giving activity. Without any better ideas, I put down that I was interesting an a Raspberry Pi.</description>
+      <content>&lt;p&gt;Having been a software engineer for years, I had heard about Raspberry Pi
+computers, and the tinkering people were doing with them. Despite the chatter,
+I didn&amp;rsquo;t have any sort of project in mind, and honestly didn&amp;rsquo;t take the time
+learn about them. One year when the holiday season began rolling around, the
+team decided to partake in a &amp;ldquo;secret santa&amp;rdquo; gift giving activity. Without any
+better ideas, I put down that I was interesting an a Raspberry Pi.&lt;/p&gt;
+&lt;p&gt;Fast-forward 3 years later and I finally found a project that I was genuinely
+excited about: creating a Raspberry Pi cluster. I dug up that model 3B+ that I
+got from the gift exchange years prior to began setting it up for the first
+time, and I&amp;rsquo;ve been at it ever since!&lt;/p&gt;
+&lt;h1 id=&#34;hardware&#34;&gt;Hardware&lt;/h1&gt;
+&lt;p&gt;In order to build a Raspberry Pi cluster, you need some gear! Lets walk through
+the various items I ended up with.&lt;/p&gt;
+&lt;h4 id=&#34;pis&#34;&gt;Pis&lt;/h4&gt;
+&lt;p&gt;The most important part of the Pi cluster is&amp;hellip; well&amp;hellip; the Pis!&lt;/p&gt;
+&lt;p&gt;I received one as a gift - check! The remaining three I needed to source internationally
+(more on that later). To future proof, I was aiming for the model 4B. Although
+it would&amp;rsquo;ve been nice to get my hands on a 4GB or 8GB configuration, they were
+basically myths during these times. I settled for 3 2GB models.&lt;/p&gt;
+&lt;h4 id=&#34;poe-hats&#34;&gt;PoE+ Hats&lt;/h4&gt;
+&lt;p&gt;Given power supplies aren&amp;rsquo;t included with the Pi itself, I knew that powering
+my cluster was going to involve spending some additional money.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;https://www.adafruit.com/product/4298?gclid=Cj0KCQjwxb2XBhDBARIsAOjDZ37bms37yK_7GGNQR5pZ6oqvTZTzyaVe16QH8_NynBC47z0yp6GJZc0aAgFnEALw_wcB&#34;&gt;official power supply&lt;/a&gt; goes for around $8 dollars. Knowing that I was going to shoot for 4 Pis, that was going
+to cost me $32 dollars. That wasn&amp;rsquo;t even including the money I&amp;rsquo;d need to spend
+on zip ties and the time I&amp;rsquo;d need to spend to cable manage. Lastly, I simply
+couldn&amp;rsquo;t justify using 4 outlets!&lt;/p&gt;
+&lt;p&gt;This is where &lt;a href=&#34;https://en.wikipedia.org/wiki/Power_over_Ethernet&#34;&gt;Power over Ethernet (PoE)&lt;/a&gt; comes to the rescue. With the correct
+networking equipment, enough power to drive the Pis can be delivered over a
+simple ethernet cable. No more outlet waste or time spent cable managing! But
+there is one catch.&lt;/p&gt;
+&lt;p&gt;The Pis themselves can&amp;rsquo;t be powered over ethernet. An &lt;a href=&#34;https://www.adafruit.com/product/5058&#34;&gt;additional hat&lt;/a&gt; needs to
+be purchased to achieve this, and they aren&amp;rsquo;t exactly cheap. That said, they
+are well worth the price. They are super easy to install on the Pis, plenty of
+cases have enough space for them, and they solve the gripes around multiple
+power supplies.&lt;/p&gt;
+&lt;h4 id=&#34;switch&#34;&gt;Switch&lt;/h4&gt;
+&lt;p&gt;When it comes to PoE+ switches, the main thing to focus on is the number of ports.
+Obviously, the more ports, the more you will end up spending. No more than 4 Pis
+are needed for my build, so I went with the &lt;a href=&#34;https://www.amazon.com/dp/B08LHL1Q2Z?psc=1&amp;amp;ref=ppx_yo2ov_dt_b_product_details&#34;&gt;Netgear GS305P (v2)&lt;/a&gt;. This switch
+is &lt;a href=&#34;https://www.fieldengineer.com/blogs/network-switch-managed-vs-unmanaged#:~:text=An%20unmanaged%20switch%20is%20simple,systems%20to%20a%20larger%20network.&#34;&gt;unmanaged&lt;/a&gt; (no smartness) and has 5 ports, one of which being the ingress
+from your existing internet connection.&lt;/p&gt;
+&lt;h4 id=&#34;memory&#34;&gt;Memory&lt;/h4&gt;
+&lt;p&gt;Each Pi has a micro SD card slot that acts as onboard storage. For my use cases,
+I knew I was going to use a network attached storage (NAS) device to store all
+of my data, so using a smaller SD card made sense. I ultimately landed on
+snagging some &lt;a href=&#34;https://www.officedepot.com/a/products/8224492/SanDisk-Ultra-PLUS-microSD-Cards-32GB/&#34;&gt;SanDisk 32GB cards&lt;/a&gt;, which will be plenty of space for my needs.&lt;/p&gt;
+&lt;h4 id=&#34;cables&#34;&gt;Cables&lt;/h4&gt;
+&lt;p&gt;To deliver both power and data to the Pis, I needed some ethernet cables. My
+only desire for these was that they were small (also called &lt;a href=&#34;https://www.cables.com/cablesblog/ethernet-vs-patch-cables-whats-the-difference.html&#34;&gt;patch cables&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;I found that cables were typically sized in 6 inch increments. Many places
+didn&amp;rsquo;t sell patch cables smaller than 1 foot, but I eventually found &lt;a href=&#34;https://www.amazon.com/dp/B06XC5PZLV?psc=1&amp;amp;ref=ppx_yo2ov_dt_b_product_details&#34;&gt;some&lt;/a&gt; online
+without too much trouble.&lt;/p&gt;
+&lt;p&gt;If you are looking for any slack at all, I&amp;rsquo;d recommend get cables that are about
+1 foot in length. Additionally, my cables all weren&amp;rsquo;t the exact same size, so
+if sizing consistency is super important, I wouldn&amp;rsquo;t buy the cables I ended up
+getting.&lt;/p&gt;
+&lt;h4 id=&#34;case&#34;&gt;Case&lt;/h4&gt;
+&lt;p&gt;Now that I had picked out all of my parts, I needed a case to put it in. After
+a little digging, I stumbled upon &lt;a href=&#34;https://www.uctronics.com/&#34;&gt;Uctronics&lt;/a&gt; which produces many &lt;a href=&#34;https://www.uctronics.com/cluster-and-rack-mount/for-raspberry-pi/cluster.html&#34;&gt;products
+specific to Pi clusters&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In particular, I wanted something that could not only house my Pis (keeping in
+mind they each would have a PoE+ hat installed), but also someting that would
+also house my PoE+ switch, and provide simple access to the Pis in case I needed
+change anything.&lt;/p&gt;
+&lt;h1 id=&#34;cost-breakdown&#34;&gt;Cost Breakdown&lt;/h1&gt;
+&lt;p&gt;Below outlines the cost of my build (excluding state-side taxes; VAT was included in some
+of the purchases). Keep in mind that the chip shortage, high
+inflation, and supply chain woes led to higher costs than what was likely achievable
+historically for the same parts.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Line Item&lt;/th&gt;
+&lt;th&gt;Price ($)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.adafruit.com/product/3775&#34;&gt;Raspberry Pi 3B+ (1GB)&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$35.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Raspberry Pi 4B (2GB)&lt;/td&gt;
+&lt;td&gt;$52.92&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Raspberry Pi 4B (2GB)&lt;/td&gt;
+&lt;td&gt;$45.78&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Raspberry Pi 4B (2GB)&lt;/td&gt;
+&lt;td&gt;$45.79&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.adafruit.com/product/2336&#34;&gt;Standoffs&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$8.16&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.amazon.com/UCTRONICS-Upgraded-Enclosure-Raspberry-Removable/dp/B09JNHKL2N&#34;&gt;Case&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$69.99&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.amazon.com/dp/B09TP9HT3C?psc=1&amp;amp;ref=ppx_yo2ov_dt_b_product_details&#34;&gt;Case Fan Adaptor&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$5.99&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.amazon.com/dp/B08LHL1Q2Z?psc=1&amp;amp;ref=ppx_yo2ov_dt_b_product_details&#34;&gt;Switch&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$69.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.adafruit.com/product/5058&#34;&gt;PoE+ Hat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$20.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.adafruit.com/product/5058&#34;&gt;PoE+ Hat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$20.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.adafruit.com/product/5058&#34;&gt;PoE+ Hat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$20.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.adafruit.com/product/5058&#34;&gt;PoE+ Hat&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$20.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.amazon.com/dp/B06XC5PZLV?psc=1&amp;amp;ref=ppx_yo2ov_dt_b_product_details&#34;&gt;Cables&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$14.49&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.officedepot.com/a/products/8224492/SanDisk-Ultra-PLUS-microSD-Cards-32GB/&#34;&gt;Micro SD Card (x2)&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$22.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.officedepot.com/a/products/8224492/SanDisk-Ultra-PLUS-microSD-Cards-32GB/&#34;&gt;Micro SD Card (x2)&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;$22.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Shipping&lt;/td&gt;
+&lt;td&gt;$76.76&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Total&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;$547.88&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;I was also very fortunate in that the Raspberry Pi 3B+ was a gift (as mentioned
+previously) and that I had accumulated some Adafruit gift cards up to this point!&lt;/p&gt;
+&lt;h1 id=&#34;what-went-well&#34;&gt;What went well&lt;/h1&gt;
+&lt;h4 id=&#34;heading&#34;&gt;&lt;/h4&gt;
+&lt;h1 id=&#34;what-went-not-so-well&#34;&gt;What went not so well&lt;/h1&gt;
+&lt;h4 id=&#34;incomplete-case&#34;&gt;Incomplete Case&lt;/h4&gt;
+&lt;p&gt;Even though the quality of the case I got was solid, it was annoyingly incomplete.&lt;/p&gt;
+&lt;p&gt;The first strike with the case was that it came with fans that could be powered
+by the Pi, but didn&amp;rsquo;t include the adaptor necessary. I actually didn&amp;rsquo;t realize
+this until I was building the case, as the instruction manual that came with it
+referenced the part but it wasn&amp;rsquo;t included. I find it pretty strange that the fans
+come with the case but the adaptor isn&amp;rsquo;t included.&lt;/p&gt;
+&lt;p&gt;My next gripe was that the case avertises that it is compatible with the
+PoE+ hat, but didn&amp;rsquo;t come equipped with standoffs compatible with the case.
+Instead it came with screws to secure the Pis to the trays, which would essentially
+be all that is necessary if there were no hats installed. I give Uctronics more
+of a pass here, given not all builds will use hats, but found the advertising
+misleading.&lt;/p&gt;
+&lt;p&gt;These shortcomings were the only reason I needed to purchase the standoffs and
+the fan adaptor, resulting in a total investment in the case to be ~$85, which
+I found to be pretty expensive - more expensive than the &lt;a href=&#34;https://www.amazon.com/Thermaltake-Suppressor-Certified-Computer-CA-1E6-00S1WN-00/dp/B017NWO5V2&#34;&gt;case&lt;/a&gt; I have for my mini-ITX
+build.&lt;/p&gt;
+&lt;h4 id=&#34;lack-of-pi-availability&#34;&gt;(Lack of) Pi Availability&lt;/h4&gt;
+&lt;p&gt;My interest in creating a Raspberry Pi cluster couldn&amp;rsquo;t have been piqued at a
+worse time in terms of availability. Due to both &lt;a href=&#34;https://www.raspberrypi.com/news/production-and-supply-chain-update/&#34;&gt;supply constraints and increased
+demand&lt;/a&gt;, they have been nearly impossible to comeby.&lt;/p&gt;
+&lt;p&gt;After quickly learning that there was no way I was going to be able to purchase
+my Pis from &lt;a href=&#34;https://www.adafruit.com/&#34;&gt;Adafruit&lt;/a&gt;, &lt;a href=&#34;https://www.digikey.com/&#34;&gt;Digikey&lt;/a&gt;, or any other retailer I was a previous customer of,
+I briefly looked at alternative marketplaces such as Facebook. It was clear that
+was going to be a dead-end as well since the only sellers were gouging hard; we&amp;rsquo;re
+talking $100+ for model 4B (2G) which &lt;a href=&#34;https://www.adafruit.com/product/4292&#34;&gt;normally retails for $45&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I finally discovered a website called &lt;a href=&#34;https://rpilocator.com/&#34;&gt;rpilocator&lt;/a&gt;, which was
+completely dedicated to help solving this issue. It was through this website that
+I was fortunate enough to snag 3 model 4B (2G) Pis.&lt;/p&gt;
+&lt;p&gt;This wasn&amp;rsquo;t a quick process though; it took 2-3 months for the timing to line up right.
+It&amp;rsquo;s also worth mentioning that nearly all of these vendor websites have a policy of
+1 Pi per customer, which made things more difficult. I even saw various vendors
+adapt very strict policies that only previously existing customers could purchase them, or that
+they were no longer going to ship them internationally.&lt;/p&gt;
+&lt;h4 id=&#34;cost&#34;&gt;Cost&lt;/h4&gt;
+&lt;p&gt;Although there were certainly some market elements that were out of my control
+that contributed to the overall price (particularly shipping), there was opportunity
+to cut costs in several areas.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Power Supplies vs. PoE Switch&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;In total, I spent $150 dollars on the PoE+ specific line items alone. Assuming
+you already have an existing switch with 4 available ports, as well as 4 available
+power outlets, that would translate to avoiding around $115 of cost, given you&amp;rsquo;d
+need to purchase the power supplies instead (around $32 + shipping).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Case&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;As previously mentioned, I ended up sinking $85 into my case for the Pi cluster.
+Sure it came with some frills, but it&amp;rsquo;s arguable whether they justify the extra bucks.
+It would definitely be possible to get away with a $15 dollar case like &lt;a href=&#34;https://vilros.com/products/vilros-acrylic-4-layer-clear-case-box-enclosure-for-raspberry-pi?variant=29408411877470&amp;amp;currency=USD&amp;amp;utm_medium=product_sync&amp;amp;utm_source=google&amp;amp;utm_content=sag_organic&amp;amp;utm_campaign=sag_organic&amp;amp;gclid=EAIaIQobChMI9ZLJzbC7-QIV9AjnCh0WpAUbEAQYASABEgLszPD_BwE&#34;&gt;this one&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&#34;was-the-cost-worth-it&#34;&gt;Was the cost worth it?&lt;/h1&gt;
+&lt;p&gt;So was the cost worth it? With so many different Infrastructure as a Service (IaaS)
+companies such as Linode, Amazon Web Service (AWS), etc. this is a question
+that gets asked more an more.&lt;/p&gt;
+&lt;p&gt;To get a sense of this, let&amp;rsquo;s consider what the cost could be if I were to choose
+a provider such as Linode to host my cluster instead.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;NOTE: This is a rough comparison, as the exact specs of my build are not
+a purchasable configuration.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;contender-1-pi-cluster&#34;&gt;Contender #1: Pi Cluster&lt;/h4&gt;
+&lt;p&gt;To kick this off, let&amp;rsquo;s get an idea of the (estimated) all in costs for the Pi cluster.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ve already highlighted the hardware costs above, but what about electricity costs?
+Since all of the Pis are being powered by a single PoE+ switch, we can compute the
+electricity costs by determining the power usage of the switch and how long we plan
+to have it running.&lt;/p&gt;
+&lt;p&gt;With all ports utilized (which they are), the switch can draw up to 60W of power.
+I plan on keeping this cluster up and running all day, everyday. Lastly, we&amp;rsquo;ll
+need to factor in average electricity rates for my state.&lt;/p&gt;
+&lt;p&gt;With the help of &lt;a href=&#34;https://www.energy.gov/energysaver/maps/appliance-energy-calculator&#34;&gt;this calculator&lt;/a&gt;, it appears that all adds up to ~$131 annually.
+Using simple maths, I came up with the following breakdown (rounding up the hardware costs to $550):&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Configuration&lt;/th&gt;
+&lt;th&gt;Up Front Cost&lt;/th&gt;
+&lt;th&gt;Cost per Month&lt;/th&gt;
+&lt;th&gt;After 6 Months&lt;/th&gt;
+&lt;th&gt;After 12 Months&lt;/th&gt;
+&lt;th&gt;After 18 Months&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Pi Cluster&lt;/td&gt;
+&lt;td&gt;~$550&lt;/td&gt;
+&lt;td&gt;$11&lt;/td&gt;
+&lt;td&gt;$616&lt;/td&gt;
+&lt;td&gt;$682&lt;/td&gt;
+&lt;td&gt;$748&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id=&#34;contender-2-linode&#34;&gt;Contender #2: Linode&lt;/h4&gt;
+&lt;p&gt;First, let&amp;rsquo;s take a look at some &lt;a href=&#34;https://www.linode.com/products/shared/&#34;&gt;Linode shared hosting&lt;/a&gt; plans:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Plan&lt;/th&gt;
+&lt;th&gt;CPU Core Count&lt;/th&gt;
+&lt;th&gt;Cost per Month&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Linode 2GB&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Linode 4GB&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;$20&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Linode 8GB&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;$40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;My cluster has 16 CPU cores (each Pi has 4) and a total of 7GB of RAM. To attempt a fair comparison,
+I&amp;rsquo;ll break down the comparisons into two sections: matching RAM and matching CPU.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Matching RAM&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The following configurations achieve 8GB RAM.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Configuration&lt;/th&gt;
+&lt;th&gt;Cost per Month&lt;/th&gt;
+&lt;th&gt;After 6 Months&lt;/th&gt;
+&lt;th&gt;After 12 Months&lt;/th&gt;
+&lt;th&gt;After 18 Months&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;4 x Linode 2GB&lt;/td&gt;
+&lt;td&gt;$40&lt;/td&gt;
+&lt;td&gt;$240&lt;/td&gt;
+&lt;td&gt;$480&lt;/td&gt;
+&lt;td&gt;$720&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2 x Linode 4GB&lt;/td&gt;
+&lt;td&gt;$40&lt;/td&gt;
+&lt;td&gt;$240&lt;/td&gt;
+&lt;td&gt;$480&lt;/td&gt;
+&lt;td&gt;$720&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1 x Linode 8GB&lt;/td&gt;
+&lt;td&gt;$40&lt;/td&gt;
+&lt;td&gt;$240&lt;/td&gt;
+&lt;td&gt;$480&lt;/td&gt;
+&lt;td&gt;$720&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;With this approach, my Pi cluster would prove to be more cost effective after &lt;strong&gt;~19 months&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Matching CPU Core Count&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The following configurations achieve 16 CPU cores.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Configuration&lt;/th&gt;
+&lt;th&gt;Cost per Month&lt;/th&gt;
+&lt;th&gt;After 6 Months&lt;/th&gt;
+&lt;th&gt;After 12 Months&lt;/th&gt;
+&lt;th&gt;After 18 Months&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;16 x Linode 2GB&lt;/td&gt;
+&lt;td&gt;$160&lt;/td&gt;
+&lt;td&gt;$960&lt;/td&gt;
+&lt;td&gt;$1920&lt;/td&gt;
+&lt;td&gt;$2880&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;8 x Linode 4GB&lt;/td&gt;
+&lt;td&gt;$160&lt;/td&gt;
+&lt;td&gt;$960&lt;/td&gt;
+&lt;td&gt;$1920&lt;/td&gt;
+&lt;td&gt;$2880&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;4 x Linode 8GB&lt;/td&gt;
+&lt;td&gt;$160&lt;/td&gt;
+&lt;td&gt;$960&lt;/td&gt;
+&lt;td&gt;$1920&lt;/td&gt;
+&lt;td&gt;$2880&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;With this approach, my Pi cluster would prove to be more cost effective after &lt;strong&gt;~3.75 months&lt;/strong&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h4&gt;
+&lt;p&gt;Yes, at least for me it was worth it, but only because I plan on hosting this
+cluster in perpituity, want to have the extra control over my data, and want the
+performance of dedicated hosting. The experience of learning how to build the
+cluster from scratch is also an added educational bonus.&lt;/p&gt;
+&lt;p&gt;To be honest though, this experienced showed me that it&amp;rsquo;s probably better to at
+least start out by using an IaaS platform. Depending on the configuration, you
+could achieve a comparable setup that is actually cheaper for 12 or even 18 months.&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>
