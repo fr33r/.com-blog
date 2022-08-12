@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>build on Terminal</title>
+    <title>build on /* Commentary */</title>
     <link>/tags/build/</link>
-    <description>Recent content in build on Terminal</description>
+    <description>Recent content in build on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 06 Aug 2022 21:22:01 -0700</lastBuildDate><atom:link href="/tags/build/index.xml" rel="self" type="application/rss+xml" />

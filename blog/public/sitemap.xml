@@ -2,22 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/</loc>
+    <lastmod>2022-08-12T14:01:08-07:00</lastmod>
+  </url><url>
+    <loc>/posts/docker-memory-constraints/</loc>
+    <lastmod>2022-08-12T14:01:08-07:00</lastmod>
+  </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2022-08-12T14:01:08-07:00</lastmod>
+  </url><url>
+    <loc>/about/</loc>
+    <lastmod>2022-08-12T09:44:28-07:00</lastmod>
+  </url><url>
+    <loc>/powered-by/</loc>
+    <lastmod>2022-08-12T09:44:28-07:00</lastmod>
+  </url><url>
+    <loc>/tags/devops/</loc>
+    <lastmod>2022-08-10T20:43:31-07:00</lastmod>
+  </url><url>
+    <loc>/tags/fix/</loc>
+    <lastmod>2022-08-10T20:43:31-07:00</lastmod>
+  </url><url>
+    <loc>/tags/nerdy/</loc>
+    <lastmod>2022-08-10T20:43:31-07:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2022-08-10T20:43:31-07:00</lastmod>
+  </url><url>
+    <loc>/posts/github-environments-and-secrets/</loc>
+    <lastmod>2022-08-10T20:43:31-07:00</lastmod>
+  </url><url>
     <loc>/tags/build/</loc>
     <lastmod>2022-08-06T21:22:01-07:00</lastmod>
   </url><url>
     <loc>/posts/building-a-pi-cluster/</loc>
-    <lastmod>2022-08-06T21:22:01-07:00</lastmod>
-  </url><url>
-    <loc>/tags/nerdy/</loc>
-    <lastmod>2022-08-06T21:22:01-07:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2022-08-06T21:22:01-07:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2022-08-06T21:22:01-07:00</lastmod>
-  </url><url>
-    <loc>/</loc>
     <lastmod>2022-08-06T21:22:01-07:00</lastmod>
   </url><url>
     <loc>/tags/tutorial/</loc>

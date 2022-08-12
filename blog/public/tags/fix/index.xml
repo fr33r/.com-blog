@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>fix on /* Commentary */</title>
+    <link>/tags/fix/</link>
+    <description>Recent content in fix on /* Commentary */</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 10 Aug 2022 20:43:31 -0700</lastBuildDate><atom:link href="/tags/fix/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tale of the Unknown GitHub Secrets</title>
+      <link>/posts/github-environments-and-secrets/</link>
+      <pubDate>Wed, 10 Aug 2022 20:43:31 -0700</pubDate>
+      
+      <guid>/posts/github-environments-and-secrets/</guid>
+      <description>When building out the deployment pipeline for this blog, I had my first run-in with Github Actions. In particular, my goal was to automatically generate a new Docker image when I push changes to the GitHub repository containing the source files, and push that Docker image to my corresponding DockerHub repository.
+What secrets? In order to achieve this, I reached for docker/login-action. This straightforward action essentially takes the credentials provided to it and logs into DockerHub using those credentials.</description>
+      <content>&lt;p&gt;When building out the deployment pipeline for this blog, I had my first run-in
+with &lt;a href=&#34;https://github.com/features/actions&#34;&gt;Github Actions&lt;/a&gt;. In particular, my goal was to automatically generate a
+new Docker image when I push changes to the GitHub repository containing
+the source files, and push that Docker image to my corresponding DockerHub repository.&lt;/p&gt;
+&lt;h1 id=&#34;what-secrets&#34;&gt;What secrets?&lt;/h1&gt;
+&lt;p&gt;In order to achieve this, I reached for &lt;a href=&#34;https://github.com/marketplace/actions/docker-login&#34;&gt;&lt;code&gt;docker/login-action&lt;/code&gt;&lt;/a&gt;. This straightforward
+action essentially takes the credentials provided to it and logs into DockerHub
+using those credentials.&lt;/p&gt;
+&lt;p&gt;I went ahead and bootstrapped a &lt;a href=&#34;https://github.com/fr33r/.com-blog/blob/main/.github/workflows/docker.yml&#34;&gt;workflow configuration&lt;/a&gt; based on the example
+provided in the &lt;a href=&#34;https://github.com/marketplace/actions/docker-login&#34;&gt;documentation for the DockerHub registry&lt;/a&gt;, and created the
+&lt;code&gt;DOCKERHUB_USERNAME&lt;/code&gt; and &lt;code&gt;DOCKERHUB_PASSWORD&lt;/code&gt; secrets in GitHub.&lt;/p&gt;
+&lt;p&gt;Then it was time to test. I went ahead and pushed some changes to trigger the
+workflow, and then&amp;hellip;&lt;/p&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;1&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;1&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;output&lt;/span&gt;
+      
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-output&#34; &gt;&lt;code&gt;
+Run docker/login-action@v2
+  with:
+    ecr: auto
+    logout: true
+Error: Username and password required
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;p&gt;Hmm, strange.&lt;/p&gt;
+&lt;p&gt;I know I created the secrets and &lt;a href=&#34;https://github.com/fr33r/.com-blog/blob/352aa1c2bc88345e05efe3f9174643f0789e2abf/.github/workflows/docker.yml#L25-L26&#34;&gt;specified them in the workflow configuration&lt;/a&gt;.
+Why didn&amp;rsquo;t they come through? Is this a generic error message, or does it truly
+get displayed when the credentials are missing? Did I forget to add values for the
+secrets? Do the keys for the secrets line up in the workflow configuration?&lt;/p&gt;
+&lt;p&gt;To help me find some answers, I reran the failed workflow with debug logs enabled:&lt;/p&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;2&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;2&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;output&lt;/span&gt;
+      
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-output&#34; &gt;&lt;code&gt;
+##[debug]Evaluating condition for step: &amp;#39;Login to DockerHub&amp;#39;
+##[debug]Evaluating: success()
+##[debug]Evaluating success:
+##[debug]=&amp;gt; true
+##[debug]Result: true
+##[debug]Starting: Login to DockerHub
+##[debug]Register post job cleanup for action: docker/login-action@v2
+##[debug]Loading inputs
+##[debug]Evaluating: secrets.DOCKERHUB_USERNAME
+##[debug]Evaluating Index:
+##[debug]..Evaluating secrets:
+##[debug]..=&amp;gt; Object
+##[debug]..Evaluating String:
+##[debug]..=&amp;gt; &amp;#39;DOCKERHUB_USERNAME&amp;#39;
+##[debug]=&amp;gt; null
+##[debug]Result: null
+##[debug]Evaluating: secrets.DOCKERHUB_TOKEN
+##[debug]Evaluating Index:
+##[debug]..Evaluating secrets:
+##[debug]..=&amp;gt; Object
+##[debug]..Evaluating String:
+##[debug]..=&amp;gt; &amp;#39;DOCKERHUB_TOKEN&amp;#39;
+##[debug]=&amp;gt; null
+##[debug]Result: null
+##[debug]Loading env
+Run docker/login-action@v2
+  with:
+    ecr: auto
+    logout: true
+::save-state name=isPost::true
+##[debug]Save intra-action state isPost = true
+::save-state name=registry::
+##[debug]Save intra-action state registry = 
+::save-state name=logout::true
+##[debug]Save intra-action state logout = true
+Error: Username and password required
+##[debug]Node Action run completed with exit code 1
+##[debug]Finishing: Login to DockerHub
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;p&gt;Okay. So the workfow is attempting to resolve the secrets, but it seems it is printing
+out &lt;code&gt;null&lt;/code&gt; for both the &lt;code&gt;DOCKERHUB_USERNAME&lt;/code&gt; and &lt;code&gt;DOCKERHUB_TOKEN&lt;/code&gt;. I remember seeing
+&lt;a href=&#34;https://docs.github.com/en/actions/security-guides/encrypted-secrets#accessing-your-secrets&#34;&gt;something&lt;/a&gt; about values of secrets being redacted from action output, but does that mean
+that it will print &lt;code&gt;null&lt;/code&gt;? That can&amp;rsquo;t be right&amp;hellip;&lt;/p&gt;
+&lt;h1 id=&#34;root-cause--fix&#34;&gt;Root Cause + Fix&lt;/h1&gt;
+&lt;p&gt;After spending far too much time turning over these stones, I finally discovered the
+concept I was lacking knowledge on: GitHub environments.&lt;/p&gt;
+&lt;p&gt;Being totally new to setting up secrets in GitHub actions, I had missed the &lt;a href=&#34;https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#using-an-environment&#34;&gt;documentation&lt;/a&gt;
+that described how workflows interacted with GitHub environments. Equipped with this ignorance,
+I proceeded to create the GitHub secrets as environment secrets, not repository
+secrets. Combine this naiveness with the documentation provided for
+&lt;code&gt;docker/login-action&lt;/code&gt;, which outlines examples that implicitly assumes
+repository level secrets are used, and the end result is that the workflow
+configuration I created couldn&amp;rsquo;t access the secrets I had created.&lt;/p&gt;
+&lt;p&gt;There were two solutions for here:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;make my workflow configuration environment aware, or&lt;/li&gt;
+&lt;li&gt;remove the existing secrets I had created and add them as repository level secrets.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Given I had created the environment without much intention, and because I currently
+don&amp;rsquo;t have much of a use case for supporting multiple environments for this project,
+I chose to go with the latter approach. Once the credentials were moved (and the old
+ones removed), it worked like a charm!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Had I chosen to go with the first option, I would&amp;rsquo;ve added an &lt;code&gt;environment&lt;/code&gt;
+key within the workflow configuration, as outlined in &lt;a href=&#34;https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#using-an-environment&#34;&gt;this&lt;/a&gt; GitHub documentation.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;how-could-this-be-better&#34;&gt;How could this be better?&lt;/h1&gt;
+&lt;p&gt;It&amp;rsquo;s clear that the root cause was my user error here. However, I definitely
+think it is worth highlighting a couple of opportunities for improvement that
+could prevent others from having to climb out of the same trap.&lt;/p&gt;
+&lt;h4 id=&#34;better-error-messaging&#34;&gt;Better Error Messaging&lt;/h4&gt;
+&lt;p&gt;Error messages could always be better right? When it comes to improving the feedback
+loop, the first thing I identify is whether or not the application generating the error
+message has enough information to actually generate a more descriptive message and/or
+a suggested fix.&lt;/p&gt;
+&lt;p&gt;In this situation, that is totally the case. It was clear here that the secrets being
+referenced did in fact exist, but just in an environment and not at the repository level.
+GitHub even has &lt;a href=&#34;https://docs.github.com/en/actions/security-guides/encrypted-secrets#naming-your-secrets&#34;&gt;documentation&lt;/a&gt; on how two secrets with the same key but exist in both levels
+are treated, so awareness of secrets in both places is already being handled to some
+degree.&lt;/p&gt;
+&lt;p&gt;To illustrate, imagine the debug logs had entries like this instead:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;...
+
+##[debug]..Evaluating secrets:
+##[debug]..=&amp;gt; Object
+##[debug]..Evaluating String:
+##[debug]..=&amp;gt; &amp;#39;DOCKERHUB_TOKEN&amp;#39;
+##[debug]..Checking repository secrets
+##[debug]=&amp;gt; null
+##[debug]..Checking environment: staging
+##[debug]=&amp;gt; null
+##[debug]..Checking environment: production
+##[debug]...Match found. Did you mean reference an environment secret instead?
+
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;With this verbiage, there is no need to dive in for triaging. Users would
+know immediately why their secrets were not accessible.&lt;/p&gt;
+&lt;p&gt;In a similar vein, it&amp;rsquo;s worth asking the question whether referencing secrets
+when there are 0 secrets detected is ever an expected scenario. In this circumstance,
+the workflow couldn&amp;rsquo;t find any secrets, despite both of them being listed. Perhaps
+an error message indicating the following would be beneficial:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;...
+
+##[debug]..Evaluating secrets:
+##[debug]..=&amp;gt; Object
+##[debug]..No secrets exist
+
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This message would at least be more straightforward that no secrets are detected,
+eliminating the additional steps the user would need to take to understand why
+&lt;code&gt;null&lt;/code&gt; is being passed around.&lt;/p&gt;
+&lt;h4 id=&#34;comprehensive-documentation&#34;&gt;Comprehensive Documentation&lt;/h4&gt;
+&lt;p&gt;This one may be more of a reach, but it&amp;rsquo;s worth calling out that the documentation
+for the &lt;code&gt;docker/login-action&lt;/code&gt; assume that environments aren&amp;rsquo;t being used. I don&amp;rsquo;t
+fault the maintainers for thinking it wouldn&amp;rsquo;t be necessary to address explicitly -
+after all, GitHub environments is it&amp;rsquo;s own wide-spread feature, and it shouldn&amp;rsquo;t
+be necessary for every maintainer of a GitHub action to eductate users of other
+GitHub features.&lt;/p&gt;
+&lt;p&gt;However, the maintainers &lt;em&gt;are&lt;/em&gt; responsible for writing the code to generate
+error messages for their action. Their documentation doesn&amp;rsquo;t outline the potential
+error that can be thrown, or potential troubleshooting steps.&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Terminal</title>
+    <title>Tags on /* Commentary */</title>
     <link>/tags/</link>
-    <description>Recent content in Tags on Terminal</description>
+    <description>Recent content in Tags on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 06 Aug 2022 21:22:01 -0700</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 10 Aug 2022 20:43:31 -0700</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>build</title>
-      <link>/tags/build/</link>
-      <pubDate>Sat, 06 Aug 2022 21:22:01 -0700</pubDate>
+      <title>devops</title>
+      <link>/tags/devops/</link>
+      <pubDate>Wed, 10 Aug 2022 20:43:31 -0700</pubDate>
       
-      <guid>/tags/build/</guid>
+      <guid>/tags/devops/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>fix</title>
+      <link>/tags/fix/</link>
+      <pubDate>Wed, 10 Aug 2022 20:43:31 -0700</pubDate>
+      
+      <guid>/tags/fix/</guid>
       <description></description>
       <content></content>
     </item>
@@ -20,9 +30,19 @@
     <item>
       <title>nerdy</title>
       <link>/tags/nerdy/</link>
-      <pubDate>Sat, 06 Aug 2022 21:22:01 -0700</pubDate>
+      <pubDate>Wed, 10 Aug 2022 20:43:31 -0700</pubDate>
       
       <guid>/tags/nerdy/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>build</title>
+      <link>/tags/build/</link>
+      <pubDate>Sat, 06 Aug 2022 21:22:01 -0700</pubDate>
+      
+      <guid>/tags/build/</guid>
       <description></description>
       <content></content>
     </item>
