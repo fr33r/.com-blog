@@ -33,4 +33,4 @@ jobs:
         with:
           context: "{{defaultContext}}:blog"
           push: true
-          tags: fr33r/blog:latest
+          tags: fr33r/blog:latest,fr33r/blog:${{github.sha}}
