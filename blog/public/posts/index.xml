@@ -13,8 +13,17 @@
       <pubDate>Fri, 12 Aug 2022 14:01:08 -0700</pubDate>
       
       <guid>/posts/docker-memory-constraints/</guid>
-      <description></description>
-      <content></content>
+      <description>what are docker memory constraints? why should you use them? what&amp;rsquo;s the deal with swap? should you disable it? link to articles that could be helpful:
+https://github.com/kubernetes/kubernetes/issues/53533 https://haydenjames.io/linux-performance-almost-always-add-swap-space/ </description>
+      <content>&lt;p&gt;what are docker memory constraints?
+why should you use them?
+what&amp;rsquo;s the deal with swap? should you disable it?
+link to articles that could be helpful:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/53533&#34;&gt;https://github.com/kubernetes/kubernetes/issues/53533&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://haydenjames.io/linux-performance-almost-always-add-swap-space/&#34;&gt;https://haydenjames.io/linux-performance-almost-always-add-swap-space/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
     </item>
     
     <item>
