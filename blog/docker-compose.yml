@@ -1,6 +1,6 @@
 version: '3'
 services:
   app:
-    image: 'fr33r/blog'
+    image: "fr33r/blog:${BLOG_VERSION:-latest}"
     ports:
       - 8080:80
