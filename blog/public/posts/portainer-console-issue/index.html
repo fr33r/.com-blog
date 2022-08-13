@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>You Had One Job Portainer Console! :: /* Commentary */</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A quick dive into why my Portainer console connectivity stopped working." />
+<meta name="keywords" content="portainer, nginx, websockets" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/portainer-console-issue/" />
+
+
+
+
+<link rel="stylesheet" href="/assets/style.css">
+
+
+
+
+
+
+<link rel="apple-touch-icon" href="/img/apple-touch-icon-192x192.png">
+
+  <link rel="shortcut icon" href="/img/favicon/orange.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="You Had One Job Portainer Console!">
+<meta property="og:description" content="A quick dive into why my Portainer console connectivity stopped working." />
+<meta property="og:url" content="/posts/portainer-console-issue/" />
+<meta property="og:site_name" content="/* Commentary */" />
+
+  <meta property="og:image" content="/img/sonic-waiting.jpeg">
+
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+  <meta property="article:published_time" content="2022-08-12 22:04:10 -0700 PDT" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="orange">
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    /* Commentary */
+  </div>
+</a>
+
+    </div>
+    
+      <div class="menu-trigger">menu</div>
+    
+  </div>
+  
+    <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/powered-by">Powered By</a></li>
+        
+      
+      
+    
+
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/powered-by">Powered By</a></li>
+      
+    
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="/posts/portainer-console-issue/">You Had One Job Portainer Console!</a></h1>
+  <div class="post-meta">
+    
+      <span class="post-date">
+        2022-08-12
+        
+          [Updated: 2022-08-12]
+        
+      </span>
+    
+    
+      <span class="post-author">:: fr33r</span>
+    
+    
+      <span class="post-reading-time">:: 3 min read (550 words)</span>
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="/tags/portainer/">portainer</a>&nbsp;
+    
+    #<a href="/tags/fix/">fix</a>&nbsp;
+    
+    #<a href="/tags/quickhit/">quickhit</a>&nbsp;
+    
+    #<a href="/tags/nginx/">nginx</a>&nbsp;
+    
+    #<a href="/tags/devops/">devops</a>&nbsp;
+    
+  </span>
+  
+  
+  <img src="/img/sonic-waiting.jpeg"
+    class="post-cover"
+    alt="You Had One Job Portainer Console!"
+    title="Cover Image" />
+
+
+  
+
+  <div class="post-content"><div>
+        <p>I use <a href="https://www.portainer.io/">Portainer</a> as my central hub for managing my Docker Swarm
+that powers my home lab, and it&rsquo;s awesome.</p>
+<p>One of the many features it includes is the ability to open up a &lsquo;console&rsquo; to any
+container (task) running in the swarm - think basically a UI for
+<code>docker exec -it &lt;CONTAINER ID&gt; /bin/bash</code>. It even provides the affordance of
+specifying a different user (other than the default of <code>root</code>) or shell (other
+than the default of <code>bash</code>).</p>
+<h1 id="connecting">Connecting&hellip;<a href="#connecting" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>One day, I went to hop into a console session on one of my containers, but instead
+of the shell launching, Portainer seemed to be stuck when attempting to connect.</p>
+
+  <figure class="center" >
+    <img src="/img/portainer-connecting-issue.png"  alt="Portainer Connecting Issue"   />
+    
+      <figcaption class="center" >Screenshot of the issue.</figcaption>
+    
+  </figure>
+
+
+<p>What gives? No error toasts appear in the top right to examine as one might expect.
+Time to dig deeper.</p>
+<p>Once I landed in the logs, I tripped over some of these:</p>
+<pre tabindex="0"><code>...
+
+level=info msg=&#34;2022/08/13 05:06:35 websocketproxy: Error when copying from backend to client: websocket: close 1006 (abnormal closure): unexpected EOF&#34;
+level=info msg=&#34;2022/08/13 05:07:01 websocketproxy: Error when copying from backend to client: websocket: invalid close code&#34;
+
+...
+
+level=info msg=&#34;2022/08/13 05:12:22 websocketproxy: couldn&#39;t upgrade websocket: the client is not using the websocket protocol: &#39;upgrade&#39; token not found in &#39;Connection&#39; header&#34;
+level=info msg=&#34;2022/08/13 05:12:40 websocketproxy: couldn&#39;t upgrade websocket: the client is not using the websocket protocol: &#39;upgrade&#39; token not found in &#39;Connection&#39; header&#34;
+
+...
+</code></pre><p>Interesting. Seems Portainer is attempting to make use of some websockets but can&rsquo;t.</p>
+<h1 id="root-cause--fix">Root Cause + Fix<a href="#root-cause--fix" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>To take a half a step back real quick, it&rsquo;s worth mentioning that I use nginx as
+my reverse proxy of choice for my swarm. Essentially it runs as a container
+within the swarm and forwards all traffic on ports <code>80</code> (http) or <code>443</code> (https)
+to other services. One of these services is Portainer.</p>
+<p>As it turns out, my nginx configuration did not support websockets. I had to make
+the following changes:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="1" type="checkbox"  />
+    <label for="1">
+      <span class="collapsable-code__language">diff</span>
+      
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-diff" ><code>
+server {
+	server_name ~^sweet.domain.com$;
+
+	listen 443 ssl;
+	ssl_certificate /ssl/cert.pem;
+	ssl_certificate_key /ssl/key.pem;
+
+	access_log /var/log/nginx/data-access.log combined;
+
+	location / {
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_pass https://sweet_swarm_task:9443;
+&#43;		proxy_http_version 1.1;
+&#43;		proxy_set_header Upgrade $http_upgrade;
+&#43;		proxy_set_header Connection &#34;upgrade&#34;;
+	}
+}
+</code></pre>
+  </div>
+
+
+<p>I definitely wasn&rsquo;t the only one to make this mistake; this
+<a href="https://github.com/portainer/portainer/issues/6353">GitHub issue</a> being one example! Although, reading through
+some of the conversation retriggered some interest in exploring
+<a href="https://nginxproxymanager.com/">Nginx Proxy Manager</a> once again - perhaps more on that
+in a future post.</p>
+<h4 id="breakdown">Breakdown<a href="#breakdown" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<p>In case you are saying:</p>
+<blockquote>
+<p>Hold up, what are these changes?</p>
+</blockquote>
+<p>I got you covered. Let&rsquo;s break it down.</p>
+<h5 id="proxy_http_version-11"><code>proxy_http_version 1.1;</code><a href="#proxy_http_version-11" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h5>
+<p>Indicates that the HTTP version should be set to <code>1.1</code>. Connection upgrades
+can only be performed for <code>1.1</code>, and not <code>1.0</code> or <code>2</code>
+(<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Protocol_upgrade_mechanism#upgrading_to_a_websocket_connection">explicitly disallowed</a>).</p>
+<h5 id="proxy_set_header-upgrade-http_upgrade"><code>proxy_set_header Upgrade $http_upgrade;</code><a href="#proxy_set_header-upgrade-http_upgrade" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h5>
+<p>Sets the value of the <code>Upgrade</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade">header</a> to have the value
+provided (see <a href="%5Bhttps://nginx.org/en/docs/http/ngx_http_core_module.html#var_http_%5D"><code>$http_*</code> nginx variables</a>). Clients utilize
+this header to indicate that they wish to upgrade the connection from a
+particular version of HTTP (1.1 for example) to another version, or to a websocket
+connection.</p>
+<h5 id="proxy_set_header-connection-upgrade"><code>proxy_set_header Connection &quot;upgrade&quot;;</code><a href="#proxy_set_header-connection-upgrade" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h5>
+<p>Sets the <code>Connection</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection">header</a> to have a value of
+<code>&quot;upgrade&quot;</code>, which indicates that nginx needs to process the <code>Upgrade</code>
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade">header</a> before forwarding. This header must be sent whenever
+the <code>Upgrade</code> is sent.</p>
+<h1 id="further-reading">Further Reading<a href="#further-reading" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>I&rsquo;ve only scratched the surface on this stuff. If you are interesting in reading
+further, check out <a href="https://www.nginx.com/blog/websocket-nginx/">this awesome post</a> on the
+<a href="https://www.nginx.com/blog">nginx blog</a>.</p>
+
+      </div></div>
+
+  
+  
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/should-you-upgrade-to-nginx-proxy-manager/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Should You Upgrade to Nginx Proxy Manager</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/github-environments-and-secrets/">
+                <span class="button__text">Tale of the Unknown GitHub Secrets</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+  
+
+  
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2022 Powered by <a href="http://gohugo.io">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

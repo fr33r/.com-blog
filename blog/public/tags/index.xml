@@ -6,11 +6,11 @@
     <description>Recent content in Tags on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Aug 2022 20:43:31 -0700</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 Aug 2022 22:04:10 -0700</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>devops</title>
       <link>/tags/devops/</link>
-      <pubDate>Wed, 10 Aug 2022 20:43:31 -0700</pubDate>
+      <pubDate>Fri, 12 Aug 2022 22:04:10 -0700</pubDate>
       
       <guid>/tags/devops/</guid>
       <description></description>
@@ -20,9 +20,39 @@
     <item>
       <title>fix</title>
       <link>/tags/fix/</link>
-      <pubDate>Wed, 10 Aug 2022 20:43:31 -0700</pubDate>
+      <pubDate>Fri, 12 Aug 2022 22:04:10 -0700</pubDate>
       
       <guid>/tags/fix/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>nginx</title>
+      <link>/tags/nginx/</link>
+      <pubDate>Fri, 12 Aug 2022 22:04:10 -0700</pubDate>
+      
+      <guid>/tags/nginx/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>portainer</title>
+      <link>/tags/portainer/</link>
+      <pubDate>Fri, 12 Aug 2022 22:04:10 -0700</pubDate>
+      
+      <guid>/tags/portainer/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>quickhit</title>
+      <link>/tags/quickhit/</link>
+      <pubDate>Fri, 12 Aug 2022 22:04:10 -0700</pubDate>
+      
+      <guid>/tags/quickhit/</guid>
       <description></description>
       <content></content>
     </item>

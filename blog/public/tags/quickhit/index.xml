@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>quickhit on /* Commentary */</title>
+    <link>/tags/quickhit/</link>
+    <description>Recent content in quickhit on /* Commentary */</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 12 Aug 2022 22:04:10 -0700</lastBuildDate><atom:link href="/tags/quickhit/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>You Had One Job Portainer Console!</title>
+      <link>/posts/portainer-console-issue/</link>
+      <pubDate>Fri, 12 Aug 2022 22:04:10 -0700</pubDate>
+      
+      <guid>/posts/portainer-console-issue/</guid>
+      <description>I use Portainer as my central hub for managing my Docker Swarm that powers my home lab, and it&amp;rsquo;s awesome.
+One of the many features it includes is the ability to open up a &amp;lsquo;console&amp;rsquo; to any container (task) running in the swarm - think basically a UI for docker exec -it &amp;lt;CONTAINER ID&amp;gt; /bin/bash. It even provides the affordance of specifying a different user (other than the default of root) or shell (other than the default of bash).</description>
+      <content>&lt;p&gt;I use &lt;a href=&#34;https://www.portainer.io/&#34;&gt;Portainer&lt;/a&gt; as my central hub for managing my Docker Swarm
+that powers my home lab, and it&amp;rsquo;s awesome.&lt;/p&gt;
+&lt;p&gt;One of the many features it includes is the ability to open up a &amp;lsquo;console&amp;rsquo; to any
+container (task) running in the swarm - think basically a UI for
+&lt;code&gt;docker exec -it &amp;lt;CONTAINER ID&amp;gt; /bin/bash&lt;/code&gt;. It even provides the affordance of
+specifying a different user (other than the default of &lt;code&gt;root&lt;/code&gt;) or shell (other
+than the default of &lt;code&gt;bash&lt;/code&gt;).&lt;/p&gt;
+&lt;h1 id=&#34;connecting&#34;&gt;Connecting&amp;hellip;&lt;/h1&gt;
+&lt;p&gt;One day, I went to hop into a console session on one of my containers, but instead
+of the shell launching, Portainer seemed to be stuck when attempting to connect.&lt;/p&gt;
+
+  &lt;figure class=&#34;center&#34; &gt;
+    &lt;img src=&#34;/img/portainer-connecting-issue.png&#34;  alt=&#34;Portainer Connecting Issue&#34;   /&gt;
+    
+      &lt;figcaption class=&#34;center&#34; &gt;Screenshot of the issue.&lt;/figcaption&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;What gives? No error toasts appear in the top right to examine as one might expect.
+Time to dig deeper.&lt;/p&gt;
+&lt;p&gt;Once I landed in the logs, I tripped over some of these:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;...
+
+level=info msg=&amp;#34;2022/08/13 05:06:35 websocketproxy: Error when copying from backend to client: websocket: close 1006 (abnormal closure): unexpected EOF&amp;#34;
+level=info msg=&amp;#34;2022/08/13 05:07:01 websocketproxy: Error when copying from backend to client: websocket: invalid close code&amp;#34;
+
+...
+
+level=info msg=&amp;#34;2022/08/13 05:12:22 websocketproxy: couldn&amp;#39;t upgrade websocket: the client is not using the websocket protocol: &amp;#39;upgrade&amp;#39; token not found in &amp;#39;Connection&amp;#39; header&amp;#34;
+level=info msg=&amp;#34;2022/08/13 05:12:40 websocketproxy: couldn&amp;#39;t upgrade websocket: the client is not using the websocket protocol: &amp;#39;upgrade&amp;#39; token not found in &amp;#39;Connection&amp;#39; header&amp;#34;
+
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Interesting. Seems Portainer is attempting to make use of some websockets but can&amp;rsquo;t.&lt;/p&gt;
+&lt;h1 id=&#34;root-cause--fix&#34;&gt;Root Cause + Fix&lt;/h1&gt;
+&lt;p&gt;To take a half a step back real quick, it&amp;rsquo;s worth mentioning that I use nginx as
+my reverse proxy of choice for my swarm. Essentially it runs as a container
+within the swarm and forwards all traffic on ports &lt;code&gt;80&lt;/code&gt; (http) or &lt;code&gt;443&lt;/code&gt; (https)
+to other services. One of these services is Portainer.&lt;/p&gt;
+&lt;p&gt;As it turns out, my nginx configuration did not support websockets. I had to make
+the following changes:&lt;/p&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;1&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;1&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;diff&lt;/span&gt;
+      
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-diff&#34; &gt;&lt;code&gt;
+server {
+	server_name ~^sweet.domain.com$;
+
+	listen 443 ssl;
+	ssl_certificate /ssl/cert.pem;
+	ssl_certificate_key /ssl/key.pem;
+
+	access_log /var/log/nginx/data-access.log combined;
+
+	location / {
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_pass https://sweet_swarm_task:9443;
+&amp;#43;		proxy_http_version 1.1;
+&amp;#43;		proxy_set_header Upgrade $http_upgrade;
+&amp;#43;		proxy_set_header Connection &amp;#34;upgrade&amp;#34;;
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;p&gt;I definitely wasn&amp;rsquo;t the only one to make this mistake; this
+&lt;a href=&#34;https://github.com/portainer/portainer/issues/6353&#34;&gt;GitHub issue&lt;/a&gt; being one example! Although, reading through
+some of the conversation retriggered some interest in exploring
+&lt;a href=&#34;https://nginxproxymanager.com/&#34;&gt;Nginx Proxy Manager&lt;/a&gt; once again - perhaps more on that
+in a future post.&lt;/p&gt;
+&lt;h4 id=&#34;breakdown&#34;&gt;Breakdown&lt;/h4&gt;
+&lt;p&gt;In case you are saying:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Hold up, what are these changes?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I got you covered. Let&amp;rsquo;s break it down.&lt;/p&gt;
+&lt;h5 id=&#34;proxy_http_version-11&#34;&gt;&lt;code&gt;proxy_http_version 1.1;&lt;/code&gt;&lt;/h5&gt;
+&lt;p&gt;Indicates that the HTTP version should be set to &lt;code&gt;1.1&lt;/code&gt;. Connection upgrades
+can only be performed for &lt;code&gt;1.1&lt;/code&gt;, and not &lt;code&gt;1.0&lt;/code&gt; or &lt;code&gt;2&lt;/code&gt;
+(&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Protocol_upgrade_mechanism#upgrading_to_a_websocket_connection&#34;&gt;explicitly disallowed&lt;/a&gt;).&lt;/p&gt;
+&lt;h5 id=&#34;proxy_set_header-upgrade-http_upgrade&#34;&gt;&lt;code&gt;proxy_set_header Upgrade $http_upgrade;&lt;/code&gt;&lt;/h5&gt;
+&lt;p&gt;Sets the value of the &lt;code&gt;Upgrade&lt;/code&gt; &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade&#34;&gt;header&lt;/a&gt; to have the value
+provided (see &lt;a href=&#34;%5Bhttps://nginx.org/en/docs/http/ngx_http_core_module.html#var_http_%5D&#34;&gt;&lt;code&gt;$http_*&lt;/code&gt; nginx variables&lt;/a&gt;). Clients utilize
+this header to indicate that they wish to upgrade the connection from a
+particular version of HTTP (1.1 for example) to another version, or to a websocket
+connection.&lt;/p&gt;
+&lt;h5 id=&#34;proxy_set_header-connection-upgrade&#34;&gt;&lt;code&gt;proxy_set_header Connection &amp;quot;upgrade&amp;quot;;&lt;/code&gt;&lt;/h5&gt;
+&lt;p&gt;Sets the &lt;code&gt;Connection&lt;/code&gt; &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection&#34;&gt;header&lt;/a&gt; to have a value of
+&lt;code&gt;&amp;quot;upgrade&amp;quot;&lt;/code&gt;, which indicates that nginx needs to process the &lt;code&gt;Upgrade&lt;/code&gt;
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade&#34;&gt;header&lt;/a&gt; before forwarding. This header must be sent whenever
+the &lt;code&gt;Upgrade&lt;/code&gt; is sent.&lt;/p&gt;
+&lt;h1 id=&#34;further-reading&#34;&gt;Further Reading&lt;/h1&gt;
+&lt;p&gt;I&amp;rsquo;ve only scratched the surface on this stuff. If you are interesting in reading
+further, check out &lt;a href=&#34;https://www.nginx.com/blog/websocket-nginx/&#34;&gt;this awesome post&lt;/a&gt; on the
+&lt;a href=&#34;https://www.nginx.com/blog&#34;&gt;nginx blog&lt;/a&gt;.&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>
