@@ -132,7 +132,7 @@
       <span class="post-author">:: fr33r</span>
     
     
-      <span class="post-reading-time">:: 5 min read (989 words)</span>
+      <span class="post-reading-time">:: 5 min read (990 words)</span>
     
   </div>
 
@@ -302,7 +302,7 @@ degree.</p>
 ##[debug]..Checking environment: staging
 ##[debug]=&gt; null
 ##[debug]..Checking environment: production
-##[debug]...Match found. Did you mean reference an environment secret instead?
+##[debug]...Match found. Did you mean to reference an environment secret instead?
 
 ...
 </code></pre><p>With this verbiage, there is no need to dive in for triaging. Users would
@@ -323,7 +323,7 @@ eliminating the additional steps the user would need to take to understand why
 <code>null</code> is being passed around.</p>
 <h4 id="comprehensive-documentation">Comprehensive Documentation<a href="#comprehensive-documentation" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
 <p>This one may be more of a reach, but it&rsquo;s worth calling out that the documentation
-for the <code>docker/login-action</code> assume that environments aren&rsquo;t being used. I don&rsquo;t
+for the <code>docker/login-action</code> assumes that environments aren&rsquo;t being used. I don&rsquo;t
 fault the maintainers for thinking it wouldn&rsquo;t be necessary to address explicitly -
 after all, GitHub environments is it&rsquo;s own wide-spread feature, and it shouldn&rsquo;t
 be necessary for every maintainer of a GitHub action to eductate users of other

@@ -225,7 +225,7 @@ degree.&lt;/p&gt;
 ##[debug]..Checking environment: staging
 ##[debug]=&amp;gt; null
 ##[debug]..Checking environment: production
-##[debug]...Match found. Did you mean reference an environment secret instead?
+##[debug]...Match found. Did you mean to reference an environment secret instead?
 
 ...
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;With this verbiage, there is no need to dive in for triaging. Users would
@@ -246,7 +246,7 @@ eliminating the additional steps the user would need to take to understand why
 &lt;code&gt;null&lt;/code&gt; is being passed around.&lt;/p&gt;
 &lt;h4 id=&#34;comprehensive-documentation&#34;&gt;Comprehensive Documentation&lt;/h4&gt;
 &lt;p&gt;This one may be more of a reach, but it&amp;rsquo;s worth calling out that the documentation
-for the &lt;code&gt;docker/login-action&lt;/code&gt; assume that environments aren&amp;rsquo;t being used. I don&amp;rsquo;t
+for the &lt;code&gt;docker/login-action&lt;/code&gt; assumes that environments aren&amp;rsquo;t being used. I don&amp;rsquo;t
 fault the maintainers for thinking it wouldn&amp;rsquo;t be necessary to address explicitly -
 after all, GitHub environments is it&amp;rsquo;s own wide-spread feature, and it shouldn&amp;rsquo;t
 be necessary for every maintainer of a GitHub action to eductate users of other
