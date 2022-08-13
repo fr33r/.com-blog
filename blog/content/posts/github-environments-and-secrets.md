@@ -151,7 +151,7 @@ To illustrate, imagine the debug logs had entries like this instead:
 ##[debug]..Checking environment: staging
 ##[debug]=> null
 ##[debug]..Checking environment: production
-##[debug]...Match found. Did you mean reference an environment secret instead?
+##[debug]...Match found. Did you mean to reference an environment secret instead?
 
 ...
 ```
@@ -181,7 +181,7 @@ eliminating the additional steps the user would need to take to understand why
 #### Comprehensive Documentation
 
 This one may be more of a reach, but it's worth calling out that the documentation
-for the `docker/login-action` assume that environments aren't being used. I don't
+for the `docker/login-action` assumes that environments aren't being used. I don't
 fault the maintainers for thinking it wouldn't be necessary to address explicitly -
 after all, GitHub environments is it's own wide-spread feature, and it shouldn't
 be necessary for every maintainer of a GitHub action to eductate users of other
