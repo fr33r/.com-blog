@@ -1,8 +1,8 @@
 +++
 title = "Docker Memory Constraints"
 date = "2022-08-12T14:01:08-07:00"
-author = ""
-authorTwitter = "" #do not include @
+publishDate = "2022-08-31T21:22:01-07:00"
+author = "fr33r"
 cover = ""
 tags = ["", ""]
 keywords = ["", ""]
@@ -10,6 +10,7 @@ description = ""
 showFullContent = false
 readingTime = false
 hideComments = false
+draft = true
 +++
 
 what are docker memory constraints?

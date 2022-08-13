@@ -1,6 +1,7 @@
 +++
 title = "Building a Pi Cluster"
 date = "2022-08-06T21:22:01-07:00"
+publishDate = "2022-08-31T21:22:01-07:00"
 author = "fr33r"
 cover = "img/raspberry-pi.png"
 tags = ["build", "tutorial", "nerdy"]
@@ -9,6 +10,7 @@ description = "My journey of building a Raspberry Pi cluster."
 showFullContent = false
 readingTime = true 
 hideComments = false
+draft = true
 +++
 
 Having been a software engineer for years, I had heard about Raspberry Pi
