@@ -37,55 +37,5 @@
       <content></content>
     </item>
     
-    <item>
-      <title>build</title>
-      <link>/tags/build/</link>
-      <pubDate>Sat, 06 Aug 2022 21:22:01 -0700</pubDate>
-      
-      <guid>/tags/build/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>tutorial</title>
-      <link>/tags/tutorial/</link>
-      <pubDate>Sat, 06 Aug 2022 21:22:01 -0700</pubDate>
-      
-      <guid>/tags/tutorial/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>meta</title>
-      <link>/tags/meta/</link>
-      <pubDate>Thu, 04 Aug 2022 20:07:09 -0700</pubDate>
-      
-      <guid>/tags/meta/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>motivation</title>
-      <link>/tags/motivation/</link>
-      <pubDate>Thu, 04 Aug 2022 20:07:09 -0700</pubDate>
-      
-      <guid>/tags/motivation/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>reflective</title>
-      <link>/tags/reflective/</link>
-      <pubDate>Thu, 04 Aug 2022 20:07:09 -0700</pubDate>
-      
-      <guid>/tags/reflective/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
   </channel>
 </rss>
