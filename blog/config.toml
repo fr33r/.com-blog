@@ -3,6 +3,8 @@ languageCode = "en-us"
 theme = "terminal"
 paginate = 5
 googleAnalytics = "{{GOOGLE_ANALYTICS_MEASUREMENT_ID}}"
+# https://gohugo.io/content-management/comments/#add-disqus
+disqusShortname = 'blog-fr33r-com'
 
 [params]
   # dir name of your main content (default is `content/posts`).
