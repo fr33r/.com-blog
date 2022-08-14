@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Who&#39;s the Boss? :: /* Commentary */</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Insights on Docker Swarm cluster managers and how you should deploy them." />
+<meta name="keywords" content="docker, manager" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/docker-swarm-managers/" />
+
+
+
+
+<link rel="stylesheet" href="/assets/style.css">
+
+
+
+
+
+
+<link rel="apple-touch-icon" href="/img/apple-touch-icon-192x192.png">
+
+  <link rel="shortcut icon" href="/img/favicon/orange.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Who&#39;s the Boss?">
+<meta property="og:description" content="Insights on Docker Swarm cluster managers and how you should deploy them." />
+<meta property="og:url" content="/posts/docker-swarm-managers/" />
+<meta property="og:site_name" content="/* Commentary */" />
+
+  <meta property="og:image" content="/img/the-office-managers.png">
+
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+  <meta property="article:published_time" content="2022-08-13 08:12:39 -0700 PDT" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="orange">
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    /* Commentary */
+  </div>
+</a>
+
+    </div>
+    
+      <div class="menu-trigger">menu</div>
+    
+  </div>
+  
+    <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about/">About</a></li>
+        
+      
+        
+          <li><a href="/powered-by/">Powered By</a></li>
+        
+      
+      
+    
+
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about/">About</a></li>
+      
+    
+      
+        <li><a href="/powered-by/">Powered By</a></li>
+      
+    
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="/posts/docker-swarm-managers/">Who&rsquo;s the Boss?</a></h1>
+  <div class="post-meta">
+    
+      <span class="post-date">
+        2022-08-13
+        
+          [Updated: 2022-08-13]
+        
+      </span>
+    
+    
+      <span class="post-author">:: fr33r</span>
+    
+    
+      <span class="post-reading-time">:: 6 min read (1068 words)</span>
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="/tags/docker/">docker</a>&nbsp;
+    
+    #<a href="/tags/devops/">devops</a>&nbsp;
+    
+    #<a href="/tags/quickhit/">quickhit</a>&nbsp;
+    
+    #<a href="/tags/tutorial/">tutorial</a>&nbsp;
+    
+  </span>
+  
+  
+  <img src="/img/the-office-managers.png"
+    class="post-cover"
+    alt="Who&#39;s the Boss?"
+    title="Cover Image" />
+
+
+  
+
+  <div class="post-content"><div>
+        <p>Every node in a Docker Swarm plays at least one of two particular roles: worker
+and/or manager. When you create a new cluster, you start out by creating it with
+a single node that is both a manager and a worker, and <a href="https://docs.docker.com/engine/swarm/admin_guide/#configure-the-manager-to-advertise-on-a-static-ip-address">specify an IP address
+to advertise that manager to other managers</a> as you add them.</p>
+<h1 id="roles">Roles<a href="#roles" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>So what are the responsibilities of these two roles anyway? How do you know
+how many managers and workers to deploy in your swarm? Let&rsquo;s get into it!</p>
+<h2 id="managers">Managers<a href="#managers" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>As you might imagine, <a href="https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/#manager-nodes">manager nodes</a> in a Docker Swarm take on
+additional cluster management tasks. Such tasks include:</p>
+<ul>
+<li>maintaining &amp; distributing cluster state across manager nodes in the cluster</li>
+<li>scheduling services to various nodes in the swarm</li>
+<li>serving swarm mode HTTP API endpoints</li>
+</ul>
+<h2 id="workers">Workers<a href="#workers" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Intuitively, <a href="https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/#worker-nodes">worker nodes</a> don&rsquo;t perform any of the management
+tasks that the manager nodes do; all that stuff is above the pay grade.
+Instead, worker nodes are solely responsible for executing service tasks.</p>
+<h2 id="promotion--demotion">Promotion &amp; Demotion<a href="#promotion--demotion" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Roles for nodes can be changed. To <a href="https://docs.docker.com/engine/reference/commandline/node_promote/">promote</a> a worker node to
+be a manager node, run the following:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="1" type="checkbox"  />
+    <label for="1">
+      <span class="collapsable-code__language">bash</span>
+      
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-bash" ><code>
+$ docker node promote &lt;NODE NAME&gt;
+</code></pre>
+  </div>
+
+
+<p>And to <a href="https://docs.docker.com/engine/reference/commandline/node_demote/">demote</a> a node, run this command:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="2" type="checkbox"  />
+    <label for="2">
+      <span class="collapsable-code__language">bash</span>
+      
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-bash" ><code>
+$ docker node demote &lt;NODE NAME&gt;
+</code></pre>
+  </div>
+
+
+<blockquote>
+<p><em><strong>NOTE</strong></em>: By default, all manager nodes are also worker nodes. Assuming you
+have a cluster that has more than one node, you can prevent any one manager node
+from taking on worker node responsibilities by moving it&rsquo;s availability status
+to <code>Drain</code>.</p>
+</blockquote>
+<h1 id="deployment-strategies">Deployment Strategies<a href="#deployment-strategies" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>Okay, so we&rsquo;ve nailed down the roles that nodes can play within a swarm, but you
+may be wondering:</p>
+<blockquote>
+<p>How do I choose which role(s) to assign to a node?</p>
+</blockquote>
+<p>It&rsquo;s a great question, and one that can have pretty large impact.</p>
+<h2 id="to-manage-or-not-to-manage">To Manage or Not to Manage<a href="#to-manage-or-not-to-manage" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Just like any business, having too many or too little managers can be problematic.
+When it comes to provisioning managers in a Docker Swarm, you want to strike the
+right balance of <strong>resiliency</strong> and <strong>performance</strong>.</p>
+<p>Let&rsquo;s touch first on resiliency.</p>
+<h3 id="resiliency">Resiliency<a href="#resiliency" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>One of the primary reasons why we are using an orchestration engine like Docker
+Swarm is so that we can have a degree of fault tolerance. If any particular
+node in the swarm decides to take an &ldquo;unnannounced vacation&rdquo;, we should be able
+to schedule whatever tasks (containers that comprise a service) to a different,
+active node.</p>
+<p>We have to be particularly strategic to provide this fault tolerance when it comes
+to managers. After all, they are responsible for taking on some pretty important
+and necessary tasks. In order to best understand how many managers we should
+deploy, we should quickly touch on the algorithm Docker Swarm uses to ensure
+consistent state.</p>
+<h4 id="raft-consensus-algorithm">Raft Consensus Algorithm<a href="#raft-consensus-algorithm" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<p>Sounds fancy right?</p>
+<p>The <a href="http://thesecretlivesofdata.com/raft/">Raft Consensus Algorithm</a> is essentially an algorithm that
+Docker Swarm uses to make sure each manager in the cluster is storing the same
+consistent state. The most important thing to note in the context of this discussion
+is that manager nodes need to agree on what the state is, and that &ldquo;agreement&rdquo;
+is achieved as a function of how many nodes share the same information. If the
+majority, also referred to as a &ldquo;quorum&rdquo;, is achieved when new state is proposed,
+then it will be distributed to all managers.</p>
+<p>Approaching this mathematically, we can essentially use the following simple
+equations to determine achievable fault tolerance and quorum:</p>
+<pre tabindex="0"><code>given:
+  N = the number of manager nodes in the cluster.
+
+then:
+  number of manager nodes that can be down = (N-1)/2
+  number of manager nodes to achieve quorum = (N/2)+1
+</code></pre><blockquote>
+<p><strong><em>EXAMPLE:</em></strong> Assuming we have <code>3</code> manager nodes (<code>N = 3</code>) in a cluster of <code>5</code>
+total nodes, we would be able to support <code>1</code> manager node being down at any
+moment in time (<code>(3-1)/2 = 1</code>). The number of manager nodes to reach quorum
+would be <code>2</code> (<code>(3/2)+1 = 2</code>).</p>
+</blockquote>
+<p>Ultimately, the number of managers you deploy in your cluster depends somewhat
+on the total number of nodes in your cluster. It is recommended you have at least
+<code>3</code> manager nodes, as such a configuration allows for one manager node to be down.</p>
+<h3 id="performance">Performance<a href="#performance" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>As with much in software design, the resiliency comes at a cost. Since one element
+of increasing the resiliency involves introducing redundency, more work is required
+to spread information as we introduce more managers. Adding more manager nodes,
+means more managers are needed to meet quorum.</p>
+<p>When it comes to Docker Swarm, it&rsquo;s generally <a href="https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/#manager-nodes">not recommended to have any more
+than <code>7</code> manager nodes</a>. Such a configuration would allow <code>3</code>
+managers to be simultaneously down at any moment and require <code>4</code> nodes to reach
+quorum.</p>
+<h3 id="unreachable-quorum">Unreachable Quorum<a href="#unreachable-quorum" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>In the event that the number of manager nodes simultaneously down exceeds the
+allowable fault tolerance, the state of the cluster is not allowed to change.
+New tasks cannot be scheduled, and the existing tasks cannot be rebalanced to
+other nodes if required. The following error will be returned when a management
+operation is attempted:</p>
+<pre tabindex="0"><code>Error response from daemon: rpc error: code = 4 desc = context deadline exceeded
+</code></pre><p>The ideal way to recover here is to get manager nodes back online. If for some
+reason the managers can&rsquo;t be brought back online, a new cluster will need to
+be provisioned. This can be performed using the following command:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="1" type="checkbox"  />
+    <label for="1">
+      <span class="collapsable-code__language">bash</span>
+      
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-bash" ><code>
+$ docker swarm init --force-new-cluster --advertise-addr &lt;IP&gt;:2377
+</code></pre>
+  </div>
+
+
+<p>Make sure to replace <code>&lt;IP&gt;</code> with the IP address or DNS resolvable name of the
+host you desire to be the initial manager of this new cluster.</p>
+<h4 id="workers-get-shit-done">Workers Get Shit Done<a href="#workers-get-shit-done" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<p>Compared to manager nodes, worker nodes are far simpler. Since they are
+designated for executing the tasks for the swarm, the main deployment concerns
+are simply ensuring that there are enough workers to balance the load.</p>
+<p>To join an existing swarm cluster as a worker node, run the following commands
+to retrieve the worker join token:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="3" type="checkbox"  />
+    <label for="3">
+      <span class="collapsable-code__language">bash</span>
+      
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-bash" ><code>
+$ docker swarm join-token worker
+</code></pre>
+  </div>
+
+
+<p>Assuming the above command provided this output:</p>
+<pre tabindex="0"><code>docker swarm join \
+  --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \
+  192.168.99.100:2377
+</code></pre><p>The final step would be to run that command:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="4" type="checkbox"  />
+    <label for="4">
+      <span class="collapsable-code__language">bash</span>
+      
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-bash" ><code>
+$ docker swarm join \
+  --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \
+  192.168.99.100:2377
+</code></pre>
+  </div>
+
+
+<blockquote>
+<p><em><strong>NOTE</strong></em>: When adding workers to accommodate for expected or current
+workloads, make sure to take the various resource related requirements that
+may be specified for a particular service. Remember that workers that
+don&rsquo;t meet those specified requirements will not be scheduled to execute
+those tasks.</p>
+</blockquote>
+
+      </div></div>
+
+  
+  
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/portainer-console-issue/">
+                <span class="button__text">You Had One Job Portainer Console!</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+  
+
+  
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2022 Powered by <a href="http://gohugo.io">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
