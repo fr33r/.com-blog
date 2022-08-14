@@ -2,7 +2,7 @@ baseurl = "/"
 languageCode = "en-us"
 theme = "terminal"
 paginate = 5
-googleAnalytics = "{{GOOGLE_ANALYTICS_MEASUREMENT_ID}}"
+googleAnalytics = "G-BMCHLBV6TC"
 # https://gohugo.io/content-management/comments/#add-disqus
 disqusShortname = 'blog-fr33r-com'
 
