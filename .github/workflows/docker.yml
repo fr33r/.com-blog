@@ -12,9 +12,9 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
-      -
-        name: Set up Google Analytics
-        run: sed -i "s/{{GOOGLE_ANALYTICS_MEASUREMENT_ID}}/${{secrets.GOOGLE_ANALYTICS_MEASUREMENT_ID}}/g" blog/config.toml
+        with:
+          submodules: true  # fetch the theme (true OR recursive).
+          fetch-depth: 0
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
