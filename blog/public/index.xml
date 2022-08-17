@@ -6,7 +6,232 @@
     <description>Recent content on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 13 Aug 2022 08:12:39 -0700</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 15 Aug 2022 10:33:48 -0700</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tips for Hotswapping</title>
+      <link>/posts/tips-for-hotswapping/</link>
+      <pubDate>Mon, 15 Aug 2022 10:33:48 -0700</pubDate>
+      
+      <guid>/posts/tips-for-hotswapping/</guid>
+      <description>When I build mechanical keyboards, I almost always introduce hotswap support. The dogmatic battles wage on over whether or not hotswap boards provide an equivalent or better experience as non-hotswapped versions, but it really just comes down to preference.
+Why I Hotswap For me building in hotswap support is a no brainer. Here are some reasons why it is the ideal choice for me.
+No Desoldering Switches Obviously, having a hotswap board means that you can easily pop out switches and put in new ones.</description>
+      <content>&lt;p&gt;When I build mechanical keyboards, I almost always introduce &lt;a href=&#34;https://deskthority.net/wiki/Hot-swap&#34;&gt;hotswap&lt;/a&gt; support.
+The dogmatic battles wage on over whether or not hotswap boards provide an
+equivalent or better experience as non-hotswapped versions, but it really just
+comes down to preference.&lt;/p&gt;
+&lt;h1 id=&#34;why-i-hotswap&#34;&gt;Why I Hotswap&lt;/h1&gt;
+&lt;p&gt;For me building in hotswap support is a no brainer. Here are some reasons why
+it is the ideal choice for me.&lt;/p&gt;
+&lt;h2 id=&#34;no-desoldering-switches&#34;&gt;No Desoldering Switches&lt;/h2&gt;
+&lt;p&gt;Obviously, having a hotswap board means that you can easily pop out switches
+and put in new ones. There are an insane number of variations of switches out
+there, and unless you plan on building a particular configuration and then turning
+around and selling it, I&amp;rsquo;d be willing to bet that you would at least entertain
+the idea of changing the switches out at some point.&lt;/p&gt;
+&lt;p&gt;Some say that instead of hotswapping, you could desolder your switches when you
+decided to change it up. They aren&amp;rsquo;t wrong, but let&amp;rsquo;s be real: desoldering sucks.
+It requires extra gear (&lt;a href=&#34;https://en.wikipedia.org/wiki/Desoldering&#34;&gt;desoldering&lt;/a&gt; &lt;a href=&#34;https://www.amazon.com/Teenitor-Solder-Sucker-Desoldering-Removal/dp/B0739LXQ6N/ref=zg_bs_8107034011_sccl_2/140-5809656-7869339?pd_rd_i=B0739LXQ6N&amp;amp;psc=1&#34;&gt;pumps&lt;/a&gt;
+at least) and takes way more time than popping out the existing switches and
+putting new ones in on a hotswap board.&lt;/p&gt;
+&lt;p&gt;Most importantly, desoldering requires getting the soldering iron out and heating
+up each joint, which could lead to a greater risk of accidental damage.&lt;/p&gt;
+&lt;h2 id=&#34;switch-compatibility&#34;&gt;Switch Compatibility&lt;/h2&gt;
+&lt;p&gt;Most of the popular switches are compatible with hotswap sockets. You won&amp;rsquo;t feel
+limited in your choices purely by making the decision to hotswap.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;NOTE&lt;/strong&gt;&lt;/em&gt;: Check out my tip below to see how to best determine what switches
+will be compatible with your sockets.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;iterability&#34;&gt;Iterability&lt;/h2&gt;
+&lt;p&gt;I personally like to keep the door open. You never know what new switch may
+come out in the future. Also, it will take time for you to try different
+switches out to see what you like. You may even change your opinion of a
+particular switch over time as you get to use it more and more.&lt;/p&gt;
+&lt;p&gt;Take the pressure off of buying the &amp;ldquo;perfect&amp;rdquo; switches. Like I already
+mentioned, there are almost too many to count, each having their own
+characteristics.&lt;/p&gt;
+&lt;h2 id=&#34;board-scarcity&#34;&gt;Board Scarcity&lt;/h2&gt;
+&lt;p&gt;It is very common for various build kits to be a part of a group buy. These
+group buys can be very infrequent, and they often take many months to fulfill.
+As such, it simply isn&amp;rsquo;t a viable option to sell your board with your existing
+switches in hopes of getting the same PCB and trying out different ones.&lt;/p&gt;
+&lt;p&gt;By hotswapping the PCB, you can keep your board and instead give some new
+switches a spin.&lt;/p&gt;
+&lt;h1 id=&#34;tips--tricks&#34;&gt;Tips &amp;amp; Tricks&lt;/h1&gt;
+&lt;h2 id=&#34;check-switch-compatibility&#34;&gt;Check Switch Compatibility&lt;/h2&gt;
+&lt;p&gt;Not all switches can be hotswapped. More specifically, the contacts may not fit
+inside the sockets you have chosen.&lt;/p&gt;
+&lt;p&gt;Thankfully, the mechanical keyboard community has open sourced maintaining a
+&lt;a href=&#34;https://docs.google.com/spreadsheets/d/1NhrXy6k88eY9bBqVuPWTAGW2q3GzszJ1JH-zuuGQ-iU/edit#gid=0&#34;&gt;shared spreadsheet&lt;/a&gt; that outlines switch
+compatibilities for Mill Max 7305 and 0305 sockets. Kailh MX hotswap sockets
+are advertised as being completely compatible for any MX switch.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;NOTE&lt;/strong&gt;&lt;/em&gt;: I&amp;rsquo;ve hotswapped boards using both Kailh sockets and Mill Max
+7305 sockets, and have never had any issues with switch compatibility.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;According to &lt;a href=&#34;https://deskthority.net/wiki/Hot-swap#Hot-swap_switch_sockets&#34;&gt;Deskthority&lt;/a&gt;, there are other kinds of hotswap
+(&amp;amp; pin; using them interchangeably) sockets, and to be
+totally transparent, I&amp;rsquo;ve never seen these sold from any retailers I&amp;rsquo;ve visited,
+nor seen conversation of them where I lurk on the interwebs. As such, I can&amp;rsquo;t
+comment on these, besides just suggesting that you&amp;rsquo;ll increase the chance of
+success by using sockets others are familiar with and have tested.&lt;/p&gt;
+&lt;h2 id=&#34;hold-sockets-using-painters--masking-tape&#34;&gt;Hold Sockets Using Painters / Masking Tape&lt;/h2&gt;
+
+  &lt;figure class=&#34;center&#34; &gt;
+    &lt;img src=&#34;/img/taped-board.jpg&#34;  alt=&#34;Taped PCB&#34;   /&gt;
+    
+      &lt;figcaption class=&#34;center&#34; &gt;Sockets taped to PCB.&lt;/figcaption&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;The thought of adding sockets to the board can seem daunting at first. For me,
+separating the step of inserting the sockets (and holding them in place) from
+the soldering work helps with approaching the build in a more modular way.&lt;/p&gt;
+&lt;p&gt;For this task, the secret weapon is tape; more specifically, painters tape or
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Masking_tape&#34;&gt;masking tape&lt;/a&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;WARNING&lt;/strong&gt;&lt;/em&gt;: Do not use &lt;a href=&#34;https://en.wikipedia.org/wiki/Scotch_Tape&#34;&gt;Scotch magic tape&lt;/a&gt; or
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Box-sealing_tape&#34;&gt;packing tape&lt;/a&gt;. These will melt onto the top of the sockets when
+you solder them in. Additionally, both of these kinds of tape easily tear
+when attempting to remove it, where painters or masking tape is less likely to
+do so.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Insert sockets one row at a time. When you have finished inserting the sockets
+for a row, tear off a single piece of tape that is long enough to cover then
+entire row, with at least &lt;code&gt;2&lt;/code&gt; or &lt;code&gt;3&lt;/code&gt; inches extra on each end of the board. Using
+a single piece of tape makes it super easy to remove the tape after the soldering
+is complete. The extra tape on the sides can be used to fold over itself,
+essentially creating makeshift &amp;ldquo;tabs&amp;rdquo; that you can grab onto easily when removing.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;NOTE&lt;/strong&gt;&lt;/em&gt;: Creating these tabs on the ends isn&amp;rsquo;t strictly necessary, but
+strongly recommended. You&amp;rsquo;ll be scratching at the PCB attempting to lift the
+tape otherwise, which can scuff or even damage the board if careless.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;When moving on to additional rows, attempt to minimize the amount of overlap
+between the tape for each row. You want to make sure that as you peel off one
+row, that you don&amp;rsquo;t accidentally peel off the tape for an adjacent row. Going
+one row at a time ensures you don&amp;rsquo;t remove tape that you may need to reapply
+(if you find a mistake) and makes it easier to flip the board around as you
+inspect it.&lt;/p&gt;
+&lt;p&gt;As you peel the tape off each row after soldering, test each set of sockets with
+a switch to ensure that it inserts properly.&lt;/p&gt;
+&lt;h2 id=&#34;buy-a-solid-pair-of-tweezers&#34;&gt;Buy a Solid Pair of Tweezers&lt;/h2&gt;
+
+  &lt;figure class=&#34;center&#34; &gt;
+    &lt;img src=&#34;/img/tweezers.jpeg&#34;  alt=&#34;Curved Point Tip Tweezers&#34;   /&gt;
+    
+      &lt;figcaption class=&#34;center&#34; &gt;VETUS curved point tip tweezers.&lt;/figcaption&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;No, don&amp;rsquo;t use any tweezers you might already have laying around. I strongly suggest
+getting a pair that have a curved point tip, as it is way more ergonomic for
+this use case. They are super affordable; usually &lt;code&gt;$5&lt;/code&gt; to &lt;code&gt;$10&lt;/code&gt; dollars.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;BONUS&lt;/strong&gt;&lt;/em&gt;: If you are delicate enough, you can insert the pointed tips of the
+tweezers into the socket, and then insert the socket into the board. After some
+practice, you can go beast mode and put two sockets on the tweezers at once!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;rig-up-a-raised-working-surface&#34;&gt;Rig Up a Raised Working Surface&lt;/h2&gt;
+
+  &lt;figure class=&#34;center&#34; &gt;
+    &lt;img src=&#34;/img/helping-hands.jpeg&#34;  alt=&#34;Helping Hands Tool&#34;   /&gt;
+    
+      &lt;figcaption class=&#34;center&#34; &gt;Helping hands tool.&lt;/figcaption&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;When inserting the sockets into the board, I strongly recommend that you
+raise the board off of your working surface. You&amp;rsquo;ll benefit from this because
+the sockets themselves are taller than the thickness of the PCB - they won&amp;rsquo;t be
+able to be inserted fully otherwise.&lt;/p&gt;
+&lt;p&gt;The solutions are endless here, but don&amp;rsquo;t overthink it. If you have two sets of
+&lt;a href=&#34;https://www.amazon.com/Neiko-01902-Adjustable-Magnifying-Alligator/dp/B000P42O3C/ref=asc_df_B000P42O3C/?tag=hyprod-20&amp;amp;linkCode=df0&amp;amp;hvadid=312096335436&amp;amp;hvpos=&amp;amp;hvnetw=g&amp;amp;hvrand=4691685772583898714&amp;amp;hvpone=&amp;amp;hvptwo=&amp;amp;hvqmt=&amp;amp;hvdev=c&amp;amp;hvdvcmdl=&amp;amp;hvlocint=&amp;amp;hvlocphy=9031554&amp;amp;hvtargid=pla-448870101576&amp;amp;psc=1&#34;&gt;helping hands&lt;/a&gt;, having those set up such that each set holds up one side of the
+PCB could do the trick. If you have two spare rolls of tape, you could place each
+down on your surface to prop up two opposite sides. You could even snag two
+pencils or pens to use instead of the rolls of tape; just make sure they can&amp;rsquo;t
+roll!&lt;/p&gt;
+&lt;h2 id=&#34;swap-with-intention&#34;&gt;Swap with Intention&lt;/h2&gt;
+
+  &lt;figure class=&#34;center&#34; &gt;
+    &lt;img src=&#34;/img/hotswap-switches.webp&#34;  alt=&#34;Hotswap Switches&#34;   /&gt;
+    
+      &lt;figcaption class=&#34;center&#34; &gt;Hotswap switches.&lt;/figcaption&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;Something that doesn&amp;rsquo;t get emphasized too often is that just because you can
+change out your switches, doesn&amp;rsquo;t mean you should do it just to do it. In other
+words, the sockets themselves have lifespans that you could technically measure
+in the number of swaps, just as you often see the lifespan of switches measured
+in keystrokes.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;NOTE&lt;/strong&gt;&lt;/em&gt;: The Kailh hotswap sockets are &lt;a href=&#34;https://divinikey.com/products/kailh-hot-swap-sockets&#34;&gt;rated for 100 swaps&lt;/a&gt;.
+There doesn&amp;rsquo;t appear to be explicit mentioning of the lifespan for Mill Max
+sockets.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;My recommendation is to view the ability to hotswap as a &amp;lsquo;future proofing&amp;rsquo;
+characteristic, rather than a daily or weekly activity. It keeps the door open
+for you to change your switches if you decided to do so, allowing you to
+iterate on your keyboard more gracefully over time.&lt;/p&gt;
+&lt;h2 id=&#34;buy-extra-sockets&#34;&gt;Buy Extra Sockets&lt;/h2&gt;
+
+  &lt;figure class=&#34;center&#34; &gt;
+    &lt;img src=&#34;/img/mill-max-sockets.webp&#34;  alt=&#34;Mill Max Sockets&#34;   /&gt;
+    
+      &lt;figcaption class=&#34;center&#34; &gt;Mill Max 3305 Sockets&lt;/figcaption&gt;
+    
+  &lt;/figure&gt;
+
+
+&lt;p&gt;The sockets can be tiny (&lt;code&gt;2.67mm&lt;/code&gt; tall for the
+&lt;a href=&#34;https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/7305-0-15-15-47-27-10-0/1765737&#34;&gt;Mill Max 7305&lt;/a&gt; for example). You will almost certainly drop a
+couple of these and have no clue where they went.&lt;/p&gt;
+&lt;p&gt;In addition to the reality that you may lose some of them, it&amp;rsquo;s also good to
+have extras in case you accidentally apply too much solder and get solder inside
+the socket itself. Once solder is in the socket, there is no fixing it - consider
+it a cost of doing business!&lt;/p&gt;
+&lt;p&gt;Lastly, once you do it once, it&amp;rsquo;s likely you&amp;rsquo;ll want to do it again. Maybe you
+have a keyboard with number keys, such as a 40%, 60%, 65%, etc. and you later
+decided you want a sidecar numpad. Maybe you want to build another board altogether.
+You don&amp;rsquo;t want to be halfway through a build and find out you don&amp;rsquo;t enough
+sockets.&lt;/p&gt;
+&lt;h1 id=&#34;downsides&#34;&gt;Downsides&lt;/h1&gt;
+&lt;p&gt;Building a mechanical keyboard with hotswap support isn&amp;rsquo;t a home run; it does
+come with some downsides.&lt;/p&gt;
+&lt;p&gt;Most notably, it will be more expensive. Mill max sockets aren&amp;rsquo;t cheap, and
+depending on the size of your board, you may use a lot of them (two per switch).
+Luckily, most online retailers for the sockets provide bulk discount rates. If
+you can swing it, I strongly recommend buying enough to take advantage of some
+of these discounts.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;EXAMPLE&lt;/strong&gt;&lt;/em&gt;: For example, buying &lt;code&gt;499&lt;/code&gt; &lt;a href=&#34;https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/7305-0-15-15-47-27-10-0/1765737&#34;&gt;Mill Max 7305&lt;/a&gt;
+sockets on Digikey will cost you &lt;code&gt;$158.02&lt;/code&gt; (&lt;code&gt;$0.31668&lt;/code&gt; each), while &lt;code&gt;500&lt;/code&gt;
+will cost &lt;code&gt;$150.79&lt;/code&gt; (&lt;code&gt;$0.30158&lt;/code&gt; each), which is &lt;code&gt;~4.8%&lt;/code&gt; discount. And yep you
+read that right, you save &lt;code&gt;$7&lt;/code&gt; even though you are getting one more socket.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Next, it will require a little more upfront time investment. You&amp;rsquo;ll be working
+with tweezers to insert each socket, taping them in place, and soldering them in.
+Overall though, I&amp;rsquo;ve found in practice it doesn&amp;rsquo;t add too much time;
+it&amp;rsquo;s the same amount of soldering, so really it comes down to the prep work.&lt;/p&gt;
+&lt;p&gt;Lastly, they are a little trickier to solder than the pins on a switch. Depending
+on whether you get longer sockets, (like the &lt;a href=&#34;https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp./0305-2-15-80-47-80-10-0/2639493?utm_adgroup=Terminals%20-%20PC%20Pin%20Receptacles%2C%20Socket%20Connectors&amp;amp;utm_source=google&amp;amp;utm_medium=cpc&amp;amp;utm_campaign=Shopping_Product_Connectors%2C%20Interconnects_NEW&amp;amp;utm_term=&amp;amp;utm_content=Terminals%20-%20PC%20Pin%20Receptacles%2C%20Socket%20Connectors&amp;amp;gclid=Cj0KCQjwgO2XBhCaARIsANrW2X0ZAFszkHLN835TWu_m3qZyo4K4jiFYgfiW2spKUK9OuxyNLCD5oZwaAs34EALw_wcB&#34;&gt;0305s&lt;/a&gt;; &lt;code&gt;3.94mm&lt;/code&gt;),
+or shorter ones (like the &lt;a href=&#34;https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/7305-0-15-15-47-27-10-0/1765737&#34;&gt;7305s&lt;/a&gt;; &lt;code&gt;2.67mm&lt;/code&gt;), there is an
+increased likelyhood you&amp;rsquo;ll accidentally get solder in the socket itself and
+need to replace it altogether.&lt;/p&gt;
+&lt;h1 id=&#34;anything-i-missed&#34;&gt;Anything I Missed?&lt;/h1&gt;
+&lt;p&gt;These tips &amp;amp; tricks are the ones I have found most impactful during my builds
+when it comes to hotswapping. I hope that they will help you as well.&lt;/p&gt;
+&lt;p&gt;Building these boards is a bit of a craft. I&amp;rsquo;d love to hear about other approaches
+that you might have taken!&lt;/p&gt;
+</content>
+    </item>
+    
     <item>
       <title>Who&#39;s the Boss?</title>
       <link>/posts/docker-swarm-managers/</link>

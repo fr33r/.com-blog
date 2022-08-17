@@ -3,6 +3,7 @@ title = "About"
 date = 2022-08-12T09:44:28-07:00
 author = "fr33r"
 cover = "img/headshot.png"
+hideComments = true
 +++
 
 Hey there! I'm Jon 👋. I usually go by fr33r around here and on the interwebs.
