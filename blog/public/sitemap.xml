@@ -3,25 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/</loc>
-    <lastmod>2022-08-15T10:33:48-07:00</lastmod>
-  </url><url>
-    <loc>/tags/keyboard/</loc>
-    <lastmod>2022-08-15T10:33:48-07:00</lastmod>
-  </url><url>
-    <loc>/tags/mechanical/</loc>
-    <lastmod>2022-08-15T10:33:48-07:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2022-08-15T10:33:48-07:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2022-08-15T10:33:48-07:00</lastmod>
-  </url><url>
-    <loc>/tags/tips/</loc>
-    <lastmod>2022-08-15T10:33:48-07:00</lastmod>
-  </url><url>
-    <loc>/posts/tips-for-hotswapping/</loc>
-    <lastmod>2022-08-15T10:33:48-07:00</lastmod>
+    <lastmod>2022-08-13T08:12:39-07:00</lastmod>
   </url><url>
     <loc>/tags/devops/</loc>
     <lastmod>2022-08-13T08:12:39-07:00</lastmod>
@@ -29,7 +11,13 @@
     <loc>/tags/docker/</loc>
     <lastmod>2022-08-13T08:12:39-07:00</lastmod>
   </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2022-08-13T08:12:39-07:00</lastmod>
+  </url><url>
     <loc>/tags/quickhit/</loc>
+    <lastmod>2022-08-13T08:12:39-07:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
     <lastmod>2022-08-13T08:12:39-07:00</lastmod>
   </url><url>
     <loc>/tags/tutorial/</loc>
@@ -61,6 +49,12 @@
   </url><url>
     <loc>/posts/github-environments-and-secrets/</loc>
     <lastmod>2022-08-10T20:43:31-07:00</lastmod>
+  </url><url>
+    <loc>/tags/build/</loc>
+    <lastmod>2022-08-06T21:22:01-07:00</lastmod>
+  </url><url>
+    <loc>/posts/building-a-pi-cluster/</loc>
+    <lastmod>2022-08-06T21:22:01-07:00</lastmod>
   </url><url>
     <loc>/categories/</loc>
   </url>

@@ -12,6 +12,17 @@
 <link rel="canonical" href="/posts/building-a-pi-cluster/" />
 
 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BMCHLBV6TC"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-BMCHLBV6TC', { 'anonymize_ip': false });
+}
+</script>
+
 
 
 <link rel="stylesheet" href="/assets/style.css">
@@ -83,11 +94,11 @@
     
       
         
-          <li><a href="/about">About</a></li>
+          <li><a href="/about/">About</a></li>
         
       
         
-          <li><a href="/powered-by">Powered By</a></li>
+          <li><a href="/powered-by/">Powered By</a></li>
         
       
       
@@ -99,11 +110,11 @@
   <ul class="menu__inner menu__inner--mobile">
     
       
-        <li><a href="/about">About</a></li>
+        <li><a href="/about/">About</a></li>
       
     
       
-        <li><a href="/powered-by">Powered By</a></li>
+        <li><a href="/powered-by/">Powered By</a></li>
       
     
     
@@ -132,7 +143,7 @@
       <span class="post-author">:: fr33r</span>
     
     
-      <span class="post-reading-time">:: 10 min read (1963 words)</span>
+      <span class="post-reading-time">:: 12 min read (2480 words)</span>
     
   </div>
 
@@ -160,7 +171,8 @@
         <p>Having been a software engineer for years, I had heard about Raspberry Pi
 computers, and the tinkering people were doing with them. Despite the chatter,
 I didn&rsquo;t have any sort of project in mind, and honestly didn&rsquo;t take the time
-learn about them. One year when the holiday season began rolling around, the
+to learn about them.</p>
+<p>One year when the holiday season began rolling around, the
 team decided to partake in a &ldquo;secret santa&rdquo; gift giving activity. Without any
 better ideas, I put down that I was interesting an a Raspberry Pi.</p>
 <p>Fast-forward 3 years later and I finally found a project that I was genuinely
@@ -175,7 +187,7 @@ the various items I ended up with.</p>
 <p>I received one as a gift - check! The remaining three I needed to source internationally
 (more on that later). To future proof, I was aiming for the model 4B. Although
 it would&rsquo;ve been nice to get my hands on a 4GB or 8GB configuration, they were
-basically myths during these times. I settled for 3 2GB models.</p>
+basically myths during these times. I settled for three 2GB models.</p>
 <h4 id="poe-hats">PoE+ Hats<a href="#poe-hats" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
 <p>Given power supplies aren&rsquo;t included with the Pi itself, I knew that powering
 my cluster was going to involve spending some additional money.</p>
@@ -196,9 +208,8 @@ power supplies.</p>
 <p>When it comes to PoE+ switches, the main thing to focus on is the number of ports.
 Obviously, the more ports, the more you will end up spending. No more than 4 Pis
 are needed for my build, so I went with the <a href="https://www.amazon.com/dp/B08LHL1Q2Z?psc=1&amp;ref=ppx_yo2ov_dt_b_product_details">Netgear GS305P (v2)</a>. This switch
-is <a href="https://www.fieldengineer.com/blogs/network-switch-managed-vs-unmanaged#:~:text=An%20unmanaged%20switch%20is%20simple,systems%20to%20a%20larger%20network.">unmanaged</a> (no smartness) and has 5 ports, one of which being the ingress
-from your existing internet connection.</p>
-<h4 id="memory">Memory<a href="#memory" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+is <a href="https://www.fieldengineer.com/blogs/network-switch-managed-vs-unmanaged#:~:text=An%20unmanaged%20switch%20is%20simple,systems%20to%20a%20larger%20network.">unmanaged</a> (no smartness) and has 5 ports, one of which being the ingress from your existing internet connection.</p>
+<h4 id="storage">Storage<a href="#storage" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
 <p>Each Pi has a micro SD card slot that acts as onboard storage. For my use cases,
 I knew I was going to use a network attached storage (NAS) device to store all
 of my data, so using a smaller SD card made sense. I ultimately landed on
@@ -209,7 +220,7 @@ only desire for these was that they were small (also called <a href="https://www
 <p>I found that cables were typically sized in 6 inch increments. Many places
 didn&rsquo;t sell patch cables smaller than 1 foot, but I eventually found <a href="https://www.amazon.com/dp/B06XC5PZLV?psc=1&amp;ref=ppx_yo2ov_dt_b_product_details">some</a> online
 without too much trouble.</p>
-<p>If you are looking for any slack at all, I&rsquo;d recommend get cables that are about
+<p>If you are looking for any slack at all, I&rsquo;d recommend getting cables that are about
 1 foot in length. Additionally, my cables all weren&rsquo;t the exact same size, so
 if sizing consistency is super important, I wouldn&rsquo;t buy the cables I ended up
 getting.</p>
@@ -218,14 +229,14 @@ getting.</p>
 a little digging, I stumbled upon <a href="https://www.uctronics.com/">Uctronics</a> which produces many <a href="https://www.uctronics.com/cluster-and-rack-mount/for-raspberry-pi/cluster.html">products
 specific to Pi clusters</a>.</p>
 <p>In particular, I wanted something that could not only house my Pis (keeping in
-mind they each would have a PoE+ hat installed), but also someting that would
+mind they each would have a PoE+ hat installed), but also something that would
 also house my PoE+ switch, and provide simple access to the Pis in case I needed
 change anything.</p>
 <h1 id="cost-breakdown">Cost Breakdown<a href="#cost-breakdown" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
 <p>Below outlines the cost of my build (excluding state-side taxes; VAT was included in some
-of the purchases). Keep in mind that the chip shortage, high
-inflation, and supply chain woes led to higher costs than what was likely achievable
-historically for the same parts.</p>
+of the purchases). Keep in mind that the chip shortage, high inflation, and
+supply chain woes led to higher costs than what was likely achievable historically
+for the same parts.</p>
 <table>
 <thead>
 <tr>
@@ -251,8 +262,12 @@ historically for the same parts.</p>
 <td>$45.79</td>
 </tr>
 <tr>
-<td><a href="https://www.adafruit.com/product/2336">Standoffs</a></td>
+<td><a href="https://www.adafruit.com/product/2336">Crappy Standoffs</a></td>
 <td>$8.16</td>
+</tr>
+<tr>
+<td><a href="https://www.mouser.com/ProductDetail/RAF-Electronic-Hardware/M2104-2545-AL?qs=2411ckis64rpgA%252BYlrCb%252Bg%3D%3D">Good Standoffs</a></td>
+<td>$22.73</td>
 </tr>
 <tr>
 <td><a href="https://www.amazon.com/UCTRONICS-Upgraded-Enclosure-Raspberry-Removable/dp/B09JNHKL2N">Case</a></td>
@@ -300,14 +315,12 @@ historically for the same parts.</p>
 </tr>
 <tr>
 <td><strong>Total</strong></td>
-<td><strong>$547.88</strong></td>
+<td><strong>$570.61</strong></td>
 </tr>
 </tbody>
 </table>
 <p>I was also very fortunate in that the Raspberry Pi 3B+ was a gift (as mentioned
 previously) and that I had accumulated some Adafruit gift cards up to this point!</p>
-<h1 id="what-went-well">What went well<a href="#what-went-well" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
-<h4 id="heading"><a href="#heading" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
 <h1 id="what-went-not-so-well">What went not so well<a href="#what-went-not-so-well" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
 <h4 id="incomplete-case">Incomplete Case<a href="#incomplete-case" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
 <p>Even though the quality of the case I got was solid, it was annoyingly incomplete.</p>
@@ -337,10 +350,10 @@ was going to be a dead-end as well since the only sellers were gouging hard; we&
 talking $100+ for model 4B (2G) which <a href="https://www.adafruit.com/product/4292">normally retails for $45</a>.</p>
 <p>I finally discovered a website called <a href="https://rpilocator.com/">rpilocator</a>, which was
 completely dedicated to help solving this issue. It was through this website that
-I was fortunate enough to snag 3 model 4B (2G) Pis.</p>
+I was fortunate enough to snag three model 4B (2G) Pis.</p>
 <p>This wasn&rsquo;t a quick process though; it took 2-3 months for the timing to line up right.
 It&rsquo;s also worth mentioning that nearly all of these vendor websites have a policy of
-1 Pi per customer, which made things more difficult. I even saw various vendors
+one Pi per customer, which made things more difficult. I even saw various vendors
 adapt very strict policies that only previously existing customers could purchase them, or that
 they were no longer going to ship them internationally.</p>
 <h4 id="cost">Cost<a href="#cost" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
@@ -356,6 +369,47 @@ need to purchase the power supplies instead (around $32 + shipping).</p>
 <p>As previously mentioned, I ended up sinking $85 into my case for the Pi cluster.
 Sure it came with some frills, but it&rsquo;s arguable whether they justify the extra bucks.
 It would definitely be possible to get away with a $15 dollar case like <a href="https://vilros.com/products/vilros-acrylic-4-layer-clear-case-box-enclosure-for-raspberry-pi?variant=29408411877470&amp;currency=USD&amp;utm_medium=product_sync&amp;utm_source=google&amp;utm_content=sag_organic&amp;utm_campaign=sag_organic&amp;gclid=EAIaIQobChMI9ZLJzbC7-QIV9AjnCh0WpAUbEAQYASABEgLszPD_BwE">this one</a>.</p>
+<h1 id="what-went-well">What went well<a href="#what-went-well" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<h4 id="customer-service">Customer Service<a href="#customer-service" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<h5 id="international-shipping">International Shipping<a href="#international-shipping" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h5>
+<p>Before this project, I really hadn&rsquo;t made an international purchase online before.
+For the most part, it was made far easier thanks to rpilocater, as many of the
+websites listing inventory were not written in english, and translating the content
+was hit or miss. Luckily I was able to stumble my way through check out.</p>
+<p>Waiting for the Pis to be shipped was far harder. In particular, one
+of the Pis I bought stated that it had been shipped to the US, but when I looked
+up the tracking number on the USPS website, it claimed it had never been received.
+Calling the USPS, was less than helpful, but my email interactions with the staff
+of the store I bought it from were really great - and most importantly, transparent.
+They were knowledgable of the customs shipping process and the state of global
+shipping, hopeful I&rsquo;d get it, and remarked that they had just recently gotten
+into international shipping. The positivity they had gave me that extra boost
+of stamina for the long wait!</p>
+<h5 id="standoff-snafu">Standoff Snafu<a href="#standoff-snafu" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h5>
+<p>Okay, so now I had the Pis - great! Next it was time to screw in these
+bad boys and get them up and running.</p>
+<p>When it came time to install these things into my newly purchased case, I had
+bought some standoffs that were a compatible height to support the PoE+ hats I was using. I made
+sure that they were M2.5 sized to match the screws provided with the <a href="https://www.mouser.com/ProductDetail/RAF-Electronic-Hardware/M2104-2545-AL?qs=2411ckis64rpgA%252BYlrCb%252Bg%3D%3D">case</a>
+itself; check!</p>
+<p>Weirdly, on some of the tray mounts, the screws wouldn&rsquo;t turn easily. I naively
+thought it they needed an extra &lsquo;oomf&rsquo; to get them to the desired position, so
+of course I reached for my pliers!</p>
+<blockquote>
+<p>NOTE: Don&rsquo;t use pliers to install standoffs into the case.</p>
+</blockquote>
+<p>Without too much additional manpower, I managed to snap off the threaded portion
+of a standoff in the tray mount point. Game over! Sure, I could&rsquo;ve just not
+screwed in a standoff for that one corner, but then it just wouldn&rsquo;t be complete!
+Also, since the GPIO pins are used to connect the hat and the Pi, I didn&rsquo;t
+want to have to worry about accidentally squishing that limp corner too hard when
+working with it in the future. I had to fix this.</p>
+<p>I reached out to UCTRONICS support via their website directly. I explained to
+them what happened, and they were incredible. They shipped not one, but two replacement
+trays all for something that was completely my fault.</p>
+<p>Best of all, thanks to Jeff Gerling and <a href="https://github.com/geerlingguy/raspberry-pi-dramble/issues/135">his prior research</a>, I went ahead and ordered a second
+set of standoffs with the hope that I&rsquo;d get it right the second time - it worked like a charm!</p>
+<h4 id="availability">Availability<a href="#availability" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
 <h1 id="was-the-cost-worth-it">Was the cost worth it?<a href="#was-the-cost-worth-it" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
 <p>So was the cost worth it? With so many different Infrastructure as a Service (IaaS)
 companies such as Linode, Amazon Web Service (AWS), etc. this is a question
@@ -508,9 +562,13 @@ I&rsquo;ll break down the comparisons into two sections: matching RAM and matchi
 cluster in perpituity, want to have the extra control over my data, and want the
 performance of dedicated hosting. The experience of learning how to build the
 cluster from scratch is also an added educational bonus.</p>
-<p>To be honest though, this experienced showed me that it&rsquo;s probably better to at
+<p>To be honest though, this experience showed me that it&rsquo;s probably better to at
 least start out by using an IaaS platform. Depending on the configuration, you
 could achieve a comparable setup that is actually cheaper for 12 or even 18 months.</p>
+<p>I hope you enjoyed following along! Have any ideas for what I should use my
+Pi cluster for? Toss me a comment and maybe I&rsquo;ll give it a try. Also, I can&rsquo;t
+wait to bring you all along for what I might do with this next - there is so
+much out there!</p>
 
       </div></div>
 
@@ -531,20 +589,32 @@ could achieve a comparable setup that is actually cheaper for 12 or even 18 mont
         </span>
         
         
-        <span class="button next">
-            <a href="/posts/why-blog/">
-                <span class="button__text">Why Blog?</span>
-                <span class="button__icon">→</span>
-            </a>
-        </span>
-        
     </div>
 </div>
 
   
 
   
-  
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-fr33r-com" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
   
 </div>
@@ -556,7 +626,7 @@ could achieve a comparable setup that is actually cheaper for 12 or even 18 mont
   <div class="footer__inner">
     
       <div class="copyright">
-        <span>© 2022 Powered by <a href="http://gohugo.io">Hugo</a></span>
+        <span>© 2023 Powered by <a href="http://gohugo.io">Hugo</a></span>
     
         <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
       </div>
