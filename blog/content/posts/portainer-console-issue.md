@@ -2,7 +2,7 @@
 title = "You Had One Job Portainer Console!"
 date = "2022-08-12T22:04:10-07:00"
 author = "fr33r"
-cover = "img/sonic-waiting.jpeg"
+cover = "img/jon_blog_portainer_console_issue_cover.png"
 tags = ["portainer", "fix", "quickhit", "nginx", "devops"]
 keywords = ["portainer", "nginx", "websockets"]
 description = "A quick dive into why my Portainer console connectivity stopped working."
