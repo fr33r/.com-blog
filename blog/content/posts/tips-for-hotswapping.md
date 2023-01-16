@@ -9,7 +9,6 @@ description = "Some tips & tricks to make building hotswap mechanical keyboards 
 showFullContent = false
 readingTime = true
 hideComments = false
-draft = true
 +++
 
 When I build mechanical keyboards, I almost always introduce [hotswap][hotswap] support.
