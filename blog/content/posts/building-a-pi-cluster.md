@@ -10,13 +10,14 @@ description = "My journey of building a Raspberry Pi cluster."
 showFullContent = false
 readingTime = true 
 hideComments = false
-draft = true
 +++
 
 Having been a software engineer for years, I had heard about Raspberry Pi
 computers, and the tinkering people were doing with them. Despite the chatter,
 I didn't have any sort of project in mind, and honestly didn't take the time
-learn about them. One year when the holiday season began rolling around, the
+to learn about them.
+
+One year when the holiday season began rolling around, the
 team decided to partake in a "secret santa" gift giving activity. Without any
 better ideas, I put down that I was interesting an a Raspberry Pi.
 
@@ -37,7 +38,7 @@ The most important part of the Pi cluster is... well... the Pis!
 I received one as a gift - check! The remaining three I needed to source internationally
 (more on that later). To future proof, I was aiming for the model 4B. Although
 it would've been nice to get my hands on a 4GB or 8GB configuration, they were
-basically myths during these times. I settled for 3 2GB models.
+basically myths during these times. I settled for three 2GB models.
 
 #### PoE+ Hats
 
@@ -65,10 +66,9 @@ power supplies.
 When it comes to PoE+ switches, the main thing to focus on is the number of ports.
 Obviously, the more ports, the more you will end up spending. No more than 4 Pis
 are needed for my build, so I went with the [Netgear GS305P (v2)](https://www.amazon.com/dp/B08LHL1Q2Z?psc=1&ref=ppx_yo2ov_dt_b_product_details). This switch
-is [unmanaged](https://www.fieldengineer.com/blogs/network-switch-managed-vs-unmanaged#:~:text=An%20unmanaged%20switch%20is%20simple,systems%20to%20a%20larger%20network.) (no smartness) and has 5 ports, one of which being the ingress
-from your existing internet connection.
+is [unmanaged](https://www.fieldengineer.com/blogs/network-switch-managed-vs-unmanaged#:~:text=An%20unmanaged%20switch%20is%20simple,systems%20to%20a%20larger%20network.) (no smartness) and has 5 ports, one of which being the ingress from your existing internet connection.
 
-#### Memory
+#### Storage
 
 Each Pi has a micro SD card slot that acts as onboard storage. For my use cases,
 I knew I was going to use a network attached storage (NAS) device to store all
@@ -84,7 +84,7 @@ I found that cables were typically sized in 6 inch increments. Many places
 didn't sell patch cables smaller than 1 foot, but I eventually found [some](https://www.amazon.com/dp/B06XC5PZLV?psc=1&ref=ppx_yo2ov_dt_b_product_details) online
 without too much trouble.
 
-If you are looking for any slack at all, I'd recommend get cables that are about
+If you are looking for any slack at all, I'd recommend getting cables that are about
 1 foot in length. Additionally, my cables all weren't the exact same size, so
 if sizing consistency is super important, I wouldn't buy the cables I ended up
 getting.
@@ -96,24 +96,25 @@ a little digging, I stumbled upon [Uctronics](https://www.uctronics.com/) which 
 specific to Pi clusters](https://www.uctronics.com/cluster-and-rack-mount/for-raspberry-pi/cluster.html).
 
 In particular, I wanted something that could not only house my Pis (keeping in
-mind they each would have a PoE+ hat installed), but also someting that would
+mind they each would have a PoE+ hat installed), but also something that would
 also house my PoE+ switch, and provide simple access to the Pis in case I needed
 change anything.
 
 # Cost Breakdown
 
 Below outlines the cost of my build (excluding state-side taxes; VAT was included in some
-of the purchases). Keep in mind that the chip shortage, high
-inflation, and supply chain woes led to higher costs than what was likely achievable
-historically for the same parts.
+of the purchases). Keep in mind that the chip shortage, high inflation, and
+supply chain woes led to higher costs than what was likely achievable historically
+for the same parts.
 
 | Line Item                                                                                                        | Price ($)   |
 |------------------------------------------------------------------------------------------------------------------|-------------|
 | [Raspberry Pi 3B+ (1GB)](https://www.adafruit.com/product/3775)                                                  | $35.00      |
-| Raspberry Pi 4B (2GB)   | $52.92      |
-| Raspberry Pi 4B (2GB)   | $45.78      |
-| Raspberry Pi 4B (2GB)   | $45.79      |
-| [Standoffs](https://www.adafruit.com/product/2336)                                                               | $8.16       |
+| Raspberry Pi 4B (2GB)                                                                                            | $52.92      |
+| Raspberry Pi 4B (2GB)                                                                                            | $45.78      |
+| Raspberry Pi 4B (2GB)                                                                                            | $45.79      |
+| [Crappy Standoffs](https://www.adafruit.com/product/2336)                                                        | $8.16       |
+| [Good Standoffs](https://www.mouser.com/ProductDetail/RAF-Electronic-Hardware/M2104-2545-AL?qs=2411ckis64rpgA%252BYlrCb%252Bg%3D%3D) | $22.73      |
 | [Case](https://www.amazon.com/UCTRONICS-Upgraded-Enclosure-Raspberry-Removable/dp/B09JNHKL2N)                    | $69.99      |
 | [Case Fan Adaptor](https://www.amazon.com/dp/B09TP9HT3C?psc=1&ref=ppx_yo2ov_dt_b_product_details)                | $5.99       |
 | [Switch](https://www.amazon.com/dp/B08LHL1Q2Z?psc=1&ref=ppx_yo2ov_dt_b_product_details)                          | $69.00      |
@@ -125,15 +126,10 @@ historically for the same parts.
 | [Micro SD Card (x2)](https://www.officedepot.com/a/products/8224492/SanDisk-Ultra-PLUS-microSD-Cards-32GB/)      | $22.00      |
 | [Micro SD Card (x2)](https://www.officedepot.com/a/products/8224492/SanDisk-Ultra-PLUS-microSD-Cards-32GB/)      | $22.00      |
 | Shipping                                                                                                         | $76.76      |
-| **Total**                                                                                                        | **$547.88** |
+| **Total**                                                                                                        | **$570.61** |
 
 I was also very fortunate in that the Raspberry Pi 3B+ was a gift (as mentioned
 previously) and that I had accumulated some Adafruit gift cards up to this point!
-
-
-# What went well
-
-####
 
 # What went not so well
 
@@ -173,11 +169,11 @@ talking $100+ for model 4B (2G) which [normally retails for $45](https://www.ada
 
 I finally discovered a website called [rpilocator](https://rpilocator.com/), which was
 completely dedicated to help solving this issue. It was through this website that
-I was fortunate enough to snag 3 model 4B (2G) Pis.
+I was fortunate enough to snag three model 4B (2G) Pis.
 
 This wasn't a quick process though; it took 2-3 months for the timing to line up right.
 It's also worth mentioning that nearly all of these vendor websites have a policy of
-1 Pi per customer, which made things more difficult. I even saw various vendors
+one Pi per customer, which made things more difficult. I even saw various vendors
 adapt very strict policies that only previously existing customers could purchase them, or that
 they were no longer going to ship them internationally.
 
@@ -199,6 +195,59 @@ need to purchase the power supplies instead (around $32 + shipping).
 As previously mentioned, I ended up sinking $85 into my case for the Pi cluster.
 Sure it came with some frills, but it's arguable whether they justify the extra bucks.
 It would definitely be possible to get away with a $15 dollar case like [this one](https://vilros.com/products/vilros-acrylic-4-layer-clear-case-box-enclosure-for-raspberry-pi?variant=29408411877470&currency=USD&utm_medium=product_sync&utm_source=google&utm_content=sag_organic&utm_campaign=sag_organic&gclid=EAIaIQobChMI9ZLJzbC7-QIV9AjnCh0WpAUbEAQYASABEgLszPD_BwE).
+
+# What went well
+
+#### Customer Service
+
+##### International Shipping
+
+Before this project, I really hadn't made an international purchase online before.
+For the most part, it was made far easier thanks to rpilocater, as many of the
+websites listing inventory were not written in english, and translating the content
+was hit or miss. Luckily I was able to stumble my way through check out.
+
+Waiting for the Pis to be shipped was far harder. In particular, one
+of the Pis I bought stated that it had been shipped to the US, but when I looked
+up the tracking number on the USPS website, it claimed it had never been received.
+Calling the USPS, was less than helpful, but my email interactions with the staff
+of the store I bought it from were really great - and most importantly, transparent.
+They were knowledgable of the customs shipping process and the state of global
+shipping, hopeful I'd get it, and remarked that they had just recently gotten
+into international shipping. The positivity they had gave me that extra boost
+of stamina for the long wait!
+
+##### Standoff Snafu
+
+Okay, so now I had the Pis - great! Next it was time to screw in these
+bad boys and get them up and running.
+
+When it came time to install these things into my newly purchased case, I had
+bought some standoffs that were a compatible height to support the PoE+ hats I was using. I made
+sure that they were M2.5 sized to match the screws provided with the [case](https://www.mouser.com/ProductDetail/RAF-Electronic-Hardware/M2104-2545-AL?qs=2411ckis64rpgA%252BYlrCb%252Bg%3D%3D)
+itself; check!
+
+Weirdly, on some of the tray mounts, the screws wouldn't turn easily. I naively
+thought it they needed an extra 'oomf' to get them to the desired position, so
+of course I reached for my pliers!
+
+> NOTE: Don't use pliers to install standoffs into the case.
+
+Without too much additional manpower, I managed to snap off the threaded portion
+of a standoff in the tray mount point. Game over! Sure, I could've just not
+screwed in a standoff for that one corner, but then it just wouldn't be complete!
+Also, since the GPIO pins are used to connect the hat and the Pi, I didn't
+want to have to worry about accidentally squishing that limp corner too hard when
+working with it in the future. I had to fix this.
+
+I reached out to UCTRONICS support via their website directly. I explained to
+them what happened, and they were incredible. They shipped not one, but two replacement
+trays all for something that was completely my fault.
+
+Best of all, thanks to Jeff Gerling and [his prior research](https://github.com/geerlingguy/raspberry-pi-dramble/issues/135), I went ahead and ordered a second
+set of standoffs with the hope that I'd get it right the second time - it worked like a charm!
+
+#### Availability
 
 # Was the cost worth it?
 
@@ -276,6 +325,11 @@ cluster in perpituity, want to have the extra control over my data, and want the
 performance of dedicated hosting. The experience of learning how to build the
 cluster from scratch is also an added educational bonus.
 
-To be honest though, this experienced showed me that it's probably better to at
+To be honest though, this experience showed me that it's probably better to at
 least start out by using an IaaS platform. Depending on the configuration, you
 could achieve a comparable setup that is actually cheaper for 12 or even 18 months.
+
+I hope you enjoyed following along! Have any ideas for what I should use my
+Pi cluster for? Toss me a comment and maybe I'll give it a try. Also, I can't
+wait to bring you all along for what I might do with this next - there is so
+much out there!
