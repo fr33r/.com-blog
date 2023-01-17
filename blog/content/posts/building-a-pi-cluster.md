@@ -19,9 +19,9 @@ to learn about them.
 
 One year when the holiday season began rolling around, the
 team decided to partake in a "secret santa" gift giving activity. Without any
-better ideas, I put down that I was interesting an a Raspberry Pi.
+better ideas, I put down that I was interested an a Raspberry Pi.
 
-Fast-forward 3 years later and I finally found a project that I was genuinely
+Fast-forward three years later and I finally found a project that I was genuinely
 excited about: creating a Raspberry Pi cluster. I dug up that model 3B+ that I
 got from the gift exchange years prior to began setting it up for the first
 time, and I've been at it ever since!
@@ -35,7 +35,7 @@ the various items I ended up with.
 
 The most important part of the Pi cluster is... well... the Pis!
 
-I received one as a gift - check! The remaining three I needed to source internationally
+I already got one as a gift - check! The remaining three I needed to source internationally
 (more on that later). To future proof, I was aiming for the model 4B. Although
 it would've been nice to get my hands on a 4GB or 8GB configuration, they were
 basically myths during these times. I settled for three 2GB models.
@@ -43,12 +43,12 @@ basically myths during these times. I settled for three 2GB models.
 #### PoE+ Hats
 
 Given power supplies aren't included with the Pi itself, I knew that powering
-my cluster was going to involve spending some additional money.
+my cluster was going to involve spending some additional cheddar!
 
-The [official power supply](https://www.adafruit.com/product/4298?gclid=Cj0KCQjwxb2XBhDBARIsAOjDZ37bms37yK_7GGNQR5pZ6oqvTZTzyaVe16QH8_NynBC47z0yp6GJZc0aAgFnEALw_wcB) goes for around $8 dollars. Knowing that I was going to shoot for 4 Pis, that was going
-to cost me $32 dollars. That wasn't even including the money I'd need to spend
+The [official power supply](https://www.adafruit.com/product/4298?gclid=Cj0KCQjwxb2XBhDBARIsAOjDZ37bms37yK_7GGNQR5pZ6oqvTZTzyaVe16QH8_NynBC47z0yp6GJZc0aAgFnEALw_wcB) goes for around $8 dollars. Knowing that I was going to shoot for four Pis, that was going
+to cost me at least $32 dollars. That wasn't even including the money I'd need to spend
 on zip ties and the time I'd need to spend to cable manage. Lastly, I simply
-couldn't justify using 4 outlets!
+couldn't justify using four outlets!
 
 This is where [Power over Ethernet (PoE)](https://en.wikipedia.org/wiki/Power_over_Ethernet) comes to the rescue. With the correct
 networking equipment, enough power to drive the Pis can be delivered over a
@@ -64,7 +64,7 @@ power supplies.
 #### Switch
 
 When it comes to PoE+ switches, the main thing to focus on is the number of ports.
-Obviously, the more ports, the more you will end up spending. No more than 4 Pis
+Obviously, the more ports, the more you will end up spending. No more than four Pis
 are needed for my build, so I went with the [Netgear GS305P (v2)](https://www.amazon.com/dp/B08LHL1Q2Z?psc=1&ref=ppx_yo2ov_dt_b_product_details). This switch
 is [unmanaged](https://www.fieldengineer.com/blogs/network-switch-managed-vs-unmanaged#:~:text=An%20unmanaged%20switch%20is%20simple,systems%20to%20a%20larger%20network.) (no smartness) and has 5 ports, one of which being the ingress from your existing internet connection.
 
@@ -128,9 +128,6 @@ for the same parts.
 | Shipping                                                                                                         | $76.76      |
 | **Total**                                                                                                        | **$570.61** |
 
-I was also very fortunate in that the Raspberry Pi 3B+ was a gift (as mentioned
-previously) and that I had accumulated some Adafruit gift cards up to this point!
-
 # What went not so well
 
 #### Incomplete Case
@@ -143,7 +140,7 @@ this until I was building the case, as the instruction manual that came with it
 referenced the part but it wasn't included. I find it pretty strange that the fans
 come with the case but the adaptor isn't included.
 
-My next gripe was that the case avertises that it is compatible with the
+My next gripe was that the case advertises that it is compatible with the
 PoE+ hat, but didn't come equipped with standoffs compatible with the case.
 Instead it came with screws to secure the Pis to the trays, which would essentially
 be all that is necessary if there were no hats installed. I give Uctronics more
@@ -165,17 +162,17 @@ After quickly learning that there was no way I was going to be able to purchase
 my Pis from [Adafruit](https://www.adafruit.com/), [Digikey](https://www.digikey.com/), or any other retailer I was a previous customer of,
 I briefly looked at alternative marketplaces such as Facebook. It was clear that
 was going to be a dead-end as well since the only sellers were gouging hard; we're
-talking $100+ for model 4B (2G) which [normally retails for $45](https://www.adafruit.com/product/4292).
+talking $100+ for model 4B (2G) which [normally retailed for $45](https://www.adafruit.com/product/4292).
 
 I finally discovered a website called [rpilocator](https://rpilocator.com/), which was
 completely dedicated to help solving this issue. It was through this website that
 I was fortunate enough to snag three model 4B (2G) Pis.
 
 This wasn't a quick process though; it took 2-3 months for the timing to line up right.
-It's also worth mentioning that nearly all of these vendor websites have a policy of
+It's also worth mentioning that nearly all of these vendor websites had a policy of
 one Pi per customer, which made things more difficult. I even saw various vendors
-adapt very strict policies that only previously existing customers could purchase them, or that
-they were no longer going to ship them internationally.
+adopt very strict policies that stated only previously existing customers could purchase them, or that
+they were no longer going to ship them internationally at all.
 
 #### Cost
 
@@ -227,7 +224,7 @@ bought some standoffs that were a compatible height to support the PoE+ hats I w
 sure that they were M2.5 sized to match the screws provided with the [case](https://www.mouser.com/ProductDetail/RAF-Electronic-Hardware/M2104-2545-AL?qs=2411ckis64rpgA%252BYlrCb%252Bg%3D%3D)
 itself; check!
 
-Weirdly, on some of the tray mounts, the screws wouldn't turn easily. I naively
+Weirdly, on some of the tray mounts the screws wouldn't turn easily. I naively
 thought it they needed an extra 'oomf' to get them to the desired position, so
 of course I reached for my pliers!
 
@@ -240,14 +237,12 @@ Also, since the GPIO pins are used to connect the hat and the Pi, I didn't
 want to have to worry about accidentally squishing that limp corner too hard when
 working with it in the future. I had to fix this.
 
-I reached out to UCTRONICS support via their website directly. I explained to
+I reached out to Uctronics support via their website directly. I explained to
 them what happened, and they were incredible. They shipped not one, but two replacement
 trays all for something that was completely my fault.
 
-Best of all, thanks to Jeff Gerling and [his prior research](https://github.com/geerlingguy/raspberry-pi-dramble/issues/135), I went ahead and ordered a second
+Best of all, thanks to Jeff Geerling and [his prior research](https://github.com/geerlingguy/raspberry-pi-dramble/issues/135), I went ahead and ordered another
 set of standoffs with the hope that I'd get it right the second time - it worked like a charm!
-
-#### Availability
 
 # Was the cost worth it?
 
