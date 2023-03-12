@@ -6,7 +6,150 @@
     <description>Recent content in devops on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 13 Aug 2022 08:12:39 -0700</lastBuildDate><atom:link href="/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Feb 2023 21:51:53 -0800</lastBuildDate><atom:link href="/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Writing Better Docker Swarm Stacks</title>
+      <link>/posts/organizing-docker-swarm-stacks/</link>
+      <pubDate>Fri, 10 Feb 2023 21:51:53 -0800</pubDate>
+      
+      <guid>/posts/organizing-docker-swarm-stacks/</guid>
+      <description>When I decided to stand up my home lab, I had little to no prior experience with Docker Swarm or other supporting infrastructure (shared storage, node provisioning, etc.) and applications (Portainer, NAS software, etc.). The process of building out my cluster has been packed with learnings from both the good and the bad experiences I&amp;rsquo;ve had along the way. Additionally, I&amp;rsquo;ve picked up some patterns and practices that have helped me get to where everything is today.</description>
+      <content>&lt;p&gt;When I decided to stand up my home lab, I had little to no prior experience
+with Docker Swarm or other supporting infrastructure (shared storage,
+node provisioning, etc.) and applications (Portainer, NAS software, etc.). The process of
+building out my cluster has been packed with learnings from both the good and
+the bad experiences I&amp;rsquo;ve had along the way. Additionally, I&amp;rsquo;ve picked up some
+patterns and practices that have helped me get to where everything is today.&lt;/p&gt;
+&lt;p&gt;One area specifically worth sharing is regarding Docker Compose (stack) files.
+This post walks through the most critical bits that inform how I organize
+and write my stack files.&lt;/p&gt;
+&lt;h3 id=&#34;multiple-stack-files&#34;&gt;Multiple Stack Files&lt;/h3&gt;
+&lt;p&gt;It can be tempting to put all of your service definitions in a single stack file at first.
+After all, it means you only have one file to worry about; everything is in a single place.
+Also, you don&amp;rsquo;t have to worry about setting up a directory structure to organize - keeping things
+tidy takes effort!&lt;/p&gt;
+&lt;p&gt;However, I encourage you to fight the urge. There are some really tangible benefits
+to breaking your stack files down by application:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Each stack file becomes self contained. The services defined in the stack file
+are specific to a partular application you are spinning up. All of the volumes,
+networks, etc. are all specific to the service definitions in the file; you&amp;rsquo;re no
+longer trying to determine how everything ties together.&lt;/li&gt;
+&lt;li&gt;Separating the files means you can deploy a finite set of services at a time
+instead of all of them. This helps make your deployments more manageable and
+ensures that you aren&amp;rsquo;t going to have unintended side-effects with other
+services.&lt;/li&gt;
+&lt;li&gt;There is less likelihood that you will accidentally reference an element
+unintentionally or have a naming clash. If performing variable substitution, you
+won&amp;rsquo;t have to worry about inadvertently giving two variables the same name.&lt;/li&gt;
+&lt;li&gt;Each stack file is simply easier to read. Any one application usually doesn&amp;rsquo;t have
+more than a few services (web server, database, cache, etc.) which is easier to
+navigate than a single file with dozens of services.&lt;/li&gt;
+&lt;li&gt;Tools such as Portainer provide an interface for managing stacks separate from
+the services they define. With the files broken out by application, you can
+manage each stack independently using the UI.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As with anything, there are some drawbacks. When splitting out files, you
+likely will have to repeat particular dependency definitions that various services of
+yours utilize. For example, you will need to replicate a network definition in
+each stack file that defines services that should be a part of that network. In
+the event you need to change one of those dependencies, you will need to visit multiple
+stack files to apply that change, which is a measurable amount of more work.&lt;/p&gt;
+&lt;p&gt;For me, the benefits outweighed drawbacks.&lt;/p&gt;
+&lt;h3 id=&#34;service-naming-conventions&#34;&gt;Service Naming Conventions&lt;/h3&gt;
+&lt;p&gt;Every stack file defines a list of services. Often times your stack will
+define a single service. However, some applications that you wish to deploy
+could be more complex, including a web server, database, cache, job queue,
+and more.&lt;/p&gt;
+&lt;p&gt;When it comes to naming these services, I&amp;rsquo;ve found that naming them after the
+role they play as the most effective. More specifically, I use the following
+within my stacks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;app&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cache&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;queue&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;etc.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are many reasons why this strategy has worked for me:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The service names aren&amp;rsquo;t coupled to any particular implementation, which means
+that switching them to something else ( let&amp;rsquo;s say, switching from &lt;code&gt;Redis&lt;/code&gt; to &lt;code&gt;Memcache&lt;/code&gt; )
+won&amp;rsquo;t ripple up to the service names.&lt;/li&gt;
+&lt;li&gt;It&amp;rsquo;s easier to navigate your services. All your database services are end in&lt;code&gt;db&lt;/code&gt;.
+All of your caches are end in &lt;code&gt;cache&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Since service names are prefixed by the name of the stack they belong to, this
+strategy results in service names that avoid commonly seen mistakes, such
+as repetitive words within the name.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;pinning-to-specific-image-versions&#34;&gt;Pinning to Specific Image Versions&lt;/h3&gt;
+&lt;p&gt;It&amp;rsquo;s easy to leave off a specific image version or to specify &lt;code&gt;latest&lt;/code&gt;.
+However, this can really burn you, and typically at the worst time. Instead,
+you should explicitly specify an image version (tag).&lt;/p&gt;
+&lt;p&gt;Why? Well the are several reasons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In a cluster environment, images are pulled down on each node when the service is scheduled to run on them.
+If at any time you add in additional nodes, or deploy to a node you hadn&amp;rsquo;t previously, it is possible
+that the images on each node for the service aren&amp;rsquo;t the same. After all, &lt;code&gt;latest&lt;/code&gt;
+is a moving target, and it&amp;rsquo;s not trivial to determine when new releases are cut.&lt;/li&gt;
+&lt;li&gt;In situations where your node(s) experience a more catestrophic event (hardware
+failure, botched OS upgrade, etc.) restoring the data and configuration for the
+service(s) is half the battle, but running a version of the service compatible
+with that configuration and data is the other half. Remember that the data and configuration that one
+version of your service utilizes could be completely different from the current
+(latest), and the last thing you want to do is spend time triaging errors that
+are only happening because you&amp;rsquo;re running an incompatible version.&lt;/li&gt;
+&lt;li&gt;It becomes much more apparent what version you are running for your services,
+which makes it easier to search for bugs, documentation, and other artifacts
+online.&lt;/li&gt;
+&lt;li&gt;Upgrading your services becomes more intentional. You specify the next version you
+want to upgrade to explicitly. This approach can help you avoid upgrading to
+versions known to be less stable or haven&amp;rsquo;t been well tested yet.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;source-control-for-stack-files&#34;&gt;Source Control for Stack Files&lt;/h3&gt;
+&lt;p&gt;Your stack files are essentially the source of truth for your cluster setup;
+you should manage and track changes to them so you keep your sanity! So much tweaking,
+changing, improving, and learning happens when you work in a cluster environment.
+It&amp;rsquo;s going to be near impossible to keep all of those learnings in recent memory.
+Using source control is an incredibly helpful tool to track all of that context
+for future you, while also giving you the safety net of being able to roll back
+your changes gracefully.&lt;/p&gt;
+&lt;p&gt;An awesome side-effect of pushing your stack files to a remote source control
+such as GitHub is applications like Portainer can integrate directly with
+your stack repositories. This means you can make changes to your stacks and
+push them to GitHub, and then you can use Portainer to deploy those changes.&lt;/p&gt;
+&lt;h3 id=&#34;utilize-variable-substitution-for-image-tag&#34;&gt;Utilize Variable Substitution for Image Tag&lt;/h3&gt;
+&lt;p&gt;Docker compose (stack) files support &lt;a href=&#34;https://docs.docker.com.xy2401.com/compose/environment-variables&#34;&gt;variable substitution&lt;/a&gt;, which means that
+various elements of the stack can be dynamically evaluated based on environment
+variables. This is even easier if you use a container management platform such
+as Portainer, as it allows you declare the environment variables when you
+create a stack directly in the UI.&lt;/p&gt;
+&lt;p&gt;There are various use cases one could use variable substitution for, but one
+that I strongly recommend is using them to specify the image version (tag). This way
+you can manage upgrades for your services by simply changing the environment
+variable and redeploying the stack. If you manage your stacks using source countrol
+this means you can upgrade the image without any need to change the stack file.&lt;/p&gt;
+&lt;h3 id=&#34;leverage-docker-secrets--config&#34;&gt;Leverage Docker Secrets &amp;amp; Config&lt;/h3&gt;
+&lt;p&gt;Many services store their configuration using one or more static configuration files.
+For example an &lt;code&gt;nginx&lt;/code&gt; proxy may be configured such that each domain that it
+handles has a separate &lt;code&gt;*.conf&lt;/code&gt; file. For services that are primarily driven through
+updates of static configuration files, &lt;a href=&#34;https://docs.docker.com/engine/swarm/configs/&#34;&gt;Docker Configs&lt;/a&gt; is a perfect fit. Using
+Docker Configs in a swarm environment means you can edit these configuration
+files in a streamlined and centralized way, can version that configuration,
+and no longer need to set up the necessary infrastructure to ensure that
+configuration is shared across all nodes that the service runs on.&lt;/p&gt;
+&lt;p&gt;An additional common use case for services is specifying credentials. Many Dockerized
+applications provide a way to specify credentials via environment variables. Some
+services also rely on TLS/SSL configuration. These use cases are where &lt;a href=&#34;https://docs.docker.com/engine/swarm/secrets/&#34;&gt;Docker
+Secrets&lt;/a&gt; shines. Instead of passing in credentials using variable subsitution,
+or instead of creating infrastructure to share certificate information across
+several nodes, you can use Docker Secrets similarly to Docker Configs but for
+sensitive &amp;ldquo;secret&amp;rdquo; data.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m just scratching the surface with these. Expect a future blog post on how
+I use both of these in my cluster setup!&lt;/p&gt;
+</content>
+    </item>
+    
     <item>
       <title>Who&#39;s the Boss?</title>
       <link>/posts/docker-swarm-managers/</link>
@@ -328,6 +471,49 @@ the &lt;code&gt;Upgrade&lt;/code&gt; is sent.&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;ve only scratched the surface on this stuff. If you are interesting in reading
 further, check out &lt;a href=&#34;https://www.nginx.com/blog/websocket-nginx/&#34;&gt;this awesome post&lt;/a&gt; on the
 &lt;a href=&#34;https://www.nginx.com/blog&#34;&gt;nginx blog&lt;/a&gt;.&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>If I Only Had More Memory</title>
+      <link>/posts/docker-memory-constraints/</link>
+      <pubDate>Fri, 12 Aug 2022 14:01:08 -0700</pubDate>
+      
+      <guid>/posts/docker-memory-constraints/</guid>
+      <description>When deploying a service to a cluster of hosts, it&amp;rsquo;s important to ensure that the host ultimately chosen can accommodate for the resource requirements of that service. Without first confirming that the host can provide what the service needs, it&amp;rsquo;s possible that the service will consume all available resources and result in degradation of the host itself.
+Memory Constraints One such resource to keep tabs on is memory (RAM). Each process that is ran within a particular container will consume some amount of memory while it is running.</description>
+      <content>&lt;p&gt;When deploying a service to a cluster of hosts, it&amp;rsquo;s important to ensure that
+the host ultimately chosen can accommodate for the resource requirements of
+that service. Without first confirming that the host can provide what the
+service needs, it&amp;rsquo;s possible that the service will consume all available
+resources and result in degradation of the host itself.&lt;/p&gt;
+&lt;h1 id=&#34;memory-constraints&#34;&gt;Memory Constraints&lt;/h1&gt;
+&lt;p&gt;One such resource to keep tabs on is memory (RAM). Each process that is ran
+within a particular container will consume some amount of memory while it is
+running.&lt;/p&gt;
+&lt;p&gt;By default, Docker does not apply resource constraints to containers that
+ultimately comprise a service. That said&lt;/p&gt;
+&lt;h1 id=&#34;how&#34;&gt;How&lt;/h1&gt;
+&lt;h1 id=&#34;reaching-the-limit&#34;&gt;Reaching the Limit&lt;/h1&gt;
+&lt;p&gt;So what happens once the limit is reach&lt;/p&gt;
+&lt;p&gt;what are docker memory constraints?
+why should you use them?
+how do i determine the memory limit or reservation?```
+what is OOM and how to detect it?
+what&amp;rsquo;s the deal with swap? should you disable it?
+link to articles that could be helpful:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/53533&#34;&gt;https://github.com/kubernetes/kubernetes/issues/53533&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://haydenjames.io/linux-performance-almost-always-add-swap-space/&#34;&gt;https://haydenjames.io/linux-performance-almost-always-add-swap-space/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/config/containers/resource_constraints/#prevent-a-container-from-using-swap&#34;&gt;https://docs.docker.com/config/containers/resource_constraints/#prevent-a-container-from-using-swap&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/compose/compose-file/deploy/#resources&#34;&gt;https://docs.docker.com/compose/compose-file/deploy/#resources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/ops/docker-memory-limit#:~:text=Versions%203%20and%20Newer%20With,and%20128%20megabytes%20of%20memory.&amp;amp;text=To%20take%20advantage%20of%20the,use%20the%20docker%20stack%20command&#34;&gt;https://www.baeldung.com/ops/docker-memory-limit#:~:text=Versions%203%20and%20Newer%20With,and%20128%20megabytes%20of%20memory.&amp;amp;text=To%20take%20advantage%20of%20the,use%20the%20docker%20stack%20command&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/engine/install/linux-postinstall/&#34;&gt;https://docs.docker.com/engine/install/linux-postinstall/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://forums.docker.com/t/docker-swarm-not-respecting-memory-limit/59519&#34;&gt;https://forums.docker.com/t/docker-swarm-not-respecting-memory-limit/59519&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://semaphoreci.com/community/tutorials/scheduling-services-on-a-docker-swarm-mode-cluster&#34;&gt;https://semaphoreci.com/community/tutorials/scheduling-services-on-a-docker-swarm-mode-cluster&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;vader@devastator:~ $ sudo docker container inspect 6fd463496083 &amp;ndash;format &amp;lsquo;{{.State.OOMKilled}}&amp;rsquo;
+false&lt;/p&gt;
 </content>
     </item>
     

@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   
-    <title>reflective :: /* Commentary */</title>
+    <title>swarm :: /* Commentary */</title>
   
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="" />
 <meta name="keywords" content="" />
 <meta name="robots" content="noodp" />
-<link rel="canonical" href="/tags/reflective/" />
+<link rel="canonical" href="/tags/swarm/" />
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMCHLBV6TC"></script>
@@ -44,9 +44,9 @@ if (!doNotTrack) {
 
 <meta property="og:locale" content="en" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="reflective">
+<meta property="og:title" content="swarm">
 <meta property="og:description" content="" />
-<meta property="og:url" content="/tags/reflective/" />
+<meta property="og:url" content="/tags/swarm/" />
 <meta property="og:site_name" content="/* Commentary */" />
 
   
@@ -60,7 +60,7 @@ if (!doNotTrack) {
 
 
 
-  <link href="/tags/reflective/index.xml" rel="alternate" type="application/rss+xml" title="/* Commentary */" />
+  <link href="/tags/swarm/index.xml" rel="alternate" type="application/rss+xml" title="/* Commentary */" />
 
 
 
@@ -134,11 +134,11 @@ if (!doNotTrack) {
     
       <div class="post on-list">
         <h1 class="post-title">
-          <a href="/posts/why-blog/">Why Blog?</a>
+          <a href="/posts/organizing-docker-swarm-stacks/">Writing Better Docker Swarm Stacks</a>
         </h1>
         <div class="post-meta">
           <span class="post-date">
-            2022-08-04
+            2023-02-10
           </span>
           
             <span class="post-author">:: fr33r</span>
@@ -148,11 +148,60 @@ if (!doNotTrack) {
         
           <span class="post-tags">
             
-            #<a href="/tags/meta/">meta</a>&nbsp;
+            #<a href="/tags/docker/">docker</a>&nbsp;
             
-            #<a href="/tags/reflective/">reflective</a>&nbsp;
+            #<a href="/tags/swarm/">swarm</a>&nbsp;
             
-            #<a href="/tags/motivation/">motivation</a>&nbsp;
+            #<a href="/tags/devops/">devops</a>&nbsp;
+            
+            #<a href="/tags/tips/">tips</a>&nbsp;
+            
+          </span>
+        
+
+        
+  <img src="/img/jon_blog_writing_better_stacks_cover.png"
+    class="post-cover"
+    alt="Writing Better Docker Swarm Stacks"
+    title="Cover Image" />
+
+
+      
+        <div class="post-content">
+          
+            Tips and tricks for writing better Docker Swarm stack files.
+          
+        </div>
+
+        
+        <div>
+          <a class="read-more button"
+            href="/posts/organizing-docker-swarm-stacks/">Read more →</a>
+        </div>
+        
+      </div>
+    
+      <div class="post on-list">
+        <h1 class="post-title">
+          <a href="/posts/docker-memory-constraints/">If I Only Had More Memory</a>
+        </h1>
+        <div class="post-meta">
+          <span class="post-date">
+            2022-08-12
+          </span>
+          
+            <span class="post-author">:: fr33r</span>
+          
+        </div>
+
+        
+          <span class="post-tags">
+            
+            #<a href="/tags/docker/">docker</a>&nbsp;
+            
+            #<a href="/tags/swarm/">swarm</a>&nbsp;
+            
+            #<a href="/tags/devops/">devops</a>&nbsp;
             
           </span>
         
@@ -163,14 +212,15 @@ if (!doNotTrack) {
       
         <div class="post-content">
           
-            My personal motivation behind this blog.
+            When deploying a service to a cluster of hosts, it’s important to ensure that the host ultimately chosen can accommodate for the resource requirements of that service. Without first confirming that the host can provide what the service needs, it’s possible that the service will consume all available resources and result in degradation of the host itself.
+Memory Constraints One such resource to keep tabs on is memory (RAM). Each process that is ran within a particular container will consume some amount of memory while it is running.
           
         </div>
 
         
         <div>
           <a class="read-more button"
-            href="/posts/why-blog/">Read more →</a>
+            href="/posts/docker-memory-constraints/">Read more →</a>
         </div>
         
       </div>

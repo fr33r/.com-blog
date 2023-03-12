@@ -199,15 +199,15 @@ error that can be thrown, or potential troubleshooting steps.&lt;/p&gt;
       
       <guid>/posts/building-a-pi-cluster/</guid>
       <description>Having been a software engineer for years, I had heard about Raspberry Pi computers, and the tinkering people were doing with them. Despite the chatter, I didn&amp;rsquo;t have any sort of project in mind, and honestly didn&amp;rsquo;t take the time to learn about them.
-One year when the holiday season began rolling around, the team decided to partake in a &amp;ldquo;secret santa&amp;rdquo; gift giving activity. Without any better ideas, I put down that I was interesting an a Raspberry Pi.</description>
+One year when the holiday season began rolling around, the team decided to partake in a &amp;ldquo;secret santa&amp;rdquo; gift giving activity. Without any better ideas, I put down that I was interested an a Raspberry Pi.</description>
       <content>&lt;p&gt;Having been a software engineer for years, I had heard about Raspberry Pi
 computers, and the tinkering people were doing with them. Despite the chatter,
 I didn&amp;rsquo;t have any sort of project in mind, and honestly didn&amp;rsquo;t take the time
 to learn about them.&lt;/p&gt;
 &lt;p&gt;One year when the holiday season began rolling around, the
 team decided to partake in a &amp;ldquo;secret santa&amp;rdquo; gift giving activity. Without any
-better ideas, I put down that I was interesting an a Raspberry Pi.&lt;/p&gt;
-&lt;p&gt;Fast-forward 3 years later and I finally found a project that I was genuinely
+better ideas, I put down that I was interested an a Raspberry Pi.&lt;/p&gt;
+&lt;p&gt;Fast-forward three years later and I finally found a project that I was genuinely
 excited about: creating a Raspberry Pi cluster. I dug up that model 3B+ that I
 got from the gift exchange years prior to began setting it up for the first
 time, and I&amp;rsquo;ve been at it ever since!&lt;/p&gt;
@@ -216,17 +216,17 @@ time, and I&amp;rsquo;ve been at it ever since!&lt;/p&gt;
 the various items I ended up with.&lt;/p&gt;
 &lt;h4 id=&#34;pis&#34;&gt;Pis&lt;/h4&gt;
 &lt;p&gt;The most important part of the Pi cluster is&amp;hellip; well&amp;hellip; the Pis!&lt;/p&gt;
-&lt;p&gt;I received one as a gift - check! The remaining three I needed to source internationally
+&lt;p&gt;I already got one as a gift - check! The remaining three I needed to source internationally
 (more on that later). To future proof, I was aiming for the model 4B. Although
 it would&amp;rsquo;ve been nice to get my hands on a 4GB or 8GB configuration, they were
 basically myths during these times. I settled for three 2GB models.&lt;/p&gt;
 &lt;h4 id=&#34;poe-hats&#34;&gt;PoE+ Hats&lt;/h4&gt;
 &lt;p&gt;Given power supplies aren&amp;rsquo;t included with the Pi itself, I knew that powering
-my cluster was going to involve spending some additional money.&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&#34;https://www.adafruit.com/product/4298?gclid=Cj0KCQjwxb2XBhDBARIsAOjDZ37bms37yK_7GGNQR5pZ6oqvTZTzyaVe16QH8_NynBC47z0yp6GJZc0aAgFnEALw_wcB&#34;&gt;official power supply&lt;/a&gt; goes for around $8 dollars. Knowing that I was going to shoot for 4 Pis, that was going
-to cost me $32 dollars. That wasn&amp;rsquo;t even including the money I&amp;rsquo;d need to spend
+my cluster was going to involve spending some additional cheddar!&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;https://www.adafruit.com/product/4298?gclid=Cj0KCQjwxb2XBhDBARIsAOjDZ37bms37yK_7GGNQR5pZ6oqvTZTzyaVe16QH8_NynBC47z0yp6GJZc0aAgFnEALw_wcB&#34;&gt;official power supply&lt;/a&gt; goes for around $8 dollars. Knowing that I was going to shoot for four Pis, that was going
+to cost me at least $32 dollars. That wasn&amp;rsquo;t even including the money I&amp;rsquo;d need to spend
 on zip ties and the time I&amp;rsquo;d need to spend to cable manage. Lastly, I simply
-couldn&amp;rsquo;t justify using 4 outlets!&lt;/p&gt;
+couldn&amp;rsquo;t justify using four outlets!&lt;/p&gt;
 &lt;p&gt;This is where &lt;a href=&#34;https://en.wikipedia.org/wiki/Power_over_Ethernet&#34;&gt;Power over Ethernet (PoE)&lt;/a&gt; comes to the rescue. With the correct
 networking equipment, enough power to drive the Pis can be delivered over a
 simple ethernet cable. No more outlet waste or time spent cable managing! But
@@ -238,7 +238,7 @@ cases have enough space for them, and they solve the gripes around multiple
 power supplies.&lt;/p&gt;
 &lt;h4 id=&#34;switch&#34;&gt;Switch&lt;/h4&gt;
 &lt;p&gt;When it comes to PoE+ switches, the main thing to focus on is the number of ports.
-Obviously, the more ports, the more you will end up spending. No more than 4 Pis
+Obviously, the more ports, the more you will end up spending. No more than four Pis
 are needed for my build, so I went with the &lt;a href=&#34;https://www.amazon.com/dp/B08LHL1Q2Z?psc=1&amp;amp;ref=ppx_yo2ov_dt_b_product_details&#34;&gt;Netgear GS305P (v2)&lt;/a&gt;. This switch
 is &lt;a href=&#34;https://www.fieldengineer.com/blogs/network-switch-managed-vs-unmanaged#:~:text=An%20unmanaged%20switch%20is%20simple,systems%20to%20a%20larger%20network.&#34;&gt;unmanaged&lt;/a&gt; (no smartness) and has 5 ports, one of which being the ingress from your existing internet connection.&lt;/p&gt;
 &lt;h4 id=&#34;storage&#34;&gt;Storage&lt;/h4&gt;
@@ -351,8 +351,6 @@ for the same parts.&lt;/p&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;I was also very fortunate in that the Raspberry Pi 3B+ was a gift (as mentioned
-previously) and that I had accumulated some Adafruit gift cards up to this point!&lt;/p&gt;
 &lt;h1 id=&#34;what-went-not-so-well&#34;&gt;What went not so well&lt;/h1&gt;
 &lt;h4 id=&#34;incomplete-case&#34;&gt;Incomplete Case&lt;/h4&gt;
 &lt;p&gt;Even though the quality of the case I got was solid, it was annoyingly incomplete.&lt;/p&gt;
@@ -361,7 +359,7 @@ by the Pi, but didn&amp;rsquo;t include the adaptor necessary. I actually didn&a
 this until I was building the case, as the instruction manual that came with it
 referenced the part but it wasn&amp;rsquo;t included. I find it pretty strange that the fans
 come with the case but the adaptor isn&amp;rsquo;t included.&lt;/p&gt;
-&lt;p&gt;My next gripe was that the case avertises that it is compatible with the
+&lt;p&gt;My next gripe was that the case advertises that it is compatible with the
 PoE+ hat, but didn&amp;rsquo;t come equipped with standoffs compatible with the case.
 Instead it came with screws to secure the Pis to the trays, which would essentially
 be all that is necessary if there were no hats installed. I give Uctronics more
@@ -379,15 +377,15 @@ demand&lt;/a&gt;, they have been nearly impossible to comeby.&lt;/p&gt;
 my Pis from &lt;a href=&#34;https://www.adafruit.com/&#34;&gt;Adafruit&lt;/a&gt;, &lt;a href=&#34;https://www.digikey.com/&#34;&gt;Digikey&lt;/a&gt;, or any other retailer I was a previous customer of,
 I briefly looked at alternative marketplaces such as Facebook. It was clear that
 was going to be a dead-end as well since the only sellers were gouging hard; we&amp;rsquo;re
-talking $100+ for model 4B (2G) which &lt;a href=&#34;https://www.adafruit.com/product/4292&#34;&gt;normally retails for $45&lt;/a&gt;.&lt;/p&gt;
+talking $100+ for model 4B (2G) which &lt;a href=&#34;https://www.adafruit.com/product/4292&#34;&gt;normally retailed for $45&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;I finally discovered a website called &lt;a href=&#34;https://rpilocator.com/&#34;&gt;rpilocator&lt;/a&gt;, which was
 completely dedicated to help solving this issue. It was through this website that
 I was fortunate enough to snag three model 4B (2G) Pis.&lt;/p&gt;
 &lt;p&gt;This wasn&amp;rsquo;t a quick process though; it took 2-3 months for the timing to line up right.
-It&amp;rsquo;s also worth mentioning that nearly all of these vendor websites have a policy of
+It&amp;rsquo;s also worth mentioning that nearly all of these vendor websites had a policy of
 one Pi per customer, which made things more difficult. I even saw various vendors
-adapt very strict policies that only previously existing customers could purchase them, or that
-they were no longer going to ship them internationally.&lt;/p&gt;
+adopt very strict policies that stated only previously existing customers could purchase them, or that
+they were no longer going to ship them internationally at all.&lt;/p&gt;
 &lt;h4 id=&#34;cost&#34;&gt;Cost&lt;/h4&gt;
 &lt;p&gt;Although there were certainly some market elements that were out of my control
 that contributed to the overall price (particularly shipping), there was opportunity
@@ -424,7 +422,7 @@ bad boys and get them up and running.&lt;/p&gt;
 bought some standoffs that were a compatible height to support the PoE+ hats I was using. I made
 sure that they were M2.5 sized to match the screws provided with the &lt;a href=&#34;https://www.mouser.com/ProductDetail/RAF-Electronic-Hardware/M2104-2545-AL?qs=2411ckis64rpgA%252BYlrCb%252Bg%3D%3D&#34;&gt;case&lt;/a&gt;
 itself; check!&lt;/p&gt;
-&lt;p&gt;Weirdly, on some of the tray mounts, the screws wouldn&amp;rsquo;t turn easily. I naively
+&lt;p&gt;Weirdly, on some of the tray mounts the screws wouldn&amp;rsquo;t turn easily. I naively
 thought it they needed an extra &amp;lsquo;oomf&amp;rsquo; to get them to the desired position, so
 of course I reached for my pliers!&lt;/p&gt;
 &lt;blockquote&gt;
@@ -436,12 +434,11 @@ screwed in a standoff for that one corner, but then it just wouldn&amp;rsquo;t b
 Also, since the GPIO pins are used to connect the hat and the Pi, I didn&amp;rsquo;t
 want to have to worry about accidentally squishing that limp corner too hard when
 working with it in the future. I had to fix this.&lt;/p&gt;
-&lt;p&gt;I reached out to UCTRONICS support via their website directly. I explained to
+&lt;p&gt;I reached out to Uctronics support via their website directly. I explained to
 them what happened, and they were incredible. They shipped not one, but two replacement
 trays all for something that was completely my fault.&lt;/p&gt;
-&lt;p&gt;Best of all, thanks to Jeff Gerling and &lt;a href=&#34;https://github.com/geerlingguy/raspberry-pi-dramble/issues/135&#34;&gt;his prior research&lt;/a&gt;, I went ahead and ordered a second
+&lt;p&gt;Best of all, thanks to Jeff Geerling and &lt;a href=&#34;https://github.com/geerlingguy/raspberry-pi-dramble/issues/135&#34;&gt;his prior research&lt;/a&gt;, I went ahead and ordered another
 set of standoffs with the hope that I&amp;rsquo;d get it right the second time - it worked like a charm!&lt;/p&gt;
-&lt;h4 id=&#34;availability&#34;&gt;Availability&lt;/h4&gt;
 &lt;h1 id=&#34;was-the-cost-worth-it&#34;&gt;Was the cost worth it?&lt;/h1&gt;
 &lt;p&gt;So was the cost worth it? With so many different Infrastructure as a Service (IaaS)
 companies such as Linode, Amazon Web Service (AWS), etc. this is a question

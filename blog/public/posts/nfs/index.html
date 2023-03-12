@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Configuration NFS with Firewalls :: /* Commentary */</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Storing and retrieving files from a remote location is a common need for distributed cluster environments. Given any one service or application can be ran from a pool of different hosts, those services may need to potentialy share configuration, data, and other files between them.
+For Unix based hosts, one such option for this is known as Network File System, or NFS for short.
+What is NFS? NFS is a distributed file system protocol." />
+<meta name="keywords" content=", " />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/nfs/" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BMCHLBV6TC"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-BMCHLBV6TC', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+<link rel="stylesheet" href="/assets/style.css">
+
+
+
+
+
+
+<link rel="apple-touch-icon" href="/img/apple-touch-icon-192x192.png">
+
+  <link rel="shortcut icon" href="/img/favicon/orange.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Configuration NFS with Firewalls">
+<meta property="og:description" content="Storing and retrieving files from a remote location is a common need for distributed cluster environments. Given any one service or application can be ran from a pool of different hosts, those services may need to potentialy share configuration, data, and other files between them.
+For Unix based hosts, one such option for this is known as Network File System, or NFS for short.
+What is NFS? NFS is a distributed file system protocol." />
+<meta property="og:url" content="/posts/nfs/" />
+<meta property="og:site_name" content="/* Commentary */" />
+
+  <meta property="og:image" content="/">
+
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+  <meta property="article:published_time" content="2023-03-05 13:02:04 -0800 PST" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="orange">
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    /* Commentary */
+  </div>
+</a>
+
+    </div>
+    
+      <div class="menu-trigger">menu</div>
+    
+  </div>
+  
+    <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about/">About</a></li>
+        
+      
+        
+          <li><a href="/powered-by/">Powered By</a></li>
+        
+      
+      
+    
+
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about/">About</a></li>
+      
+    
+      
+        <li><a href="/powered-by/">Powered By</a></li>
+      
+    
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="/posts/nfs/">Configuration NFS with Firewalls</a></h1>
+  <div class="post-meta">
+    
+      <span class="post-date">
+        2023-03-05
+        
+          [Updated: 2023-03-05]
+        
+      </span>
+    
+    
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="/tags/"></a>&nbsp;
+    
+    #<a href="/tags/"></a>&nbsp;
+    
+  </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>Storing and retrieving files from a remote location is a common need for
+distributed cluster environments. Given any one service or application can
+be ran from a pool of different hosts, those services may need to potentialy share
+configuration, data, and other files between them.</p>
+<p>For Unix based hosts, one such option for this is known as
+<a href="https://en.wikipedia.org/wiki/Network_File_System">Network File System</a>,
+or NFS for short.</p>
+<h2 id="what-is-nfs">What is NFS?<a href="#what-is-nfs" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>NFS is a distributed file system protocol. It essentially emulates remote file
+access as if that remote location was local to the client. It was originally
+developed by Sun Microsystems all the way back in 1984, and has had several
+versions and variations over the years.</p>
+<h3 id="versions">Versions<a href="#versions" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Despite there being four official versions, I&rsquo;ll concentrate on the latest two:
+NFSv3 and NFSv4. These are the two versions you are likely to interact with in
+todays world, and versions older than NFSv3 have several limitations that no
+longer make them viable (storage size limitations, performance limitations, etc.).</p>
+<h4 id="nfsv3">NFSv3<a href="#nfsv3" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<p>NFS really comprises of several different organized components:</p>
+<p>Network Status Monitor (NSM) Protocol</p>
+<p><a href="https://linux.die.net/man/8/rpc.nfsd">rpc.nfsd</a></p>
+<p>The NFS server process. By default, it runs on port <code>2049</code>.</p>
+<p><a href="https://linux.die.net/man/8/rpc.statd">rpc.statd</a></p>
+<p>A client and server-side daemon responsible for listening for reboot notifications
+from other hosts, while also doing the flip-side by managing the list of hosts to
+be notified if the local system reboots.</p>
+<p><code>rpc.statd</code> is what the NFS Lock Manager (NLM) communicates with to help maintain
+proper file locking state when NFS connected hosts reboot.</p>
+<p>By default, it runs on a random ephemeral port for each socket. This
+daemon is only needed for NFSv3 and NFSv2.</p>
+<p><a href="https://linux.die.net/man/8/rpcinfo">rpcinfo</a></p>
+<p>A command line utility used to discover what various RPC services have been registered
+with <code>rpcbind</code> on a host. For use cases of working NFS, this utility can be used
+to view what NFS-related services are running and what ports they are configured on.</p>
+<p><a href="https://linux.die.net/man/8/mountd">rpc.mountd</a></p>
+<p>The NFS server-side daemon responsible for receiving and managing mount requests
+to NFS exports. By default, it runs on a random ephemeral port for each socket. This
+daemon is only needed for NFSv3 and NFSv2.</p>
+<h4 id="nfsv4">NFSv4<a href="#nfsv4" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<h2 id="running-a-firewall-with-nfs">Running a Firewall with NFS<a href="#running-a-firewall-with-nfs" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Given the default behavior of the various components of NFSv3 using random
+ephemeral ports, some configuration changes are needed to instead utilize static
+ports.</p>
+<blockquote>
+</blockquote>
+<h3 id="nfs-v3">NFS v3<a href="#nfs-v3" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<h3 id="nfs-v4">NFS v4<a href="#nfs-v4" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+
+      </div></div>
+
+  
+  
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/organizing-docker-swarm-stacks/">
+                <span class="button__text">Writing Better Docker Swarm Stacks</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-fr33r-com" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="http://gohugo.io">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

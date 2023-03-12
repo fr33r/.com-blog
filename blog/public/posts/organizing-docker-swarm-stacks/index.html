@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Writing Better Docker Swarm Stacks :: /* Commentary */</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tips and tricks for writing better Docker Swarm stack files." />
+<meta name="keywords" content="docker, swarm, stack, tips, devops, portainer" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/organizing-docker-swarm-stacks/" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BMCHLBV6TC"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-BMCHLBV6TC', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+<link rel="stylesheet" href="/assets/style.css">
+
+
+
+
+
+
+<link rel="apple-touch-icon" href="/img/apple-touch-icon-192x192.png">
+
+  <link rel="shortcut icon" href="/img/favicon/orange.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Writing Better Docker Swarm Stacks">
+<meta property="og:description" content="Tips and tricks for writing better Docker Swarm stack files." />
+<meta property="og:url" content="/posts/organizing-docker-swarm-stacks/" />
+<meta property="og:site_name" content="/* Commentary */" />
+
+  <meta property="og:image" content="/img/jon_blog_writing_better_stacks_cover.png">
+
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+  <meta property="article:published_time" content="2023-02-10 21:51:53 -0800 PST" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="orange">
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    /* Commentary */
+  </div>
+</a>
+
+    </div>
+    
+      <div class="menu-trigger">menu</div>
+    
+  </div>
+  
+    <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about/">About</a></li>
+        
+      
+        
+          <li><a href="/powered-by/">Powered By</a></li>
+        
+      
+      
+    
+
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about/">About</a></li>
+      
+    
+      
+        <li><a href="/powered-by/">Powered By</a></li>
+      
+    
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="/posts/organizing-docker-swarm-stacks/">Writing Better Docker Swarm Stacks</a></h1>
+  <div class="post-meta">
+    
+      <span class="post-date">
+        2023-02-10
+        
+          [Updated: 2023-02-10]
+        
+      </span>
+    
+    
+      <span class="post-author">:: fr33r</span>
+    
+    
+      <span class="post-reading-time">:: 7 min read (1378 words)</span>
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="/tags/docker/">docker</a>&nbsp;
+    
+    #<a href="/tags/swarm/">swarm</a>&nbsp;
+    
+    #<a href="/tags/devops/">devops</a>&nbsp;
+    
+    #<a href="/tags/tips/">tips</a>&nbsp;
+    
+  </span>
+  
+  
+  <img src="/img/jon_blog_writing_better_stacks_cover.png"
+    class="post-cover"
+    alt="Writing Better Docker Swarm Stacks"
+    title="Cover Image" />
+
+
+  
+
+  <div class="post-content"><div>
+        <p>When I decided to stand up my home lab, I had little to no prior experience
+with Docker Swarm or other supporting infrastructure (shared storage,
+node provisioning, etc.) and applications (Portainer, NAS software, etc.). The process of
+building out my cluster has been packed with learnings from both the good and
+the bad experiences I&rsquo;ve had along the way. Additionally, I&rsquo;ve picked up some
+patterns and practices that have helped me get to where everything is today.</p>
+<p>One area specifically worth sharing is regarding Docker Compose (stack) files.
+This post walks through the most critical bits that inform how I organize
+and write my stack files.</p>
+<h3 id="multiple-stack-files">Multiple Stack Files<a href="#multiple-stack-files" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>It can be tempting to put all of your service definitions in a single stack file at first.
+After all, it means you only have one file to worry about; everything is in a single place.
+Also, you don&rsquo;t have to worry about setting up a directory structure to organize - keeping things
+tidy takes effort!</p>
+<p>However, I encourage you to fight the urge. There are some really tangible benefits
+to breaking your stack files down by application:</p>
+<ul>
+<li>Each stack file becomes self contained. The services defined in the stack file
+are specific to a partular application you are spinning up. All of the volumes,
+networks, etc. are all specific to the service definitions in the file; you&rsquo;re no
+longer trying to determine how everything ties together.</li>
+<li>Separating the files means you can deploy a finite set of services at a time
+instead of all of them. This helps make your deployments more manageable and
+ensures that you aren&rsquo;t going to have unintended side-effects with other
+services.</li>
+<li>There is less likelihood that you will accidentally reference an element
+unintentionally or have a naming clash. If performing variable substitution, you
+won&rsquo;t have to worry about inadvertently giving two variables the same name.</li>
+<li>Each stack file is simply easier to read. Any one application usually doesn&rsquo;t have
+more than a few services (web server, database, cache, etc.) which is easier to
+navigate than a single file with dozens of services.</li>
+<li>Tools such as Portainer provide an interface for managing stacks separate from
+the services they define. With the files broken out by application, you can
+manage each stack independently using the UI.</li>
+</ul>
+<p>As with anything, there are some drawbacks. When splitting out files, you
+likely will have to repeat particular dependency definitions that various services of
+yours utilize. For example, you will need to replicate a network definition in
+each stack file that defines services that should be a part of that network. In
+the event you need to change one of those dependencies, you will need to visit multiple
+stack files to apply that change, which is a measurable amount of more work.</p>
+<p>For me, the benefits outweighed drawbacks.</p>
+<h3 id="service-naming-conventions">Service Naming Conventions<a href="#service-naming-conventions" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Every stack file defines a list of services. Often times your stack will
+define a single service. However, some applications that you wish to deploy
+could be more complex, including a web server, database, cache, job queue,
+and more.</p>
+<p>When it comes to naming these services, I&rsquo;ve found that naming them after the
+role they play as the most effective. More specifically, I use the following
+within my stacks:</p>
+<ul>
+<li><code>app</code></li>
+<li><code>db</code></li>
+<li><code>cache</code></li>
+<li><code>queue</code></li>
+<li>etc.</li>
+</ul>
+<p>There are many reasons why this strategy has worked for me:</p>
+<ul>
+<li>The service names aren&rsquo;t coupled to any particular implementation, which means
+that switching them to something else ( let&rsquo;s say, switching from <code>Redis</code> to <code>Memcache</code> )
+won&rsquo;t ripple up to the service names.</li>
+<li>It&rsquo;s easier to navigate your services. All your database services are end in<code>db</code>.
+All of your caches are end in <code>cache</code>.</li>
+<li>Since service names are prefixed by the name of the stack they belong to, this
+strategy results in service names that avoid commonly seen mistakes, such
+as repetitive words within the name.</li>
+</ul>
+<h3 id="pinning-to-specific-image-versions">Pinning to Specific Image Versions<a href="#pinning-to-specific-image-versions" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>It&rsquo;s easy to leave off a specific image version or to specify <code>latest</code>.
+However, this can really burn you, and typically at the worst time. Instead,
+you should explicitly specify an image version (tag).</p>
+<p>Why? Well the are several reasons:</p>
+<ul>
+<li>In a cluster environment, images are pulled down on each node when the service is scheduled to run on them.
+If at any time you add in additional nodes, or deploy to a node you hadn&rsquo;t previously, it is possible
+that the images on each node for the service aren&rsquo;t the same. After all, <code>latest</code>
+is a moving target, and it&rsquo;s not trivial to determine when new releases are cut.</li>
+<li>In situations where your node(s) experience a more catestrophic event (hardware
+failure, botched OS upgrade, etc.) restoring the data and configuration for the
+service(s) is half the battle, but running a version of the service compatible
+with that configuration and data is the other half. Remember that the data and configuration that one
+version of your service utilizes could be completely different from the current
+(latest), and the last thing you want to do is spend time triaging errors that
+are only happening because you&rsquo;re running an incompatible version.</li>
+<li>It becomes much more apparent what version you are running for your services,
+which makes it easier to search for bugs, documentation, and other artifacts
+online.</li>
+<li>Upgrading your services becomes more intentional. You specify the next version you
+want to upgrade to explicitly. This approach can help you avoid upgrading to
+versions known to be less stable or haven&rsquo;t been well tested yet.</li>
+</ul>
+<h3 id="source-control-for-stack-files">Source Control for Stack Files<a href="#source-control-for-stack-files" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Your stack files are essentially the source of truth for your cluster setup;
+you should manage and track changes to them so you keep your sanity! So much tweaking,
+changing, improving, and learning happens when you work in a cluster environment.
+It&rsquo;s going to be near impossible to keep all of those learnings in recent memory.
+Using source control is an incredibly helpful tool to track all of that context
+for future you, while also giving you the safety net of being able to roll back
+your changes gracefully.</p>
+<p>An awesome side-effect of pushing your stack files to a remote source control
+such as GitHub is applications like Portainer can integrate directly with
+your stack repositories. This means you can make changes to your stacks and
+push them to GitHub, and then you can use Portainer to deploy those changes.</p>
+<h3 id="utilize-variable-substitution-for-image-tag">Utilize Variable Substitution for Image Tag<a href="#utilize-variable-substitution-for-image-tag" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Docker compose (stack) files support <a href="https://docs.docker.com.xy2401.com/compose/environment-variables">variable substitution</a>, which means that
+various elements of the stack can be dynamically evaluated based on environment
+variables. This is even easier if you use a container management platform such
+as Portainer, as it allows you declare the environment variables when you
+create a stack directly in the UI.</p>
+<p>There are various use cases one could use variable substitution for, but one
+that I strongly recommend is using them to specify the image version (tag). This way
+you can manage upgrades for your services by simply changing the environment
+variable and redeploying the stack. If you manage your stacks using source countrol
+this means you can upgrade the image without any need to change the stack file.</p>
+<h3 id="leverage-docker-secrets--config">Leverage Docker Secrets &amp; Config<a href="#leverage-docker-secrets--config" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Many services store their configuration using one or more static configuration files.
+For example an <code>nginx</code> proxy may be configured such that each domain that it
+handles has a separate <code>*.conf</code> file. For services that are primarily driven through
+updates of static configuration files, <a href="https://docs.docker.com/engine/swarm/configs/">Docker Configs</a> is a perfect fit. Using
+Docker Configs in a swarm environment means you can edit these configuration
+files in a streamlined and centralized way, can version that configuration,
+and no longer need to set up the necessary infrastructure to ensure that
+configuration is shared across all nodes that the service runs on.</p>
+<p>An additional common use case for services is specifying credentials. Many Dockerized
+applications provide a way to specify credentials via environment variables. Some
+services also rely on TLS/SSL configuration. These use cases are where <a href="https://docs.docker.com/engine/swarm/secrets/">Docker
+Secrets</a> shines. Instead of passing in credentials using variable subsitution,
+or instead of creating infrastructure to share certificate information across
+several nodes, you can use Docker Secrets similarly to Docker Configs but for
+sensitive &ldquo;secret&rdquo; data.</p>
+<p>I&rsquo;m just scratching the surface with these. Expect a future blog post on how
+I use both of these in my cluster setup!</p>
+
+      </div></div>
+
+  
+  
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/nfs/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Configuration NFS with Firewalls</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/tips-for-hotswapping/">
+                <span class="button__text">Tips for Hotswapping</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-fr33r-com" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="http://gohugo.io">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

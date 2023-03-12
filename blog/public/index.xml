@@ -6,7 +6,209 @@
     <description>Recent content on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 15 Aug 2022 10:33:48 -0700</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Mar 2023 13:02:04 -0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Configuration NFS with Firewalls</title>
+      <link>/posts/nfs/</link>
+      <pubDate>Sun, 05 Mar 2023 13:02:04 -0800</pubDate>
+      
+      <guid>/posts/nfs/</guid>
+      <description>Storing and retrieving files from a remote location is a common need for distributed cluster environments. Given any one service or application can be ran from a pool of different hosts, those services may need to potentialy share configuration, data, and other files between them.
+For Unix based hosts, one such option for this is known as Network File System, or NFS for short.
+What is NFS? NFS is a distributed file system protocol.</description>
+      <content>&lt;p&gt;Storing and retrieving files from a remote location is a common need for
+distributed cluster environments. Given any one service or application can
+be ran from a pool of different hosts, those services may need to potentialy share
+configuration, data, and other files between them.&lt;/p&gt;
+&lt;p&gt;For Unix based hosts, one such option for this is known as
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Network_File_System&#34;&gt;Network File System&lt;/a&gt;,
+or NFS for short.&lt;/p&gt;
+&lt;h2 id=&#34;what-is-nfs&#34;&gt;What is NFS?&lt;/h2&gt;
+&lt;p&gt;NFS is a distributed file system protocol. It essentially emulates remote file
+access as if that remote location was local to the client. It was originally
+developed by Sun Microsystems all the way back in 1984, and has had several
+versions and variations over the years.&lt;/p&gt;
+&lt;h3 id=&#34;versions&#34;&gt;Versions&lt;/h3&gt;
+&lt;p&gt;Despite there being four official versions, I&amp;rsquo;ll concentrate on the latest two:
+NFSv3 and NFSv4. These are the two versions you are likely to interact with in
+todays world, and versions older than NFSv3 have several limitations that no
+longer make them viable (storage size limitations, performance limitations, etc.).&lt;/p&gt;
+&lt;h4 id=&#34;nfsv3&#34;&gt;NFSv3&lt;/h4&gt;
+&lt;p&gt;NFS really comprises of several different organized components:&lt;/p&gt;
+&lt;p&gt;Network Status Monitor (NSM) Protocol&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/8/rpc.nfsd&#34;&gt;rpc.nfsd&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The NFS server process. By default, it runs on port &lt;code&gt;2049&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/8/rpc.statd&#34;&gt;rpc.statd&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;A client and server-side daemon responsible for listening for reboot notifications
+from other hosts, while also doing the flip-side by managing the list of hosts to
+be notified if the local system reboots.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;rpc.statd&lt;/code&gt; is what the NFS Lock Manager (NLM) communicates with to help maintain
+proper file locking state when NFS connected hosts reboot.&lt;/p&gt;
+&lt;p&gt;By default, it runs on a random ephemeral port for each socket. This
+daemon is only needed for NFSv3 and NFSv2.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/8/rpcinfo&#34;&gt;rpcinfo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;A command line utility used to discover what various RPC services have been registered
+with &lt;code&gt;rpcbind&lt;/code&gt; on a host. For use cases of working NFS, this utility can be used
+to view what NFS-related services are running and what ports they are configured on.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/8/mountd&#34;&gt;rpc.mountd&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The NFS server-side daemon responsible for receiving and managing mount requests
+to NFS exports. By default, it runs on a random ephemeral port for each socket. This
+daemon is only needed for NFSv3 and NFSv2.&lt;/p&gt;
+&lt;h4 id=&#34;nfsv4&#34;&gt;NFSv4&lt;/h4&gt;
+&lt;h2 id=&#34;running-a-firewall-with-nfs&#34;&gt;Running a Firewall with NFS&lt;/h2&gt;
+&lt;p&gt;Given the default behavior of the various components of NFSv3 using random
+ephemeral ports, some configuration changes are needed to instead utilize static
+ports.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;nfs-v3&#34;&gt;NFS v3&lt;/h3&gt;
+&lt;h3 id=&#34;nfs-v4&#34;&gt;NFS v4&lt;/h3&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Writing Better Docker Swarm Stacks</title>
+      <link>/posts/organizing-docker-swarm-stacks/</link>
+      <pubDate>Fri, 10 Feb 2023 21:51:53 -0800</pubDate>
+      
+      <guid>/posts/organizing-docker-swarm-stacks/</guid>
+      <description>When I decided to stand up my home lab, I had little to no prior experience with Docker Swarm or other supporting infrastructure (shared storage, node provisioning, etc.) and applications (Portainer, NAS software, etc.). The process of building out my cluster has been packed with learnings from both the good and the bad experiences I&amp;rsquo;ve had along the way. Additionally, I&amp;rsquo;ve picked up some patterns and practices that have helped me get to where everything is today.</description>
+      <content>&lt;p&gt;When I decided to stand up my home lab, I had little to no prior experience
+with Docker Swarm or other supporting infrastructure (shared storage,
+node provisioning, etc.) and applications (Portainer, NAS software, etc.). The process of
+building out my cluster has been packed with learnings from both the good and
+the bad experiences I&amp;rsquo;ve had along the way. Additionally, I&amp;rsquo;ve picked up some
+patterns and practices that have helped me get to where everything is today.&lt;/p&gt;
+&lt;p&gt;One area specifically worth sharing is regarding Docker Compose (stack) files.
+This post walks through the most critical bits that inform how I organize
+and write my stack files.&lt;/p&gt;
+&lt;h3 id=&#34;multiple-stack-files&#34;&gt;Multiple Stack Files&lt;/h3&gt;
+&lt;p&gt;It can be tempting to put all of your service definitions in a single stack file at first.
+After all, it means you only have one file to worry about; everything is in a single place.
+Also, you don&amp;rsquo;t have to worry about setting up a directory structure to organize - keeping things
+tidy takes effort!&lt;/p&gt;
+&lt;p&gt;However, I encourage you to fight the urge. There are some really tangible benefits
+to breaking your stack files down by application:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Each stack file becomes self contained. The services defined in the stack file
+are specific to a partular application you are spinning up. All of the volumes,
+networks, etc. are all specific to the service definitions in the file; you&amp;rsquo;re no
+longer trying to determine how everything ties together.&lt;/li&gt;
+&lt;li&gt;Separating the files means you can deploy a finite set of services at a time
+instead of all of them. This helps make your deployments more manageable and
+ensures that you aren&amp;rsquo;t going to have unintended side-effects with other
+services.&lt;/li&gt;
+&lt;li&gt;There is less likelihood that you will accidentally reference an element
+unintentionally or have a naming clash. If performing variable substitution, you
+won&amp;rsquo;t have to worry about inadvertently giving two variables the same name.&lt;/li&gt;
+&lt;li&gt;Each stack file is simply easier to read. Any one application usually doesn&amp;rsquo;t have
+more than a few services (web server, database, cache, etc.) which is easier to
+navigate than a single file with dozens of services.&lt;/li&gt;
+&lt;li&gt;Tools such as Portainer provide an interface for managing stacks separate from
+the services they define. With the files broken out by application, you can
+manage each stack independently using the UI.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As with anything, there are some drawbacks. When splitting out files, you
+likely will have to repeat particular dependency definitions that various services of
+yours utilize. For example, you will need to replicate a network definition in
+each stack file that defines services that should be a part of that network. In
+the event you need to change one of those dependencies, you will need to visit multiple
+stack files to apply that change, which is a measurable amount of more work.&lt;/p&gt;
+&lt;p&gt;For me, the benefits outweighed drawbacks.&lt;/p&gt;
+&lt;h3 id=&#34;service-naming-conventions&#34;&gt;Service Naming Conventions&lt;/h3&gt;
+&lt;p&gt;Every stack file defines a list of services. Often times your stack will
+define a single service. However, some applications that you wish to deploy
+could be more complex, including a web server, database, cache, job queue,
+and more.&lt;/p&gt;
+&lt;p&gt;When it comes to naming these services, I&amp;rsquo;ve found that naming them after the
+role they play as the most effective. More specifically, I use the following
+within my stacks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;app&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cache&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;queue&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;etc.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are many reasons why this strategy has worked for me:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The service names aren&amp;rsquo;t coupled to any particular implementation, which means
+that switching them to something else ( let&amp;rsquo;s say, switching from &lt;code&gt;Redis&lt;/code&gt; to &lt;code&gt;Memcache&lt;/code&gt; )
+won&amp;rsquo;t ripple up to the service names.&lt;/li&gt;
+&lt;li&gt;It&amp;rsquo;s easier to navigate your services. All your database services are end in&lt;code&gt;db&lt;/code&gt;.
+All of your caches are end in &lt;code&gt;cache&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Since service names are prefixed by the name of the stack they belong to, this
+strategy results in service names that avoid commonly seen mistakes, such
+as repetitive words within the name.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;pinning-to-specific-image-versions&#34;&gt;Pinning to Specific Image Versions&lt;/h3&gt;
+&lt;p&gt;It&amp;rsquo;s easy to leave off a specific image version or to specify &lt;code&gt;latest&lt;/code&gt;.
+However, this can really burn you, and typically at the worst time. Instead,
+you should explicitly specify an image version (tag).&lt;/p&gt;
+&lt;p&gt;Why? Well the are several reasons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In a cluster environment, images are pulled down on each node when the service is scheduled to run on them.
+If at any time you add in additional nodes, or deploy to a node you hadn&amp;rsquo;t previously, it is possible
+that the images on each node for the service aren&amp;rsquo;t the same. After all, &lt;code&gt;latest&lt;/code&gt;
+is a moving target, and it&amp;rsquo;s not trivial to determine when new releases are cut.&lt;/li&gt;
+&lt;li&gt;In situations where your node(s) experience a more catestrophic event (hardware
+failure, botched OS upgrade, etc.) restoring the data and configuration for the
+service(s) is half the battle, but running a version of the service compatible
+with that configuration and data is the other half. Remember that the data and configuration that one
+version of your service utilizes could be completely different from the current
+(latest), and the last thing you want to do is spend time triaging errors that
+are only happening because you&amp;rsquo;re running an incompatible version.&lt;/li&gt;
+&lt;li&gt;It becomes much more apparent what version you are running for your services,
+which makes it easier to search for bugs, documentation, and other artifacts
+online.&lt;/li&gt;
+&lt;li&gt;Upgrading your services becomes more intentional. You specify the next version you
+want to upgrade to explicitly. This approach can help you avoid upgrading to
+versions known to be less stable or haven&amp;rsquo;t been well tested yet.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;source-control-for-stack-files&#34;&gt;Source Control for Stack Files&lt;/h3&gt;
+&lt;p&gt;Your stack files are essentially the source of truth for your cluster setup;
+you should manage and track changes to them so you keep your sanity! So much tweaking,
+changing, improving, and learning happens when you work in a cluster environment.
+It&amp;rsquo;s going to be near impossible to keep all of those learnings in recent memory.
+Using source control is an incredibly helpful tool to track all of that context
+for future you, while also giving you the safety net of being able to roll back
+your changes gracefully.&lt;/p&gt;
+&lt;p&gt;An awesome side-effect of pushing your stack files to a remote source control
+such as GitHub is applications like Portainer can integrate directly with
+your stack repositories. This means you can make changes to your stacks and
+push them to GitHub, and then you can use Portainer to deploy those changes.&lt;/p&gt;
+&lt;h3 id=&#34;utilize-variable-substitution-for-image-tag&#34;&gt;Utilize Variable Substitution for Image Tag&lt;/h3&gt;
+&lt;p&gt;Docker compose (stack) files support &lt;a href=&#34;https://docs.docker.com.xy2401.com/compose/environment-variables&#34;&gt;variable substitution&lt;/a&gt;, which means that
+various elements of the stack can be dynamically evaluated based on environment
+variables. This is even easier if you use a container management platform such
+as Portainer, as it allows you declare the environment variables when you
+create a stack directly in the UI.&lt;/p&gt;
+&lt;p&gt;There are various use cases one could use variable substitution for, but one
+that I strongly recommend is using them to specify the image version (tag). This way
+you can manage upgrades for your services by simply changing the environment
+variable and redeploying the stack. If you manage your stacks using source countrol
+this means you can upgrade the image without any need to change the stack file.&lt;/p&gt;
+&lt;h3 id=&#34;leverage-docker-secrets--config&#34;&gt;Leverage Docker Secrets &amp;amp; Config&lt;/h3&gt;
+&lt;p&gt;Many services store their configuration using one or more static configuration files.
+For example an &lt;code&gt;nginx&lt;/code&gt; proxy may be configured such that each domain that it
+handles has a separate &lt;code&gt;*.conf&lt;/code&gt; file. For services that are primarily driven through
+updates of static configuration files, &lt;a href=&#34;https://docs.docker.com/engine/swarm/configs/&#34;&gt;Docker Configs&lt;/a&gt; is a perfect fit. Using
+Docker Configs in a swarm environment means you can edit these configuration
+files in a streamlined and centralized way, can version that configuration,
+and no longer need to set up the necessary infrastructure to ensure that
+configuration is shared across all nodes that the service runs on.&lt;/p&gt;
+&lt;p&gt;An additional common use case for services is specifying credentials. Many Dockerized
+applications provide a way to specify credentials via environment variables. Some
+services also rely on TLS/SSL configuration. These use cases are where &lt;a href=&#34;https://docs.docker.com/engine/swarm/secrets/&#34;&gt;Docker
+Secrets&lt;/a&gt; shines. Instead of passing in credentials using variable subsitution,
+or instead of creating infrastructure to share certificate information across
+several nodes, you can use Docker Secrets similarly to Docker Configs but for
+sensitive &amp;ldquo;secret&amp;rdquo; data.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m just scratching the surface with these. Expect a future blog post on how
+I use both of these in my cluster setup!&lt;/p&gt;
+</content>
+    </item>
+    
     <item>
       <title>Tips for Hotswapping</title>
       <link>/posts/tips-for-hotswapping/</link>
@@ -443,6 +645,16 @@ those tasks.&lt;/p&gt;
     </item>
     
     <item>
+      <title>Should You Upgrade to Nginx Proxy Manager</title>
+      <link>/posts/should-you-upgrade-to-nginx-proxy-manager/</link>
+      <pubDate>Fri, 12 Aug 2022 22:04:35 -0700</pubDate>
+      
+      <guid>/posts/should-you-upgrade-to-nginx-proxy-manager/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
       <title>You Had One Job Portainer Console!</title>
       <link>/posts/portainer-console-issue/</link>
       <pubDate>Fri, 12 Aug 2022 22:04:10 -0700</pubDate>
@@ -553,6 +765,49 @@ the &lt;code&gt;Upgrade&lt;/code&gt; is sent.&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;ve only scratched the surface on this stuff. If you are interesting in reading
 further, check out &lt;a href=&#34;https://www.nginx.com/blog/websocket-nginx/&#34;&gt;this awesome post&lt;/a&gt; on the
 &lt;a href=&#34;https://www.nginx.com/blog&#34;&gt;nginx blog&lt;/a&gt;.&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>If I Only Had More Memory</title>
+      <link>/posts/docker-memory-constraints/</link>
+      <pubDate>Fri, 12 Aug 2022 14:01:08 -0700</pubDate>
+      
+      <guid>/posts/docker-memory-constraints/</guid>
+      <description>When deploying a service to a cluster of hosts, it&amp;rsquo;s important to ensure that the host ultimately chosen can accommodate for the resource requirements of that service. Without first confirming that the host can provide what the service needs, it&amp;rsquo;s possible that the service will consume all available resources and result in degradation of the host itself.
+Memory Constraints One such resource to keep tabs on is memory (RAM). Each process that is ran within a particular container will consume some amount of memory while it is running.</description>
+      <content>&lt;p&gt;When deploying a service to a cluster of hosts, it&amp;rsquo;s important to ensure that
+the host ultimately chosen can accommodate for the resource requirements of
+that service. Without first confirming that the host can provide what the
+service needs, it&amp;rsquo;s possible that the service will consume all available
+resources and result in degradation of the host itself.&lt;/p&gt;
+&lt;h1 id=&#34;memory-constraints&#34;&gt;Memory Constraints&lt;/h1&gt;
+&lt;p&gt;One such resource to keep tabs on is memory (RAM). Each process that is ran
+within a particular container will consume some amount of memory while it is
+running.&lt;/p&gt;
+&lt;p&gt;By default, Docker does not apply resource constraints to containers that
+ultimately comprise a service. That said&lt;/p&gt;
+&lt;h1 id=&#34;how&#34;&gt;How&lt;/h1&gt;
+&lt;h1 id=&#34;reaching-the-limit&#34;&gt;Reaching the Limit&lt;/h1&gt;
+&lt;p&gt;So what happens once the limit is reach&lt;/p&gt;
+&lt;p&gt;what are docker memory constraints?
+why should you use them?
+how do i determine the memory limit or reservation?```
+what is OOM and how to detect it?
+what&amp;rsquo;s the deal with swap? should you disable it?
+link to articles that could be helpful:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/53533&#34;&gt;https://github.com/kubernetes/kubernetes/issues/53533&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://haydenjames.io/linux-performance-almost-always-add-swap-space/&#34;&gt;https://haydenjames.io/linux-performance-almost-always-add-swap-space/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/config/containers/resource_constraints/#prevent-a-container-from-using-swap&#34;&gt;https://docs.docker.com/config/containers/resource_constraints/#prevent-a-container-from-using-swap&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/compose/compose-file/deploy/#resources&#34;&gt;https://docs.docker.com/compose/compose-file/deploy/#resources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/ops/docker-memory-limit#:~:text=Versions%203%20and%20Newer%20With,and%20128%20megabytes%20of%20memory.&amp;amp;text=To%20take%20advantage%20of%20the,use%20the%20docker%20stack%20command&#34;&gt;https://www.baeldung.com/ops/docker-memory-limit#:~:text=Versions%203%20and%20Newer%20With,and%20128%20megabytes%20of%20memory.&amp;amp;text=To%20take%20advantage%20of%20the,use%20the%20docker%20stack%20command&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/engine/install/linux-postinstall/&#34;&gt;https://docs.docker.com/engine/install/linux-postinstall/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://forums.docker.com/t/docker-swarm-not-respecting-memory-limit/59519&#34;&gt;https://forums.docker.com/t/docker-swarm-not-respecting-memory-limit/59519&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://semaphoreci.com/community/tutorials/scheduling-services-on-a-docker-swarm-mode-cluster&#34;&gt;https://semaphoreci.com/community/tutorials/scheduling-services-on-a-docker-swarm-mode-cluster&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;vader@devastator:~ $ sudo docker container inspect 6fd463496083 &amp;ndash;format &amp;lsquo;{{.State.OOMKilled}}&amp;rsquo;
+false&lt;/p&gt;
 </content>
     </item>
     
@@ -813,15 +1068,15 @@ error that can be thrown, or potential troubleshooting steps.&lt;/p&gt;
       
       <guid>/posts/building-a-pi-cluster/</guid>
       <description>Having been a software engineer for years, I had heard about Raspberry Pi computers, and the tinkering people were doing with them. Despite the chatter, I didn&amp;rsquo;t have any sort of project in mind, and honestly didn&amp;rsquo;t take the time to learn about them.
-One year when the holiday season began rolling around, the team decided to partake in a &amp;ldquo;secret santa&amp;rdquo; gift giving activity. Without any better ideas, I put down that I was interesting an a Raspberry Pi.</description>
+One year when the holiday season began rolling around, the team decided to partake in a &amp;ldquo;secret santa&amp;rdquo; gift giving activity. Without any better ideas, I put down that I was interested an a Raspberry Pi.</description>
       <content>&lt;p&gt;Having been a software engineer for years, I had heard about Raspberry Pi
 computers, and the tinkering people were doing with them. Despite the chatter,
 I didn&amp;rsquo;t have any sort of project in mind, and honestly didn&amp;rsquo;t take the time
 to learn about them.&lt;/p&gt;
 &lt;p&gt;One year when the holiday season began rolling around, the
 team decided to partake in a &amp;ldquo;secret santa&amp;rdquo; gift giving activity. Without any
-better ideas, I put down that I was interesting an a Raspberry Pi.&lt;/p&gt;
-&lt;p&gt;Fast-forward 3 years later and I finally found a project that I was genuinely
+better ideas, I put down that I was interested an a Raspberry Pi.&lt;/p&gt;
+&lt;p&gt;Fast-forward three years later and I finally found a project that I was genuinely
 excited about: creating a Raspberry Pi cluster. I dug up that model 3B+ that I
 got from the gift exchange years prior to began setting it up for the first
 time, and I&amp;rsquo;ve been at it ever since!&lt;/p&gt;
@@ -830,17 +1085,17 @@ time, and I&amp;rsquo;ve been at it ever since!&lt;/p&gt;
 the various items I ended up with.&lt;/p&gt;
 &lt;h4 id=&#34;pis&#34;&gt;Pis&lt;/h4&gt;
 &lt;p&gt;The most important part of the Pi cluster is&amp;hellip; well&amp;hellip; the Pis!&lt;/p&gt;
-&lt;p&gt;I received one as a gift - check! The remaining three I needed to source internationally
+&lt;p&gt;I already got one as a gift - check! The remaining three I needed to source internationally
 (more on that later). To future proof, I was aiming for the model 4B. Although
 it would&amp;rsquo;ve been nice to get my hands on a 4GB or 8GB configuration, they were
 basically myths during these times. I settled for three 2GB models.&lt;/p&gt;
 &lt;h4 id=&#34;poe-hats&#34;&gt;PoE+ Hats&lt;/h4&gt;
 &lt;p&gt;Given power supplies aren&amp;rsquo;t included with the Pi itself, I knew that powering
-my cluster was going to involve spending some additional money.&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&#34;https://www.adafruit.com/product/4298?gclid=Cj0KCQjwxb2XBhDBARIsAOjDZ37bms37yK_7GGNQR5pZ6oqvTZTzyaVe16QH8_NynBC47z0yp6GJZc0aAgFnEALw_wcB&#34;&gt;official power supply&lt;/a&gt; goes for around $8 dollars. Knowing that I was going to shoot for 4 Pis, that was going
-to cost me $32 dollars. That wasn&amp;rsquo;t even including the money I&amp;rsquo;d need to spend
+my cluster was going to involve spending some additional cheddar!&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;https://www.adafruit.com/product/4298?gclid=Cj0KCQjwxb2XBhDBARIsAOjDZ37bms37yK_7GGNQR5pZ6oqvTZTzyaVe16QH8_NynBC47z0yp6GJZc0aAgFnEALw_wcB&#34;&gt;official power supply&lt;/a&gt; goes for around $8 dollars. Knowing that I was going to shoot for four Pis, that was going
+to cost me at least $32 dollars. That wasn&amp;rsquo;t even including the money I&amp;rsquo;d need to spend
 on zip ties and the time I&amp;rsquo;d need to spend to cable manage. Lastly, I simply
-couldn&amp;rsquo;t justify using 4 outlets!&lt;/p&gt;
+couldn&amp;rsquo;t justify using four outlets!&lt;/p&gt;
 &lt;p&gt;This is where &lt;a href=&#34;https://en.wikipedia.org/wiki/Power_over_Ethernet&#34;&gt;Power over Ethernet (PoE)&lt;/a&gt; comes to the rescue. With the correct
 networking equipment, enough power to drive the Pis can be delivered over a
 simple ethernet cable. No more outlet waste or time spent cable managing! But
@@ -852,7 +1107,7 @@ cases have enough space for them, and they solve the gripes around multiple
 power supplies.&lt;/p&gt;
 &lt;h4 id=&#34;switch&#34;&gt;Switch&lt;/h4&gt;
 &lt;p&gt;When it comes to PoE+ switches, the main thing to focus on is the number of ports.
-Obviously, the more ports, the more you will end up spending. No more than 4 Pis
+Obviously, the more ports, the more you will end up spending. No more than four Pis
 are needed for my build, so I went with the &lt;a href=&#34;https://www.amazon.com/dp/B08LHL1Q2Z?psc=1&amp;amp;ref=ppx_yo2ov_dt_b_product_details&#34;&gt;Netgear GS305P (v2)&lt;/a&gt;. This switch
 is &lt;a href=&#34;https://www.fieldengineer.com/blogs/network-switch-managed-vs-unmanaged#:~:text=An%20unmanaged%20switch%20is%20simple,systems%20to%20a%20larger%20network.&#34;&gt;unmanaged&lt;/a&gt; (no smartness) and has 5 ports, one of which being the ingress from your existing internet connection.&lt;/p&gt;
 &lt;h4 id=&#34;storage&#34;&gt;Storage&lt;/h4&gt;
@@ -965,8 +1220,6 @@ for the same parts.&lt;/p&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;I was also very fortunate in that the Raspberry Pi 3B+ was a gift (as mentioned
-previously) and that I had accumulated some Adafruit gift cards up to this point!&lt;/p&gt;
 &lt;h1 id=&#34;what-went-not-so-well&#34;&gt;What went not so well&lt;/h1&gt;
 &lt;h4 id=&#34;incomplete-case&#34;&gt;Incomplete Case&lt;/h4&gt;
 &lt;p&gt;Even though the quality of the case I got was solid, it was annoyingly incomplete.&lt;/p&gt;
@@ -975,7 +1228,7 @@ by the Pi, but didn&amp;rsquo;t include the adaptor necessary. I actually didn&a
 this until I was building the case, as the instruction manual that came with it
 referenced the part but it wasn&amp;rsquo;t included. I find it pretty strange that the fans
 come with the case but the adaptor isn&amp;rsquo;t included.&lt;/p&gt;
-&lt;p&gt;My next gripe was that the case avertises that it is compatible with the
+&lt;p&gt;My next gripe was that the case advertises that it is compatible with the
 PoE+ hat, but didn&amp;rsquo;t come equipped with standoffs compatible with the case.
 Instead it came with screws to secure the Pis to the trays, which would essentially
 be all that is necessary if there were no hats installed. I give Uctronics more
@@ -993,15 +1246,15 @@ demand&lt;/a&gt;, they have been nearly impossible to comeby.&lt;/p&gt;
 my Pis from &lt;a href=&#34;https://www.adafruit.com/&#34;&gt;Adafruit&lt;/a&gt;, &lt;a href=&#34;https://www.digikey.com/&#34;&gt;Digikey&lt;/a&gt;, or any other retailer I was a previous customer of,
 I briefly looked at alternative marketplaces such as Facebook. It was clear that
 was going to be a dead-end as well since the only sellers were gouging hard; we&amp;rsquo;re
-talking $100+ for model 4B (2G) which &lt;a href=&#34;https://www.adafruit.com/product/4292&#34;&gt;normally retails for $45&lt;/a&gt;.&lt;/p&gt;
+talking $100+ for model 4B (2G) which &lt;a href=&#34;https://www.adafruit.com/product/4292&#34;&gt;normally retailed for $45&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;I finally discovered a website called &lt;a href=&#34;https://rpilocator.com/&#34;&gt;rpilocator&lt;/a&gt;, which was
 completely dedicated to help solving this issue. It was through this website that
 I was fortunate enough to snag three model 4B (2G) Pis.&lt;/p&gt;
 &lt;p&gt;This wasn&amp;rsquo;t a quick process though; it took 2-3 months for the timing to line up right.
-It&amp;rsquo;s also worth mentioning that nearly all of these vendor websites have a policy of
+It&amp;rsquo;s also worth mentioning that nearly all of these vendor websites had a policy of
 one Pi per customer, which made things more difficult. I even saw various vendors
-adapt very strict policies that only previously existing customers could purchase them, or that
-they were no longer going to ship them internationally.&lt;/p&gt;
+adopt very strict policies that stated only previously existing customers could purchase them, or that
+they were no longer going to ship them internationally at all.&lt;/p&gt;
 &lt;h4 id=&#34;cost&#34;&gt;Cost&lt;/h4&gt;
 &lt;p&gt;Although there were certainly some market elements that were out of my control
 that contributed to the overall price (particularly shipping), there was opportunity
@@ -1038,7 +1291,7 @@ bad boys and get them up and running.&lt;/p&gt;
 bought some standoffs that were a compatible height to support the PoE+ hats I was using. I made
 sure that they were M2.5 sized to match the screws provided with the &lt;a href=&#34;https://www.mouser.com/ProductDetail/RAF-Electronic-Hardware/M2104-2545-AL?qs=2411ckis64rpgA%252BYlrCb%252Bg%3D%3D&#34;&gt;case&lt;/a&gt;
 itself; check!&lt;/p&gt;
-&lt;p&gt;Weirdly, on some of the tray mounts, the screws wouldn&amp;rsquo;t turn easily. I naively
+&lt;p&gt;Weirdly, on some of the tray mounts the screws wouldn&amp;rsquo;t turn easily. I naively
 thought it they needed an extra &amp;lsquo;oomf&amp;rsquo; to get them to the desired position, so
 of course I reached for my pliers!&lt;/p&gt;
 &lt;blockquote&gt;
@@ -1050,12 +1303,11 @@ screwed in a standoff for that one corner, but then it just wouldn&amp;rsquo;t b
 Also, since the GPIO pins are used to connect the hat and the Pi, I didn&amp;rsquo;t
 want to have to worry about accidentally squishing that limp corner too hard when
 working with it in the future. I had to fix this.&lt;/p&gt;
-&lt;p&gt;I reached out to UCTRONICS support via their website directly. I explained to
+&lt;p&gt;I reached out to Uctronics support via their website directly. I explained to
 them what happened, and they were incredible. They shipped not one, but two replacement
 trays all for something that was completely my fault.&lt;/p&gt;
-&lt;p&gt;Best of all, thanks to Jeff Gerling and &lt;a href=&#34;https://github.com/geerlingguy/raspberry-pi-dramble/issues/135&#34;&gt;his prior research&lt;/a&gt;, I went ahead and ordered a second
+&lt;p&gt;Best of all, thanks to Jeff Geerling and &lt;a href=&#34;https://github.com/geerlingguy/raspberry-pi-dramble/issues/135&#34;&gt;his prior research&lt;/a&gt;, I went ahead and ordered another
 set of standoffs with the hope that I&amp;rsquo;d get it right the second time - it worked like a charm!&lt;/p&gt;
-&lt;h4 id=&#34;availability&#34;&gt;Availability&lt;/h4&gt;
 &lt;h1 id=&#34;was-the-cost-worth-it&#34;&gt;Was the cost worth it?&lt;/h1&gt;
 &lt;p&gt;So was the cost worth it? With so many different Infrastructure as a Service (IaaS)
 companies such as Linode, Amazon Web Service (AWS), etc. this is a question
@@ -1215,6 +1467,37 @@ could achieve a comparable setup that is actually cheaper for 12 or even 18 mont
 Pi cluster for? Toss me a comment and maybe I&amp;rsquo;ll give it a try. Also, I can&amp;rsquo;t
 wait to bring you all along for what I might do with this next - there is so
 much out there!&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Why Blog?</title>
+      <link>/posts/why-blog/</link>
+      <pubDate>Thu, 04 Aug 2022 20:07:09 -0700</pubDate>
+      
+      <guid>/posts/why-blog/</guid>
+      <description>being a successful software engineer requires solid communication bring others along for the ride; see your vision work through kinks of ideas; solutions are almost always too large to completely load up cognitively code reviews are excellent quality control and educations tools having a blog is a different way to sharpen the knife - expressing technical concepts so that they can digestable more broadly. want to find new ways to get better at this.</description>
+      <content>&lt;ul&gt;
+&lt;li&gt;being a successful software engineer requires solid communication
+&lt;ul&gt;
+&lt;li&gt;bring others along for the ride; see your vision&lt;/li&gt;
+&lt;li&gt;work through kinks of ideas; solutions are almost always too large to completely load up cognitively&lt;/li&gt;
+&lt;li&gt;code reviews are excellent quality control and educations tools&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;having a blog is a different way to sharpen the knife - expressing technical concepts
+so that they can digestable more broadly. want to find new ways to get better at this.&lt;/p&gt;
+&lt;p&gt;ever since my first days of coding, i&amp;rsquo;ve see a huge need to decomplexify complex topics.
+in college, it was common for academics to flex as a show of knowledge prowess, and i found
+it to be detrimental. i aspire to make various topics approachable.&lt;/p&gt;
+&lt;p&gt;it&amp;rsquo;s a way to get a fresh avenue of perspective and ideas! who knows who will comment on my stuff!&lt;/p&gt;
+&lt;p&gt;so much in tech is rework. an engineer could literally build the same application / components at every
+company they work at. blogs are my way of attempting to share whatever knowledge i have to help
+others not re-invent the wheel. let&amp;rsquo;s coordinate people!&lt;/p&gt;
+&lt;p&gt;lastly, it&amp;rsquo;s a great way to consolidate knowledge &amp;amp; learnings. i love learning new things,
+but time can be the enemy of retention. taking note of the details empowers me to come
+back up to speed on previous topics faster!&lt;/p&gt;
 </content>
     </item>
     
