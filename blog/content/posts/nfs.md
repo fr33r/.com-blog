@@ -1,6 +1,7 @@
 +++
 title = "Configuration NFS with Firewalls"
 date = "2023-03-05T13:02:04-08:00"
+publishDate = "2024-03-05T13:02:04-08:00"
 author = ""
 authorTwitter = "" #do not include @
 cover = ""

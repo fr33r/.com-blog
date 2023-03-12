@@ -6,66 +6,7 @@
     <description>Recent content on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 Mar 2023 13:02:04 -0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Configuration NFS with Firewalls</title>
-      <link>/posts/nfs/</link>
-      <pubDate>Sun, 05 Mar 2023 13:02:04 -0800</pubDate>
-      
-      <guid>/posts/nfs/</guid>
-      <description>Storing and retrieving files from a remote location is a common need for distributed cluster environments. Given any one service or application can be ran from a pool of different hosts, those services may need to potentialy share configuration, data, and other files between them.
-For Unix based hosts, one such option for this is known as Network File System, or NFS for short.
-What is NFS? NFS is a distributed file system protocol.</description>
-      <content>&lt;p&gt;Storing and retrieving files from a remote location is a common need for
-distributed cluster environments. Given any one service or application can
-be ran from a pool of different hosts, those services may need to potentialy share
-configuration, data, and other files between them.&lt;/p&gt;
-&lt;p&gt;For Unix based hosts, one such option for this is known as
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Network_File_System&#34;&gt;Network File System&lt;/a&gt;,
-or NFS for short.&lt;/p&gt;
-&lt;h2 id=&#34;what-is-nfs&#34;&gt;What is NFS?&lt;/h2&gt;
-&lt;p&gt;NFS is a distributed file system protocol. It essentially emulates remote file
-access as if that remote location was local to the client. It was originally
-developed by Sun Microsystems all the way back in 1984, and has had several
-versions and variations over the years.&lt;/p&gt;
-&lt;h3 id=&#34;versions&#34;&gt;Versions&lt;/h3&gt;
-&lt;p&gt;Despite there being four official versions, I&amp;rsquo;ll concentrate on the latest two:
-NFSv3 and NFSv4. These are the two versions you are likely to interact with in
-todays world, and versions older than NFSv3 have several limitations that no
-longer make them viable (storage size limitations, performance limitations, etc.).&lt;/p&gt;
-&lt;h4 id=&#34;nfsv3&#34;&gt;NFSv3&lt;/h4&gt;
-&lt;p&gt;NFS really comprises of several different organized components:&lt;/p&gt;
-&lt;p&gt;Network Status Monitor (NSM) Protocol&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/8/rpc.nfsd&#34;&gt;rpc.nfsd&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;The NFS server process. By default, it runs on port &lt;code&gt;2049&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/8/rpc.statd&#34;&gt;rpc.statd&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;A client and server-side daemon responsible for listening for reboot notifications
-from other hosts, while also doing the flip-side by managing the list of hosts to
-be notified if the local system reboots.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;rpc.statd&lt;/code&gt; is what the NFS Lock Manager (NLM) communicates with to help maintain
-proper file locking state when NFS connected hosts reboot.&lt;/p&gt;
-&lt;p&gt;By default, it runs on a random ephemeral port for each socket. This
-daemon is only needed for NFSv3 and NFSv2.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/8/rpcinfo&#34;&gt;rpcinfo&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;A command line utility used to discover what various RPC services have been registered
-with &lt;code&gt;rpcbind&lt;/code&gt; on a host. For use cases of working NFS, this utility can be used
-to view what NFS-related services are running and what ports they are configured on.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://linux.die.net/man/8/mountd&#34;&gt;rpc.mountd&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;The NFS server-side daemon responsible for receiving and managing mount requests
-to NFS exports. By default, it runs on a random ephemeral port for each socket. This
-daemon is only needed for NFSv3 and NFSv2.&lt;/p&gt;
-&lt;h4 id=&#34;nfsv4&#34;&gt;NFSv4&lt;/h4&gt;
-&lt;h2 id=&#34;running-a-firewall-with-nfs&#34;&gt;Running a Firewall with NFS&lt;/h2&gt;
-&lt;p&gt;Given the default behavior of the various components of NFSv3 using random
-ephemeral ports, some configuration changes are needed to instead utilize static
-ports.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;nfs-v3&#34;&gt;NFS v3&lt;/h3&gt;
-&lt;h3 id=&#34;nfs-v4&#34;&gt;NFS v4&lt;/h3&gt;
-</content>
-    </item>
-    
+    <lastBuildDate>Fri, 10 Feb 2023 21:51:53 -0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Writing Better Docker Swarm Stacks</title>
       <link>/posts/organizing-docker-swarm-stacks/</link>
@@ -645,16 +586,6 @@ those tasks.&lt;/p&gt;
     </item>
     
     <item>
-      <title>Should You Upgrade to Nginx Proxy Manager</title>
-      <link>/posts/should-you-upgrade-to-nginx-proxy-manager/</link>
-      <pubDate>Fri, 12 Aug 2022 22:04:35 -0700</pubDate>
-      
-      <guid>/posts/should-you-upgrade-to-nginx-proxy-manager/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
       <title>You Had One Job Portainer Console!</title>
       <link>/posts/portainer-console-issue/</link>
       <pubDate>Fri, 12 Aug 2022 22:04:10 -0700</pubDate>
@@ -765,49 +696,6 @@ the &lt;code&gt;Upgrade&lt;/code&gt; is sent.&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;ve only scratched the surface on this stuff. If you are interesting in reading
 further, check out &lt;a href=&#34;https://www.nginx.com/blog/websocket-nginx/&#34;&gt;this awesome post&lt;/a&gt; on the
 &lt;a href=&#34;https://www.nginx.com/blog&#34;&gt;nginx blog&lt;/a&gt;.&lt;/p&gt;
-</content>
-    </item>
-    
-    <item>
-      <title>If I Only Had More Memory</title>
-      <link>/posts/docker-memory-constraints/</link>
-      <pubDate>Fri, 12 Aug 2022 14:01:08 -0700</pubDate>
-      
-      <guid>/posts/docker-memory-constraints/</guid>
-      <description>When deploying a service to a cluster of hosts, it&amp;rsquo;s important to ensure that the host ultimately chosen can accommodate for the resource requirements of that service. Without first confirming that the host can provide what the service needs, it&amp;rsquo;s possible that the service will consume all available resources and result in degradation of the host itself.
-Memory Constraints One such resource to keep tabs on is memory (RAM). Each process that is ran within a particular container will consume some amount of memory while it is running.</description>
-      <content>&lt;p&gt;When deploying a service to a cluster of hosts, it&amp;rsquo;s important to ensure that
-the host ultimately chosen can accommodate for the resource requirements of
-that service. Without first confirming that the host can provide what the
-service needs, it&amp;rsquo;s possible that the service will consume all available
-resources and result in degradation of the host itself.&lt;/p&gt;
-&lt;h1 id=&#34;memory-constraints&#34;&gt;Memory Constraints&lt;/h1&gt;
-&lt;p&gt;One such resource to keep tabs on is memory (RAM). Each process that is ran
-within a particular container will consume some amount of memory while it is
-running.&lt;/p&gt;
-&lt;p&gt;By default, Docker does not apply resource constraints to containers that
-ultimately comprise a service. That said&lt;/p&gt;
-&lt;h1 id=&#34;how&#34;&gt;How&lt;/h1&gt;
-&lt;h1 id=&#34;reaching-the-limit&#34;&gt;Reaching the Limit&lt;/h1&gt;
-&lt;p&gt;So what happens once the limit is reach&lt;/p&gt;
-&lt;p&gt;what are docker memory constraints?
-why should you use them?
-how do i determine the memory limit or reservation?```
-what is OOM and how to detect it?
-what&amp;rsquo;s the deal with swap? should you disable it?
-link to articles that could be helpful:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/53533&#34;&gt;https://github.com/kubernetes/kubernetes/issues/53533&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://haydenjames.io/linux-performance-almost-always-add-swap-space/&#34;&gt;https://haydenjames.io/linux-performance-almost-always-add-swap-space/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/config/containers/resource_constraints/#prevent-a-container-from-using-swap&#34;&gt;https://docs.docker.com/config/containers/resource_constraints/#prevent-a-container-from-using-swap&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/compose/compose-file/deploy/#resources&#34;&gt;https://docs.docker.com/compose/compose-file/deploy/#resources&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/ops/docker-memory-limit#:~:text=Versions%203%20and%20Newer%20With,and%20128%20megabytes%20of%20memory.&amp;amp;text=To%20take%20advantage%20of%20the,use%20the%20docker%20stack%20command&#34;&gt;https://www.baeldung.com/ops/docker-memory-limit#:~:text=Versions%203%20and%20Newer%20With,and%20128%20megabytes%20of%20memory.&amp;amp;text=To%20take%20advantage%20of%20the,use%20the%20docker%20stack%20command&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/engine/install/linux-postinstall/&#34;&gt;https://docs.docker.com/engine/install/linux-postinstall/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://forums.docker.com/t/docker-swarm-not-respecting-memory-limit/59519&#34;&gt;https://forums.docker.com/t/docker-swarm-not-respecting-memory-limit/59519&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://semaphoreci.com/community/tutorials/scheduling-services-on-a-docker-swarm-mode-cluster&#34;&gt;https://semaphoreci.com/community/tutorials/scheduling-services-on-a-docker-swarm-mode-cluster&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;vader@devastator:~ $ sudo docker container inspect 6fd463496083 &amp;ndash;format &amp;lsquo;{{.State.OOMKilled}}&amp;rsquo;
-false&lt;/p&gt;
 </content>
     </item>
     
@@ -1467,37 +1355,6 @@ could achieve a comparable setup that is actually cheaper for 12 or even 18 mont
 Pi cluster for? Toss me a comment and maybe I&amp;rsquo;ll give it a try. Also, I can&amp;rsquo;t
 wait to bring you all along for what I might do with this next - there is so
 much out there!&lt;/p&gt;
-</content>
-    </item>
-    
-    <item>
-      <title>Why Blog?</title>
-      <link>/posts/why-blog/</link>
-      <pubDate>Thu, 04 Aug 2022 20:07:09 -0700</pubDate>
-      
-      <guid>/posts/why-blog/</guid>
-      <description>being a successful software engineer requires solid communication bring others along for the ride; see your vision work through kinks of ideas; solutions are almost always too large to completely load up cognitively code reviews are excellent quality control and educations tools having a blog is a different way to sharpen the knife - expressing technical concepts so that they can digestable more broadly. want to find new ways to get better at this.</description>
-      <content>&lt;ul&gt;
-&lt;li&gt;being a successful software engineer requires solid communication
-&lt;ul&gt;
-&lt;li&gt;bring others along for the ride; see your vision&lt;/li&gt;
-&lt;li&gt;work through kinks of ideas; solutions are almost always too large to completely load up cognitively&lt;/li&gt;
-&lt;li&gt;code reviews are excellent quality control and educations tools&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;having a blog is a different way to sharpen the knife - expressing technical concepts
-so that they can digestable more broadly. want to find new ways to get better at this.&lt;/p&gt;
-&lt;p&gt;ever since my first days of coding, i&amp;rsquo;ve see a huge need to decomplexify complex topics.
-in college, it was common for academics to flex as a show of knowledge prowess, and i found
-it to be detrimental. i aspire to make various topics approachable.&lt;/p&gt;
-&lt;p&gt;it&amp;rsquo;s a way to get a fresh avenue of perspective and ideas! who knows who will comment on my stuff!&lt;/p&gt;
-&lt;p&gt;so much in tech is rework. an engineer could literally build the same application / components at every
-company they work at. blogs are my way of attempting to share whatever knowledge i have to help
-others not re-invent the wheel. let&amp;rsquo;s coordinate people!&lt;/p&gt;
-&lt;p&gt;lastly, it&amp;rsquo;s a great way to consolidate knowledge &amp;amp; learnings. i love learning new things,
-but time can be the enemy of retention. taking note of the details empowers me to come
-back up to speed on previous topics faster!&lt;/p&gt;
 </content>
     </item>
     

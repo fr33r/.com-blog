@@ -1,7 +1,7 @@
 +++
 title = "If I Only Had More Memory"
 date = "2022-08-12T14:01:08-07:00"
-publishDate = "2022-08-31T21:22:01-07:00"
+publishDate = "2024-08-31T21:22:01-07:00"
 author = "fr33r"
 cover = ""
 tags = ["docker", "swarm", "devops"]
