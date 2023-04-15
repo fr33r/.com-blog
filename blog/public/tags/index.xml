@@ -6,7 +6,37 @@
     <description>Recent content in Tags on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Feb 2023 21:51:53 -0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 08 Apr 2023 10:35:13 -0700</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>api</title>
+      <link>/tags/api/</link>
+      <pubDate>Sat, 08 Apr 2023 10:35:13 -0700</pubDate>
+      
+      <guid>/tags/api/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>scaling</title>
+      <link>/tags/scaling/</link>
+      <pubDate>Sat, 08 Apr 2023 10:35:13 -0700</pubDate>
+      
+      <guid>/tags/scaling/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>web</title>
+      <link>/tags/web/</link>
+      <pubDate>Sat, 08 Apr 2023 10:35:13 -0700</pubDate>
+      
+      <guid>/tags/web/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
     <item>
       <title>devops</title>
       <link>/tags/devops/</link>
