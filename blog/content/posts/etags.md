@@ -30,7 +30,7 @@ to great volumes.
 representations of the same resource, regardless of whether those multiple
 representations are due to resource state changes over time, content
 negotiation resulting in multiple representations being valid at the same
-time, or both. - [RFC-7232 Section 2.3][rfc-7232-section-2.3]
+time, or both. - [RFC-7232 Section 2.3][rfc7232-section-2.3]
 
 In other words, an entity tag is indicative of a particular state or "version"
 of resource state communicated via a representation. Any time the
@@ -115,54 +115,187 @@ are what gets hashed.
 On the flip side, if weak validation is desired, you as the engineer have to
 define what data is used as input. For example, perhaps only a subset of the
 data items returned in a representation need to be considered - this could
-be accomplished by serializing just those properties and using those as input.
-
-> NOTE: 
-
-Interestingly, documentation about entity tags typically discuss how
-generating strong entity tags can prove burdensome, and may even go as far as
-possibly impacting peformance. As with most things software engineering, there
-are some variables and nuances to consider when interpreting this claim, and
-ultimately some trade offs to evaluate based on your use cases. In fact, I'd
-argue it's more combersome to explicitly define
-
->>>
-
-
+be accomplished by serializing just those properties and using that result as input.
 
 ### What are variants?
 
 > A resource may have one, or more than one, representation(s) associated with
-it at any given instant. Each of these representations is termed a `variant'.
+it at any given instant. Each of these representations is termed a 'variant'.
 Use of the term `variant' does not necessarily imply that the resource is
 subject to content negotiation. - [RFC 2616 Section 1.3][rfc2616-section-1.3]
 
-## Etag storage
+## Storage
+
+Although various API flows that leverage entity tags can operate completely
+without storing entity tags and compute them on the fly prior to usage, I strongly
+urge that you consider storing them. In absence of storing them, the
+origin server basically needs to reconsitute the resource and serialize it
+to determine what the current relevant entity tag is for a resource which
+is costly.
 
 ### What not to do
 
+Since entity tags are fundamentally a means of tracking and communicating
+"versions" of resource state, it can be tempting for engineers to reach
+for a versioning solution included with various well-known web frameworks
+and apply it directly to a database table responsible for storing resource
+state.
+
+Many of these implementations are based on storing a version as an additional
+column in a database table. Don't do this. Why?
+
+Many times, a resource representation includes data that is stored across
+many tables or data sources. Storing a version at a table level means that
+you would need to devise a complex solution for ensure that version gets
+changed even if data ultimately stored in a different table is altered.
+
+Also, not all data stored is included in resource representations. Storing
+versions at a table level as many of these web frameworks enable results in
+a version change even if the resulting resource representation wouldn't be
+altered. A thrashing entity tag will reduce efficacy of various entity tag
+applications, such as conditional `GET` and conditional `PUT` / `PATCH`
+requests.
+
 ### RDBMS (SQL)
+
+If you are building an API that leverages a relational database management
+system (RDBMS), entity tags could be represented as a separate table
+that is modified within the scope of the transaction responsible for executing
+the SQL statements that create or modify the resource state itself. This
+approach ensures that entity tags are consistent with the resource state being 
+persisted.
+
+The following is an example schema for such a table:
+
+| Column Name | Data Type | Description
+| --- | --- | --- |
+| `uri` | `VARCHAR` | The URI of the resource. |
+| `media_type` | `VARCHAR` | The MIME media type of the representation. |
+| `etag` | `VARCHAR` | The entity tag. |
+| `version` | `INTEGER` | The version column utilize to support optimistic locking. |
 
 ### Document storage (NoSQL)
 
 ## Scaling reads
 
+The post popular application of entity tags is to help scale API read operations,
+such as `GET` requests. This is achieved using what is referred to as
+"conditional `GET` requests.
+
 ### Conditional `GET`
+
+Any request is classified as conditional if it provides any of these
+conditional headers:
+
+- [`If-Match`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Match)
+- [`If-None-Match`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match)
+- [`If-Modified-Since`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since)
+- [`If-Unmodified-Since`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Unmodified-Since)
+- [`If-Range`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Range)
+
+More specifically, conditional `GET` requests most often utilize either the
+`If-None-Match` or `If-Modified-Since` headers. Since we are mainly focusing
+on entity tags in this dicussion, we'll focus just on `If-None-Match`.
+
+In the context of conditional `GET` requests, the `If-None-Match` header
+is used as a way for a client to conditionally request a fresh representation
+for a resource only if that resource has an entity tag _that does not match_
+any of the entity tags provided within the value of the header. The format
+of that header looks like the following:
+
+```
+If-None-Match: "<entity tag value>"
+If-None-Match: "<entity tag value>", "<entity tag value>", …
+If-None-Match: *
+```
+
+HTTP clients (as well as intermediary hosts such as proxies) often maintain
+caches that store responses to previous requests. Those clients maintain that
+cache, and expiration of the entries are primarily controlled by the value
+of the `Cache-Control` header sent in the response from the origin server. Once
+the entry has expired, the [client issues these conditional `GET` requests to
+"refresh" the entry](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#cache_update)
+only if it has changed.
+
+{{< image src="/img/conditional-get.gif" alt="Conditional GET Example" position="center" style="border-radius: 8px;" >}}
 
 ## Resource integrity
 
-### Conditional `PUT`
+The lesser known use case for conditional requests is to maintain resource
+integrity. Using entity tags and conditional headers
+such as `If-Match`, the origin server can utilize optimistic concurrency
+control practices to validate whether the clients write request is being based
+off of a stale representation, and properly facilitate a feedback cycle to
+inform the client of this change of state.
 
-### Conditional `PATCH`
+Even though this has value even in non-concurrent request patterns, it really
+shines when it comes to modern systems where more than one client could be
+modifying resource state at the same time. If implemented correctly, only
+a single clients write will succeed and the remaining will be rejected with
+[`412 Precondition Failed`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412).
+
+### Conditional `PUT` / `PATCH`
+
+Modifications to resource state are achieved using the
+[`PUT`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT)
+and [`PATCH`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH)
+HTTP methods. When issuing conditional `PUT` or `PATCH` requests, the client
+provides a value for the `If-Match` or `If-Unmodified-Since` headers. Again,
+we will set `If-Unmodified-Since` to the side.
+
+The premise here is similar to conditional `GET` requests, in the way that
+clients indicate one or many entity tags they have recorded for the resource
+they wish to interacted with. The format of the `If-Match` header should
+look familiar:
+
+```
+If-Match: "<entity tag value>"
+If-Match: "<entity tag value>", "<entity tag value>", …
+If-Match: *
+```
+
+However, as the header name communicates, the intention is the client
+wishes to perform the modifications _only if the current resource entity tag
+matches_ at least one of the provided values for `If-Match`. It is only then
+that the modifications are performed, as this process validates the client
+is issuing the request based on the context of the latest (most current)
+state of that resource.
+
+> NOTE: The `*` value essentially forces the request to succeed. More concretely, it
+results in the precondition to evalute to `true` [as long as the resource
+being targeted exists][if-match-directives]. Utilize this value with caution; it basically disables
+the safety that this conditional request is intending to provide.
+
+{{< image src="/img/conditional-update.gif" alt="Conditional GET Example" position="center" style="border-radius: 8px;" >}}
 
 ## Advanced
 
 ### Scaling collection-based searches
 
-### Synchronizing with code-changes
+### Synchronizing with code changes
+
+As stated previously, there are signficant benefits to storing entity tags
+instead of computing them on the fly prior to comparisons. One drawback of this
+approach is that stored entity tags become stale as the structure (and thus the
+code responsible for generating that structure) of represntations evolves.
+Many changes happen organically over time that are backwards compatible to
+API consumers.
+
+There is room for creativity on how to handle this. One approach could be to
+store a hash of the file contents responsible for generating the representation
+alongside each entity tag stored. This would enable programmatic detection of
+which entity tags need to be refreshed, which could be done lazily if detected
+during a comparison operation. Instead of the lazy approach, if use cases
+allow, a background job could be spawned upon code deployment or perhaps on a
+cadence that identify these stale entity tags and update them accordingly.
+
+Depending on the number of resources your system manages, a simpler solution
+of regenerating all entity tags could be viable. The main benefit of this
+approach is simplicity.
 
 [rfc7232-section-2.3]: https://www.rfc-editor.org/rfc/rfc7232#section-2.3
 [rfc2616-section-1.3]: https://www.rfc-editor.org/rfc/rfc2616#section-1.3
 [md5-algorithm]: https://en.wikipedia.org/wiki/MD5
 [sha-2-algorithm]: https://en.wikipedia.org/wiki/SHA-2
 [if-range]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Range
+[if-match-directives]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Match#directives
