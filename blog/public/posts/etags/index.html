@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
   
-    <title>Etags :: /* Commentary */</title>
+    <title>Etags: The Secret Sauce to Scalable &amp; Concurrent APIs :: /* Commentary */</title>
   
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="If you are a software engineer in the web development space, I&amp;rsquo;m willing to wager you have at least familiarized yourself with entity tags, or &amp;ldquo;etags&amp;rdquo; for short. However, not many have fully seized the various opportunities etags provide when implementing RESTful, HTTP-based APIs.
-Interestingly, I&amp;rsquo;ve incidentally become somewhat passionate about etags and their applied usage as I&amp;rsquo;ve continued through my career. They are often a critical necessity that gets overlooked when building scalable, concurrent systems for the web." />
+<meta name="description" content="An in-depth walkthrough about what entity tags are and how you can leverage them to build scalable &amp; highly concurrent RESTful APIs." />
 <meta name="keywords" content="api, web, etag, http, rfc2616, rfc7262, header, concurrency, scale" />
 <meta name="robots" content="noodp" />
 <link rel="canonical" href="/posts/etags/" />
@@ -45,9 +44,8 @@ if (!doNotTrack) {
 
 <meta property="og:locale" content="en" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="Etags">
-<meta property="og:description" content="If you are a software engineer in the web development space, I&amp;rsquo;m willing to wager you have at least familiarized yourself with entity tags, or &amp;ldquo;etags&amp;rdquo; for short. However, not many have fully seized the various opportunities etags provide when implementing RESTful, HTTP-based APIs.
-Interestingly, I&amp;rsquo;ve incidentally become somewhat passionate about etags and their applied usage as I&amp;rsquo;ve continued through my career. They are often a critical necessity that gets overlooked when building scalable, concurrent systems for the web." />
+<meta property="og:title" content="Etags: The Secret Sauce to Scalable &amp; Concurrent APIs">
+<meta property="og:description" content="An in-depth walkthrough about what entity tags are and how you can leverage them to build scalable &amp; highly concurrent RESTful APIs." />
 <meta property="og:url" content="/posts/etags/" />
 <meta property="og:site_name" content="/* Commentary */" />
 
@@ -131,7 +129,7 @@ Interestingly, I&amp;rsquo;ve incidentally become somewhat passionate about etag
     
 <div class="post">
   <h1 class="post-title">
-    <a href="/posts/etags/">Etags</a></h1>
+    <a href="/posts/etags/">Etags: The Secret Sauce to Scalable &amp; Concurrent APIs</a></h1>
   <div class="post-meta">
     
       <span class="post-date">
@@ -145,7 +143,7 @@ Interestingly, I&amp;rsquo;ve incidentally become somewhat passionate about etag
       <span class="post-author">:: fr33r</span>
     
     
-      <span class="post-reading-time">:: 10 min read (1973 words)</span>
+      <span class="post-reading-time">:: 15 min read (3102 words)</span>
     
   </div>
 
@@ -170,7 +168,7 @@ Interestingly, I&amp;rsquo;ve incidentally become somewhat passionate about etag
 wager you have at least familiarized yourself with entity tags, or &ldquo;etags&rdquo; for
 short. However, not many have fully seized the various opportunities etags
 provide when implementing RESTful, HTTP-based APIs.</p>
-<p>Interestingly, I&rsquo;ve incidentally become somewhat passionate about etags and
+<p>Incidentally I have become somewhat passionate about etags and
 their applied usage as I&rsquo;ve continued through my career. They are often a
 critical necessity that gets overlooked when building scalable, concurrent
 systems for the web. Having knowledge of what they are and how to use them
@@ -183,150 +181,316 @@ to great volumes.</p>
 representations of the same resource, regardless of whether those multiple
 representations are due to resource state changes over time, content
 negotiation resulting in multiple representations being valid at the same
-time, or both. - <a href="https://www.rfc-editor.org/rfc/rfc7232#section-2.3">RFC-7232 Section 2.3</a></p>
+time, or both. - <a href="https://www.rfc-editor.org/rfc/rfc7232#section-2.3">RFC 7232 Section 2.3</a></p>
 </blockquote>
 <p>In other words, an entity tag is indicative of a particular state or &ldquo;version&rdquo;
 of resource state communicated via a representation. Any time the
 representation for the resource changes, the corresponding entity tag will
-change. These entity tags are communicated via the <code>Etag</code> header in HTTP
+change. These entity tags are communicated via the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag"><code>Etag</code> header</a> in HTTP
 responses.</p>
 <p>Now that we know what they are, it&rsquo;s time to get a little more concrete. After
 all, what does one of these look like?</p>
 <p>An entity tag consists of two main sections: an optional weakness identifier
 (if the entity tag is a weak entity tag; more on that shortly), and a series
-of [ASCII encoded][ascii] characters surrounded by double (<code>&quot;</code>) quotes. The
+of <a href="https://en.wikipedia.org/wiki/ASCII">ASCII encoded</a> characters surrounded by double (<code>&quot;</code>) quotes. The
 second portion is often referred to as an &ldquo;opaque string&rdquo;, &ldquo;opaque validator&rdquo;,
-or &ldquo;entity tag value&rdquo;, simply meaning it&rsquo;s an abstract sequence of charactors
-typically without descernable alterior meaning. The first section is used to
-determine whether the entity tag is classified as either strong, or weak.</p>
+or &ldquo;entity tag value&rdquo;, simply meaning it&rsquo;s an abstract sequence of characters
+typically without descernable or ulterior meaning.</p>
 <h3 id="strong">Strong<a href="#strong" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<p>Stating that an entity tag is a &ldquo;strong enitity tag&rdquo; really means that the
-entity tag should be used to perform strong validation. Strong validation
-is used to determine whether two representations of a resource at byte to byte
+<p>Stating that an entity tag is a &ldquo;strong entity tag&rdquo; really means that the
+entity tag should be used to perform <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#strong_validation">strong validation</a>. Strong validation
+is used to determine whether two representations of a resource are byte for byte
 identical. This strict form of validation is required for a subset of
 conditional HTTP headers, and in general provides the highest level of
 confidence that the data being compared is equivalent.</p>
-<h3 id="weak">Weak<a href="#weak" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<p>Contrasting with strong entity tags, a weak entity tag refers to one that
-leverages weak validation. This form of validation does not assert byte for
-byte equality, and instead relies on determining whether the two
-representations are semantically equivalent. This relies on the author of the
-origin server to define these semantics.</p>
-<h3 id="examples">Examples<a href="#examples" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<pre tabindex="0"><code># entity tag using weak validation.
-W/&#34;2b00042f7481c7b056c4b410d28f33cf&#34;
-
-# entity tag using strong validation.
+<h4 id="examples">Examples<a href="#examples" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<pre tabindex="0"><code>
 &#34;e6139f93eb47c9fe7eb7fc5ddb586511&#34;
-</code></pre><h2 id="which-type-should-i-use">Which type should I use?<a href="#which-type-should-i-use" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+&#34;3b6f421e7550395e28e091c5565ac80a&#34;
+&#34;00a809937eddc44521da9521269e75c6&#34;
+</code></pre><h3 id="weak">Weak<a href="#weak" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Contrasting with strong entity tags, a weak entity tag refers to one that
+leverages <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#weak_validation">weak validation</a>. This form of validation does not assert byte for
+byte equality, and instead relies on determining whether the two
+representations are semantically equivalent. This relies on the engineer to
+define these semantics. A weak entity tag is designated by
+adding a <code>W/</code> prefix to the entity tag value.</p>
+<h4 id="examples-1">Examples<a href="#examples-1" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<pre tabindex="0"><code>W/&#34;2b00042f7481c7b056c4b410d28f33cf&#34;
+W/&#34;4ecc28c187a45859e7631bb871a41a7d&#34;
+W/&#34;28198b369067e88dab9fefe85484dbf4&#34;
+</code></pre><h2 id="which-type-should-i-use">Which Type Should I Use?<a href="#which-type-should-i-use" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
 <p>Based on my experience and systems I&rsquo;ve built over the years, I recommend
-using strong etags. In the next section, I&rsquo;ll go into more detail on how
-entity tags can be generated, but in general, strong entity tags are simpler
+using <strong>strong etags</strong>. In the next section, I&rsquo;ll go into more detail on how
+entity tags can be generated, but in general, strong entity tags are typically simpler
 to generate from a coding perspective. Additionally, they leave the door
 open for your API to support conditional request behaviors that rely on byte
 for byte equality, such as <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Range"><code>If-Range</code></a>, which can be used to request a portion
-of a resource representation. Lastly, they are easier to reason about given
-their generation algorithms are well defined and easily reproducible.</p>
-<p>That said, it&rsquo;s worth highlighting some downsides; the most prominent being
-that the slightest difference results in a different entity tag, even if the
-data communicated in the representation is the same.</p>
-<p>For example, if your representations are a data exchange format such as JSON,
+of a resource representation. They are easier to reason about given
+their generation algorithms are well known, documented, and widely available. Lastly,
+they gracefully support content negotiation use cases given different
+negotiated representations will natively have different content.</p>
+<p>That said, it&rsquo;s worth highlighting the most prominent downside:
+the slightest difference results in a different entity tag, even if the
+data being conveyed in the representation is the same.</p>
+<p>For example, if your representations leverage a data exchange format such as <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>,
 any changes to the ordering of the keys would result in a mismatch. Perhaps your
 representation contains a collection or list; if the ordering of the elements
 is different, again the entity tags will not match. Such fragility is as
-burdensome as is the ability to tame these occurances. For example, if you
+burdensome as is the ability to tame these occurrences. For example, if you
 can easily ensure JSON keys are serialized in a consistent order, that lists
 are serialized in a consistent order, etc. than you should be able to safely
 avoid unintended mismatches.</p>
-<h2 id="how-should-i-generate-them">How should I generate them?<a href="#how-should-i-generate-them" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<blockquote>
+<p><strong>NOTE:</strong> Some web frameworks already take liberties in how data is serialized
+that help ensure the process is deterministic. For example, it&rsquo;s common to see
+serialization functionality be implemented such that it sorts JSON keys in
+alphabetical order. As such, the fragility described above is typically
+already handled to some degree from the start.</p>
+</blockquote>
+<h2 id="how-should-i-generate-them">How Should I Generate Them?<a href="#how-should-i-generate-them" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
 <p>Mechanically, entity tags are typically generated using well known, one-way
-hashing algorithms such as <a href="https://en.wikipedia.org/wiki/MD5">MD5</a> or [SHA256][sha2-algorithm].
+hashing algorithms such as <a href="https://en.wikipedia.org/wiki/MD5">MD5</a> or <a href="https://en.wikipedia.org/wiki/SHA-2">SHA256</a>.
 The input to the hashing algorithm hinges on whether strong or weak validation
 is desired.</p>
 <p>When generating strong entity tags, the input is the serialized
-representation. In other words, all of the bytes that are intended for the
-representation to be returned in a response to a <code>GET</code> request for the resource
-are what gets hashed.</p>
+representation. In other words, all of the bytes that comprise the
+representation to be returned in a response to a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET"><code>GET</code></a> request for the resource
+are what ultimately gets hashed.</p>
 <p>On the flip side, if weak validation is desired, you as the engineer have to
 define what data is used as input. For example, perhaps only a subset of the
 data items returned in a representation need to be considered - this could
 be accomplished by serializing just those properties and using that result as input.</p>
-<h3 id="what-are-variants">What are variants?<a href="#what-are-variants" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
 <blockquote>
-<p>A resource may have one, or more than one, representation(s) associated with
-it at any given instant. Each of these representations is termed a &lsquo;variant&rsquo;.
-Use of the term `variant&rsquo; does not necessarily imply that the resource is
-subject to content negotiation. - <a href="https://www.rfc-editor.org/rfc/rfc2616#section-1.3">RFC 2616 Section 1.3</a></p>
+<p><strong>NOTE:</strong> You may also see or hear the term &lsquo;variant&rsquo; used interchageably with
+&lsquo;representation&rsquo;. Some web frameworks use this terminology as well in their
+code. Within the context of this article, you can assume they are synonymous
+with one another.</p>
 </blockquote>
+<p>It&rsquo;s important to reiterate that entity tags should be generated for each
+representation for a resource, such that different representations for that
+resource can be properly distinguished. This includes <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation">content negotiation</a>
+as well.</p>
+<p>If your HTTP API supports content negotiation, make sure that you are capable
+of generating entity tags such that they factor in the variants your API supports.
+For generating entity tags that support strong validation, this should be supported
+out of the box. Representations that differ in language, encoding, or media type
+will be comprised of different bytes. When generating entity tags that use
+weak validation, these negotiable characteristics of each variant should
+be used as input in combination with the semantics already put in place to
+generate the entity tag.</p>
 <h2 id="storage">Storage<a href="#storage" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<p>Although various API flows that leverage entity tags can operate completely
+<p>Although various request flows that leverage entity tags can operate completely
 without storing entity tags and compute them on the fly prior to usage, I strongly
 urge that you consider storing them. In absence of storing them, the
-origin server basically needs to reconsitute the resource and serialize it
-to determine what the current relevant entity tag is for a resource which
-is costly.</p>
-<h3 id="what-not-to-do">What not to do<a href="#what-not-to-do" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<p>Since entity tags are fundamentally a means of tracking and communicating
-&ldquo;versions&rdquo; of resource state, it can be tempting for engineers to reach
-for a versioning solution included with various well-known web frameworks
-and apply it directly to a database table responsible for storing resource
-state.</p>
-<p>Many of these implementations are based on storing a version as an additional
-column in a database table. Don&rsquo;t do this. Why?</p>
-<p>Many times, a resource representation includes data that is stored across
-many tables or data sources. Storing a version at a table level means that
-you would need to devise a complex solution for ensure that version gets
-changed even if data ultimately stored in a different table is altered.</p>
-<p>Also, not all data stored is included in resource representations. Storing
-versions at a table level as many of these web frameworks enable results in
-a version change even if the resulting resource representation wouldn&rsquo;t be
-altered. A thrashing entity tag will reduce efficacy of various entity tag
-applications, such as conditional <code>GET</code> and conditional <code>PUT</code> / <code>PATCH</code>
-requests.</p>
-<h3 id="rdbms-sql">RDBMS (SQL)<a href="#rdbms-sql" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<p>If you are building an API that leverages a relational database management
-system (RDBMS), entity tags could be represented as a separate table
-that is modified within the scope of the transaction responsible for executing
-the SQL statements that create or modify the resource state itself. This
-approach ensures that entity tags are consistent with the resource state being
-persisted.</p>
-<p>The following is an example schema for such a table:</p>
+origin server basically needs to reconstitute the resource and serialize it
+to determine what the current relevant entity tag is which
+is costly. Additionally, data store technologies provide affordances that
+can help ensure race conditions are handled gracefully.</p>
+<h3 id="considerations">Considerations<a href="#considerations" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>There are some key considerations to weigh when choosing to store entity tags:</p>
+<ul>
+<li>In the event your API supports content negotiation, you will need to store the
+dimensions of negotiation along with your entity tags such that the correct
+one is selected. Examples of dimensions are media type, language, and encoding.</li>
+<li>You will need to use optimistic concurrency controls. Check to see if your database
+of choice or web framework supports optimistic concurrency out of the box. If not,
+your API will need to implement this.</li>
+<li>The metadata utilized for the optimistic concurrency control algorithm should
+be stored directly with the entity tags. In other words,
+judge whether the resource change in progress should pass or fail based on whether
+a concurrent change to the stored entity tag has occurred.</li>
+<li>Entity tags should be generated within the same transaction as the resource
+creation or modification operation. If your data store doesn&rsquo;t support explicit
+transactions, I&rsquo;d suggest creating a separate &ldquo;view&rdquo; of the resource state such
+that it is all consolidated into one location. For example, if using a document
+database, you could denormalize all resource state into
+a single document. This way, all data used as input for the entity tag is
+consolidated. This creates a single pathway of change that can be used to trigger
+new entity tag creation, and optimistic concurrency control can be used to ensure
+that a concurrent change has not occurred.</li>
+</ul>
+<h3 id="example-relational-db">Example (Relational DB)<a href="#example-relational-db" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Let&rsquo;s assume we are using a relational database solution such as <a href="https://www.mysql.com/">MySQL</a> or
+<a href="https://www.postgresql.org/">PostgreSQL</a>. Since these solutions offer support for transactions we could
+create a separate <code>entity_tags</code> table to store our entity tags. We then would
+issue <code>INSERT</code> or <code>UPDATE</code> SQL statements to this table within the same
+transaction as the resource state changes.</p>
+<p>New table; ✅. We next need to decide what
+data this table should store. The following are various data items we could
+add to the schema of this table:</p>
 <table>
 <thead>
 <tr>
-<th>Column Name</th>
-<th>Data Type</th>
+<th>Data Item</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>uri</code></td>
-<td><code>VARCHAR</code></td>
 <td>The URI of the resource.</td>
 </tr>
 <tr>
 <td><code>media_type</code></td>
-<td><code>VARCHAR</code></td>
-<td>The MIME media type of the representation.</td>
+<td>The <a href="https://en.wikipedia.org/wiki/MIME">MIME</a> media type of the representation.</td>
+</tr>
+<tr>
+<td><code>language</code>*</td>
+<td>The language of the representation.</td>
+</tr>
+<tr>
+<td><code>encodings</code>*</td>
+<td>The encodings of the representation.</td>
 </tr>
 <tr>
 <td><code>etag</code></td>
-<td><code>VARCHAR</code></td>
 <td>The entity tag.</td>
 </tr>
 <tr>
 <td><code>version</code></td>
-<td><code>INTEGER</code></td>
-<td>The version column utilize to support optimistic locking.</td>
+<td>The version column utilized to support optimistic concurrency.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="document-storage-nosql">Document storage (NoSQL)<a href="#document-storage-nosql" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<h2 id="scaling-reads">Scaling reads<a href="#scaling-reads" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<p>The post popular application of entity tags is to help scale API read operations,
+<blockquote>
+<p><code>*</code> = Data item may not be required; depends on the dimensions available for content negotiation.</p>
+</blockquote>
+<p>Let&rsquo;s get to it! We could achieve the above with something similar to the following SQL:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="1" type="checkbox"  />
+    <label for="1">
+      <span class="collapsable-code__language">sql</span>
+      
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+CREATE TABLE entity_tags
+  (
+     uri        VARCHAR NOT NULL,
+     media_type VARCHAR NOT NULL,
+     language   VARCHAR NOT NULL,
+     encodings  VARCHAR NOT NULL,
+     etag       VARCHAR NOT NULL,
+     version    INTEGER NOT NULL,
+
+     PRIMARY KEY (uri, media_type, language, encodings)
+  ); 
+</code></pre>
+  </div>
+
+
+<p>Within this table in place, some examples of records in this table could look
+like this:</p>
+<table>
+<thead>
+<tr>
+<th><code>uri</code></th>
+<th><code>media_type</code></th>
+<th><code>language</code></th>
+<th><code>encodings</code></th>
+<th><code>etag</code></th>
+<th><code>version</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/examples/1</code></td>
+<td><code>application/vnd.example+json</code></td>
+<td><code>en-US</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;8afc1e9bec810034dafd45c6854f1dd9&quot;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>/examples/1</code></td>
+<td><code>application/vnd.example+yaml</code></td>
+<td><code>en-US</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;87a1ca13ae46d84174ee2b607f03e36d&quot;</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>/examples/1</code></td>
+<td><code>application/vnd.example+json</code></td>
+<td><code>fr-CA</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;a4bef372fd7a743fb81ead93498ce414&quot;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>/examples/1</code></td>
+<td><code>application/vnd.example+yaml</code></td>
+<td><code>fr-CA</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;937de310a05a530fa4c802d802020fdb&quot;</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>/examples/1</code></td>
+<td><code>application/vnd.example+yaml</code></td>
+<td><code>en-US</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;26e28f0c78c13daad592c8977afca45e&quot;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>/examples/2</code></td>
+<td><code>application/vnd.example+json</code></td>
+<td><code>en-US</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;5d83f25b2cb0df85c52620eda1031e2c&quot;</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>/examples/2</code></td>
+<td><code>application/vnd.example+yaml</code></td>
+<td><code>en-US</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;57d4cc6b026949a45688c6352d88d023&quot;</code></td>
+<td>7</td>
+</tr>
+<tr>
+<td><code>/examples/2</code></td>
+<td><code>application/vnd.example+json</code></td>
+<td><code>fr-CA</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;337943905ca0bfe204b69eab51fff1a8&quot;</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>/examples/2</code></td>
+<td><code>application/vnd.example+yaml</code></td>
+<td><code>fr-CA</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;48dd5c5c560dabcf685899e0b2a5d866&quot;</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>/examples/2</code></td>
+<td><code>application/vnd.example+yaml</code></td>
+<td><code>en-US</code></td>
+<td><code>gzip</code></td>
+<td><code>&quot;6833d9d1ce9ec568f370572f6e029425&quot;</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>&hellip;</td>
+<td>&hellip;</td>
+<td>&hellip;</td>
+<td>&hellip;</td>
+<td>&hellip;</td>
+<td>&hellip;</td>
+</tr>
+</tbody>
+</table>
+<h2 id="scaling-reads">Scaling Reads<a href="#scaling-reads" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>The most popular application of entity tags is to help scale API read operations,
 such as <code>GET</code> requests. This is achieved using what is referred to as
-&ldquo;conditional <code>GET</code> requests.</p>
+&ldquo;conditional&rdquo; <code>GET</code> requests.</p>
 <h3 id="conditional-get">Conditional <code>GET</code><a href="#conditional-get" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
 <p>Any request is classified as conditional if it provides any of these
 conditional headers:</p>
@@ -359,28 +523,27 @@ only if it has changed.</p>
   <img src="/img/conditional-get.gif"  alt="Conditional GET Example"  class="center"  style="border-radius: 8px;"  />
 
 
-<h2 id="resource-integrity">Resource integrity<a href="#resource-integrity" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h2 id="resource-integrity">Resource Integrity<a href="#resource-integrity" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
 <p>The lesser known use case for conditional requests is to maintain resource
 integrity. Using entity tags and conditional headers
-such as <code>If-Match</code>, the origin server can utilize optimistic concurrency
+such as <code>If-Match</code>, the origin server can utilize <a href="https://en.wikipedia.org/wiki/Optimistic_concurrency_control">optimistic concurrency</a>
 control practices to validate whether the clients write request is being based
 off of a stale representation, and properly facilitate a feedback cycle to
 inform the client of this change of state.</p>
-<p>Even though this has value even in non-concurrent request patterns, it really
+<p>Even though this has value in non-concurrent request patterns, it really
 shines when it comes to modern systems where more than one client could be
-modifying resource state at the same time. If implemented correctly, only
-a single clients write will succeed and the remaining will be rejected with
-<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412"><code>412 Precondition Failed</code></a>.</p>
+modifying resource state at the same time. If implemented correctly, writes
+to resource state will avoid the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests#avoiding_the_lost_update_problem_with_optimistic_locking">Lost Update Problem</a>, and clients will be
+empowered to understand when relavent resource state changes outside the
+scope of their interaction.</p>
 <h3 id="conditional-put--patch">Conditional <code>PUT</code> / <code>PATCH</code><a href="#conditional-put--patch" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<p>Modifications to resource state are achieved using the
-<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT"><code>PUT</code></a>
-and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH"><code>PATCH</code></a>
+<p>Modifications to resource state are achieved using the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT"><code>PUT</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH"><code>PATCH</code></a>
 HTTP methods. When issuing conditional <code>PUT</code> or <code>PATCH</code> requests, the client
 provides a value for the <code>If-Match</code> or <code>If-Unmodified-Since</code> headers. Again,
 we will set <code>If-Unmodified-Since</code> to the side.</p>
 <p>The premise here is similar to conditional <code>GET</code> requests, in the way that
 clients indicate one or many entity tags they have recorded for the resource
-they wish to interacted with. The format of the <code>If-Match</code> header should
+they wish to interact with. The format of the <code>If-Match</code> header should
 look familiar:</p>
 <pre tabindex="0"><code>If-Match: &#34;&lt;entity tag value&gt;&#34;
 If-Match: &#34;&lt;entity tag value&gt;&#34;, &#34;&lt;entity tag value&gt;&#34;, …
@@ -392,7 +555,7 @@ that the modifications are performed, as this process validates the client
 is issuing the request based on the context of the latest (most current)
 state of that resource.</p>
 <blockquote>
-<p>NOTE: The <code>*</code> value essentially forces the request to succeed. More concretely, it
+<p><strong>NOTE:</strong> The <code>*</code> value essentially forces the request to succeed. More concretely, it
 results in the precondition to evalute to <code>true</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Match#directives">as long as the resource
 being targeted exists</a>. Utilize this value with caution; it basically disables
 the safety that this conditional request is intending to provide.</p>
@@ -402,14 +565,13 @@ the safety that this conditional request is intending to provide.</p>
 
 
 <h2 id="advanced">Advanced<a href="#advanced" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
-<h3 id="scaling-collection-based-searches">Scaling collection-based searches<a href="#scaling-collection-based-searches" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<h3 id="synchronizing-with-code-changes">Synchronizing with code changes<a href="#synchronizing-with-code-changes" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
-<p>As stated previously, there are signficant benefits to storing entity tags
+<h3 id="synchronizing-with-code-changes">Synchronizing with Code Changes<a href="#synchronizing-with-code-changes" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>As stated previously, there are significant benefits to storing entity tags
 instead of computing them on the fly prior to comparisons. One drawback of this
-approach is that stored entity tags become stale as the structure (and thus the
-code responsible for generating that structure) of represntations evolves.
+approach, however, is that stored entity tags become stale as the structure (and thus the
+code responsible for generating that structure) of representations evolves.
 Many changes happen organically over time that are backwards compatible to
-API consumers.</p>
+API consumers, thus can be made inline to existing contracts.</p>
 <p>There is room for creativity on how to handle this. One approach could be to
 store a hash of the file contents responsible for generating the representation
 alongside each entity tag stored. This would enable programmatic detection of
@@ -419,7 +581,77 @@ allow, a background job could be spawned upon code deployment or perhaps on a
 cadence that identify these stale entity tags and update them accordingly.</p>
 <p>Depending on the number of resources your system manages, a simpler solution
 of regenerating all entity tags could be viable. The main benefit of this
-approach is simplicity.</p>
+approach is simplicity; there would be no need to attempt to track &amp; handle file
+content changes.</p>
+<h3 id="server-side-caching">Server-side Caching<a href="#server-side-caching" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>The use case of leveraging entity tags to ensure client-side caches remain fresh
+through conditional <code>GET</code> requests is well known. However, the opportunity for
+server-side caching arises once the approach of storing entity tags is implemented.</p>
+<p>When entity tags are stored, the resource doesn&rsquo;t need to be loaded prior
+to determining the latest relevant entity tag. Loading the resource state
+would defeat the point of the cache; the cache would be intended to return a
+response without loading the resource with the goals of providing speedier
+responses and reducing server system load.</p>
+<p>Assuming we have built the supporting infrastructure to store entity tags,
+including the appropriate mechanics that ensures entity tags are regenerated
+atomically when resource state changes, a <a href="https://www.keycdn.com/support/what-is-cache-busting">cache busting</a>
+strategy can be used. The cache key would itself comprise of the entity tag,
+and since changes to resource state would result in a new entity tag
+altogther, new representations are stored as completely different cache
+entries. This strategy eliminates the possibility where a stale cached
+representation is used incidentally.</p>
+
+  <img src="/img/server-side-caching.png"  alt="Server-side Caching Example"  class="center"  style="border-radius: 8px;"  />
+
+
+<p>Given new entries will be made in the cache each time the entity tag
+changes, I suggest using a reasonably short expiration. Selecting a timeframe
+for your expiration will be dependent on your use cases, the balance being
+between growing cache size vs. cache hit count.</p>
+<blockquote>
+<p><strong>NOTE:</strong> To determine a cache entry expiration, think about how much time
+typically elapses between creation of the resource and the first time it is
+retrieved. Additionally, if your API allows modification of your resources,
+it&rsquo;s similarly valuable to consider how much time typically elapses between
+the modification and a subsequent retrieval. Lastly, if you resources are
+typically shared amongst many clients, consider how much time elapses between
+the retrievals each client issues.</p>
+</blockquote>
+<h3 id="scaling-collection-based-searches">Scaling Collection-based Searches<a href="#scaling-collection-based-searches" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>We went in depth on how entity tags could be used to maintain client-side caches
+of resources, as well as maintain resource integrity during modifications -
+but what about collection resources? If resource state changes for a resource that
+also influences the state of a collection resource, how do we make sure the
+entity tag for that collection gets updated to?</p>
+<p>Some collection resources can be conceptually huge. Often APIs offer filtering
+or pagination semantics that make consuming these collections easier and more
+useful for clients. Given this, we should rule out the approach of attempting
+to generate a new entity tag based on the entire collection. Instead, the
+entity tag should be based on the representation actually sent to the client;
+pagination and filtering included.</p>
+<p>From here, we should identify common searches or paginations requests that the
+clients of the API issue. Perhaps these clients are commonly searching the
+collection resource based on an identifier or other high cardinality
+characteristic, such as a timestamp. Maybe it&rsquo;s common for the client to only
+be interested in the first one or two pages of the results. These workflows
+will identify which we should actively attempt to cache.</p>
+<p>Once we&rsquo;ve identified these common requests, we can actually pregenerate these
+representations and their respective entity tags when any dependent resource
+state is modified. In other words, the existing logic in place to update
+the entity tags for a single resource can be further expanded to also not only
+generate the entity tag based on the representation for that single resource,
+but also a finite list of representations for dependent collection resources.</p>
+<p>With these new entity tags stored, it&rsquo;s not possible for us to store these
+precomputed search or pagination results in our cache.</p>
+<h2 id="conclusion">Conclusion<a href="#conclusion" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Who knew there was so much to know about entity tags, right? It&rsquo;s pretty amazing
+that so many capabilities can be unlocked if they are fully adopted. My hope is that
+you walk away from this feeling empowered to leverage entity tags on APIs you
+are building!</p>
+<p>Do you currently, or have you previously used entity tags in projects you&rsquo;ve
+been a part of? Have you ever used them in a way that I didn&rsquo;t capture?
+Was there anything in this article I could go deeper on, or that
+you think I could improve? Let me know in the comments!</p>
 
       </div></div>
 
