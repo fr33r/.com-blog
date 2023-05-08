@@ -6,7 +6,306 @@
     <description>Recent content on /* Commentary */</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 08 Apr 2023 10:35:13 -0700</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 May 2023 22:47:06 -0700</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Explaining the `EXPLAIN`</title>
+      <link>/posts/explain-statement/</link>
+      <pubDate>Sat, 06 May 2023 22:47:06 -0700</pubDate>
+      
+      <guid>/posts/explain-statement/</guid>
+      <description>When using an relational database management system (RDBMS), also called a &amp;ldquo;relational database&amp;rdquo; or &amp;ldquo;SQL database&amp;rdquo;, it&amp;rsquo;s only a matter of time before you want to gain more insight into the performance of a subset of your queries. These databases are equipped with the ability for engineers to examine how the queries are planned to be executed, referred to as a &amp;ldquo;query execution plan&amp;rdquo;, and in some cases, able to compare that plan to what actually occurred when the query is run.</description>
+      <content>&lt;p&gt;When using an relational database management system (RDBMS), also called a
+&amp;ldquo;relational database&amp;rdquo; or &amp;ldquo;SQL database&amp;rdquo;, it&amp;rsquo;s only a matter of time before
+you want to gain more insight into the performance of a subset of your queries.
+These databases are equipped with the ability for engineers to examine how the
+queries are planned to be executed, referred to as a &amp;ldquo;query execution plan&amp;rdquo;,
+and in some cases, able to compare that plan to what actually occurred when
+the query is run.&lt;/p&gt;
+&lt;p&gt;This process of asking the database to provide these insights is technically
+referred to as &amp;ldquo;explaining&amp;rdquo; or &amp;ldquo;describing&amp;rdquo; the query, and commonly utilize
+the keyword &lt;code&gt;EXPLAIN&lt;/code&gt; to invoke that process.&lt;/p&gt;
+&lt;h2 id=&#34;explain-statement&#34;&gt;&lt;code&gt;EXPLAIN&lt;/code&gt; Statement&lt;/h2&gt;
+&lt;hr&gt;
+&lt;p&gt;The &lt;code&gt;EXPLAIN&lt;/code&gt; statement supported by various relational databases exposes
+how the the database plans on executing the query provided to it. It can be
+used to gain these insights on most query statement types, such as &lt;code&gt;SELECT&lt;/code&gt;,
+&lt;code&gt;INSERT&lt;/code&gt;, &lt;code&gt;DELETE&lt;/code&gt;, &lt;code&gt;UPDATE&lt;/code&gt;, and potentially more, but in practice is mainly
+used with &lt;code&gt;SELECT&lt;/code&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;ℹ️  The component within a relational database responsible for
+determinining the query execution plan is often called the &amp;ldquo;optimizer&amp;rdquo; or
+&amp;ldquo;planner&amp;rdquo;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;When providing the &lt;code&gt;EXPLAIN&lt;/code&gt; statement with a query, that query is not actually
+executed. Instead, the query execution plan that would have been used is
+retrieved and provided in the output. This is helpful to know, because queries
+that have been known to be problematic and utilize a large portion of system
+resources can be safely specified to &lt;code&gt;EXPLAIN&lt;/code&gt; without the side-effects
+caused by actually executing that query.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;⚠️ Most relational databases require that you have permissions to run
+the query provided to &lt;code&gt;EXPLAIN&lt;/code&gt;, and a subset have an explicit permission
+associated to the &lt;code&gt;EXPLAIN&lt;/code&gt; command. Make sure you have the proper permissions.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;example-syntax&#34;&gt;Example Syntax&lt;/h3&gt;
+&lt;p&gt;Although various relational databases have differing alternative syntaxes
+and options that can be provided to further refine how &lt;code&gt;EXPLAIN&lt;/code&gt; behaves,
+most support a common (canonical) syntax. The examples laid out here
+demonstrate both the common and alternative syntaxes for several popular
+relational databases.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;FUN FACT&lt;/strong&gt;: The cited relational databases together represent &lt;code&gt;97.96%&lt;/code&gt;
+market share; PostgreSQL has &lt;a href=&#34;https://6sense.com/tech/relational-databases/postgresql-market-share&#34;&gt;&lt;code&gt;17.32%&lt;/code&gt;&lt;/a&gt;, MySQL has
+&lt;a href=&#34;https://6sense.com/tech/relational-databases/mysql-market-share&#34;&gt;&lt;code&gt;44.68%&lt;/code&gt;&lt;/a&gt;, SQLite has &lt;a href=&#34;https://6sense.com/tech/relational-databases/sqlite-market-share&#34;&gt;&lt;code&gt;3.32%&lt;/code&gt;&lt;/a&gt;,
+and SQL Server has &lt;a href=&#34;https://6sense.com/tech/database/microsoft-sql-server-market-share&#34;&gt;&lt;code&gt;32.64%&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;postgresql&#34;&gt;PostgreSQL&lt;/h4&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;1&#34; type=&#34;checkbox&#34; checked /&gt;
+    &lt;label for=&#34;1&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sql&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;PostgreSQL&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sql&#34; &gt;&lt;code&gt;
+-- canonical syntax.
+EXPLAIN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: PostgreSQL supports a vast array of options that can provided to
+&lt;code&gt;EXPLAIN&lt;/code&gt;, such as &lt;code&gt;VERBOSE&lt;/code&gt;, &lt;code&gt;COSTS&lt;/code&gt;, &lt;code&gt;BUFFERS&lt;/code&gt;, &lt;code&gt;WAL&lt;/code&gt;, etc. For more
+information on these options, check out &lt;a href=&#34;https://www.postgresql.org/docs/current/sql-explain.html&#34;&gt;this&lt;/a&gt;
+documentation.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;mysql&#34;&gt;MySQL&lt;/h4&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;2&#34; type=&#34;checkbox&#34; checked /&gt;
+    &lt;label for=&#34;2&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sql&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;MySQL&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sql&#34; &gt;&lt;code&gt;
+-- canonical syntax.
+EXPLAIN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+
+-- alternative syntax.
+DESCRIBE SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+
+-- alternative syntax.
+DESC SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;h4 id=&#34;sqlite&#34;&gt;SQLite&lt;/h4&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;3&#34; type=&#34;checkbox&#34; checked /&gt;
+    &lt;label for=&#34;3&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sql&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;SQLite&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sql&#34; &gt;&lt;code&gt;
+-- canonical syntax.
+EXPLAIN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+
+-- alternative syntax.
+EXPLAIN QUERY PLAN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;h4 id=&#34;sql-server&#34;&gt;SQL Server&lt;/h4&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;4&#34; type=&#34;checkbox&#34; checked /&gt;
+    &lt;label for=&#34;4&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sql&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;SQL Server&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sql&#34; &gt;&lt;code&gt;
+-- canonical syntax.
+EXPLAIN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: SQL Server supports a &lt;code&gt;WITH_RECOMMENDATIONS&lt;/code&gt; option, which results in
+the output containing recommendations to optimize the provided query. For more
+information on this option, check out &lt;a href=&#34;https://learn.microsoft.com/en-us/sql/t-sql/queries/explain-transact-sql?view=azure-sqldw-latest#with_recommendations&#34;&gt;this&lt;/a&gt;
+documentation.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
+&lt;p&gt;Now that we know how to issue the &lt;code&gt;EXPLAIN&lt;/code&gt; statement, it&amp;rsquo;s time to dive into
+the output. In contrast to the common syntax across various relational databases,
+the output format, along with the level of configurability of that format,
+deviates significantly.&lt;/p&gt;
+&lt;h4 id=&#34;postgresql-1&#34;&gt;PostgreSQL&lt;/h4&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;1&#34; type=&#34;checkbox&#34; checked /&gt;
+    &lt;label for=&#34;1&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sql&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;PostgreSQL&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sql&#34; &gt;&lt;code&gt;
+EXPLAIN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;h4 id=&#34;mysql-1&#34;&gt;MySQL&lt;/h4&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;2&#34; type=&#34;checkbox&#34; checked /&gt;
+    &lt;label for=&#34;2&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sql&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;MySQL&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sql&#34; &gt;&lt;code&gt;
+EXPLAIN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;h4 id=&#34;sqlite-1&#34;&gt;SQLite&lt;/h4&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;3&#34; type=&#34;checkbox&#34; checked /&gt;
+    &lt;label for=&#34;3&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sql&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;SQLite&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sql&#34; &gt;&lt;code&gt;
+EXPLAIN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;h4 id=&#34;sql-server-1&#34;&gt;SQL Server&lt;/h4&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;4&#34; type=&#34;checkbox&#34; checked /&gt;
+    &lt;label for=&#34;4&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;sql&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;SQL Server&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-sql&#34; &gt;&lt;code&gt;
+EXPLAIN SELECT name FROM players WHERE players.games_played &amp;gt; 10;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;h2 id=&#34;when-should-i-use-explain&#34;&gt;When should I use &lt;code&gt;EXPLAIN&lt;/code&gt;?&lt;/h2&gt;
+&lt;h2 id=&#34;comparing-plans-with-actual&#34;&gt;Comparing plans with actual&lt;/h2&gt;
+&lt;h2 id=&#34;any-tools-to-help-me-read-the-output&#34;&gt;Any tools to help me read the output?&lt;/h2&gt;
+&lt;p&gt;OUTLINE&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;what circumstances would lead to you wanting to use &lt;code&gt;EXPLAIN&lt;/code&gt;?&lt;/li&gt;
+&lt;li&gt;what is &lt;code&gt;EXPLAIN&lt;/code&gt;?
+&lt;ul&gt;
+&lt;li&gt;talk about how it is an estimate.&lt;/li&gt;
+&lt;li&gt;what is a query execution plan?&lt;/li&gt;
+&lt;li&gt;what is the optimizer?&lt;/li&gt;
+&lt;li&gt;can be used with other things besides &lt;code&gt;SELECT&lt;/code&gt;, but let&amp;rsquo;s focus on that.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;what does the output look like?
+&lt;ul&gt;
+&lt;li&gt;MySQL?&lt;/li&gt;
+&lt;li&gt;SQLLite?&lt;/li&gt;
+&lt;li&gt;PostgreSQL?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;what about &lt;code&gt;EXPLAIN ANALYZE&lt;/code&gt;?
+&lt;ul&gt;
+&lt;li&gt;talk about how it actually runs the query and compares.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;optimizer hints?&lt;/li&gt;
+&lt;li&gt;what does the output mean?&lt;/li&gt;
+&lt;li&gt;example of how &lt;code&gt;EXPLAIN&lt;/code&gt; output can help improve query performance.
+&lt;ul&gt;
+&lt;li&gt;create tables related to hockey:
+&lt;ul&gt;
+&lt;li&gt;players
+&lt;ul&gt;
+&lt;li&gt;name&lt;/li&gt;
+&lt;li&gt;position&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;teams
+&lt;ul&gt;
+&lt;li&gt;name&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;players_teams
+&lt;ul&gt;
+&lt;li&gt;player_id&lt;/li&gt;
+&lt;li&gt;team_id&lt;/li&gt;
+&lt;li&gt;season_id&lt;/li&gt;
+&lt;li&gt;games_played&lt;/li&gt;
+&lt;li&gt;icetime&lt;/li&gt;
+&lt;li&gt;shifts&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;season
+&lt;ul&gt;
+&lt;li&gt;year&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;RESOURCES&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.postgresql.org/docs/current/sql-explain.html&#34;&gt;https://www.postgresql.org/docs/current/sql-explain.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/using-explain.html&#34;&gt;https://dev.mysql.com/doc/refman/8.0/en/using-explain.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/explain.html&#34;&gt;https://dev.mysql.com/doc/refman/8.0/en/explain.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sqlite.org/eqp.html&#34;&gt;https://www.sqlite.org/eqp.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sqlite.org/optoverview.html&#34;&gt;https://www.sqlite.org/optoverview.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.postgresql.org/docs/current/planner-optimizer.html&#34;&gt;https://www.postgresql.org/docs/current/planner-optimizer.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/8.0/en/controlling-query-plan-evaluation.html&#34;&gt;https://dev.mysql.com/doc/refman/8.0/en/controlling-query-plan-evaluation.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://learn.microsoft.com/en-us/sql/t-sql/queries/explain-transact-sql?view=azure-sqldw-latest&#34;&gt;https://learn.microsoft.com/en-us/sql/t-sql/queries/explain-transact-sql?view=azure-sqldw-latest&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;Perhaps you noticed a slow query when developing a new feature, or maybe
+there is application timing out in your production environment. May&lt;/p&gt;
+</content>
+    </item>
+    
     <item>
       <title>Etags: The Secret Sauce to Scalable &amp; Concurrent APIs</title>
       <link>/posts/etags/</link>

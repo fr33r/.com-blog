@@ -3,7 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/</loc>
-    <lastmod>2023-04-08T10:35:13-07:00</lastmod>
+    <lastmod>2023-05-06T22:47:06-07:00</lastmod>
+  </url><url>
+    <loc>/tags/database/</loc>
+    <lastmod>2023-05-06T22:47:06-07:00</lastmod>
+  </url><url>
+    <loc>/posts/explain-statement/</loc>
+    <lastmod>2023-05-06T22:47:06-07:00</lastmod>
+  </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2023-05-06T22:47:06-07:00</lastmod>
+  </url><url>
+    <loc>/tags/sql/</loc>
+    <lastmod>2023-05-06T22:47:06-07:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2023-05-06T22:47:06-07:00</lastmod>
   </url><url>
     <loc>/tags/api/</loc>
     <lastmod>2023-04-08T10:35:13-07:00</lastmod>
@@ -11,13 +26,7 @@
     <loc>/posts/etags/</loc>
     <lastmod>2023-04-08T10:35:13-07:00</lastmod>
   </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2023-04-08T10:35:13-07:00</lastmod>
-  </url><url>
     <loc>/tags/scaling/</loc>
-    <lastmod>2023-04-08T10:35:13-07:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
     <lastmod>2023-04-08T10:35:13-07:00</lastmod>
   </url><url>
     <loc>/tags/web/</loc>

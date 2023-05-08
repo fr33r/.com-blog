@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Explaining the `EXPLAIN` :: /* Commentary */</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="When using an relational database management system (RDBMS), also called a &amp;ldquo;relational database&amp;rdquo; or &amp;ldquo;SQL database&amp;rdquo;, it&amp;rsquo;s only a matter of time before you want to gain more insight into the performance of a subset of your queries. These databases are equipped with the ability for engineers to examine how the queries are planned to be executed, referred to as a &amp;ldquo;query execution plan&amp;rdquo;, and in some cases, able to compare that plan to what actually occurred when the query is run." />
+<meta name="keywords" content="explain, sql, database, performance, analyze" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/explain-statement/" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BMCHLBV6TC"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-BMCHLBV6TC', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+<link rel="stylesheet" href="/assets/style.css">
+
+
+
+
+
+
+<link rel="apple-touch-icon" href="/img/apple-touch-icon-192x192.png">
+
+  <link rel="shortcut icon" href="/img/favicon/orange.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Explaining the `EXPLAIN`">
+<meta property="og:description" content="When using an relational database management system (RDBMS), also called a &amp;ldquo;relational database&amp;rdquo; or &amp;ldquo;SQL database&amp;rdquo;, it&amp;rsquo;s only a matter of time before you want to gain more insight into the performance of a subset of your queries. These databases are equipped with the ability for engineers to examine how the queries are planned to be executed, referred to as a &amp;ldquo;query execution plan&amp;rdquo;, and in some cases, able to compare that plan to what actually occurred when the query is run." />
+<meta property="og:url" content="/posts/explain-statement/" />
+<meta property="og:site_name" content="/* Commentary */" />
+
+  <meta property="og:image" content="/">
+
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+  <meta property="article:published_time" content="2023-05-06 22:47:06 -0700 PDT" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="orange">
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    /* Commentary */
+  </div>
+</a>
+
+    </div>
+    
+      <div class="menu-trigger">menu</div>
+    
+  </div>
+  
+    <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about/">About</a></li>
+        
+      
+        
+          <li><a href="/powered-by/">Powered By</a></li>
+        
+      
+      
+    
+
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about/">About</a></li>
+      
+    
+      
+        <li><a href="/powered-by/">Powered By</a></li>
+      
+    
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="/posts/explain-statement/">Explaining the <code>EXPLAIN</code></a></h1>
+  <div class="post-meta">
+    
+      <span class="post-date">
+        2023-05-06
+        
+          [Updated: 2023-05-06]
+        
+      </span>
+    
+    
+      <span class="post-author">:: fr33r</span>
+    
+    
+      <span class="post-reading-time">:: 4 min read (762 words)</span>
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="/tags/sql/">sql</a>&nbsp;
+    
+    #<a href="/tags/database/">database</a>&nbsp;
+    
+  </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>When using an relational database management system (RDBMS), also called a
+&ldquo;relational database&rdquo; or &ldquo;SQL database&rdquo;, it&rsquo;s only a matter of time before
+you want to gain more insight into the performance of a subset of your queries.
+These databases are equipped with the ability for engineers to examine how the
+queries are planned to be executed, referred to as a &ldquo;query execution plan&rdquo;,
+and in some cases, able to compare that plan to what actually occurred when
+the query is run.</p>
+<p>This process of asking the database to provide these insights is technically
+referred to as &ldquo;explaining&rdquo; or &ldquo;describing&rdquo; the query, and commonly utilize
+the keyword <code>EXPLAIN</code> to invoke that process.</p>
+<h2 id="explain-statement"><code>EXPLAIN</code> Statement<a href="#explain-statement" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<hr>
+<p>The <code>EXPLAIN</code> statement supported by various relational databases exposes
+how the the database plans on executing the query provided to it. It can be
+used to gain these insights on most query statement types, such as <code>SELECT</code>,
+<code>INSERT</code>, <code>DELETE</code>, <code>UPDATE</code>, and potentially more, but in practice is mainly
+used with <code>SELECT</code>.</p>
+<blockquote>
+<p>ℹ️  The component within a relational database responsible for
+determinining the query execution plan is often called the &ldquo;optimizer&rdquo; or
+&ldquo;planner&rdquo;.</p>
+</blockquote>
+<p>When providing the <code>EXPLAIN</code> statement with a query, that query is not actually
+executed. Instead, the query execution plan that would have been used is
+retrieved and provided in the output. This is helpful to know, because queries
+that have been known to be problematic and utilize a large portion of system
+resources can be safely specified to <code>EXPLAIN</code> without the side-effects
+caused by actually executing that query.</p>
+<blockquote>
+<p>⚠️ Most relational databases require that you have permissions to run
+the query provided to <code>EXPLAIN</code>, and a subset have an explicit permission
+associated to the <code>EXPLAIN</code> command. Make sure you have the proper permissions.</p>
+</blockquote>
+<h3 id="example-syntax">Example Syntax<a href="#example-syntax" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Although various relational databases have differing alternative syntaxes
+and options that can be provided to further refine how <code>EXPLAIN</code> behaves,
+most support a common (canonical) syntax. The examples laid out here
+demonstrate both the common and alternative syntaxes for several popular
+relational databases.</p>
+<blockquote>
+<p><strong>FUN FACT</strong>: The cited relational databases together represent <code>97.96%</code>
+market share; PostgreSQL has <a href="https://6sense.com/tech/relational-databases/postgresql-market-share"><code>17.32%</code></a>, MySQL has
+<a href="https://6sense.com/tech/relational-databases/mysql-market-share"><code>44.68%</code></a>, SQLite has <a href="https://6sense.com/tech/relational-databases/sqlite-market-share"><code>3.32%</code></a>,
+and SQL Server has <a href="https://6sense.com/tech/database/microsoft-sql-server-market-share"><code>32.64%</code></a>.</p>
+</blockquote>
+<h4 id="postgresql">PostgreSQL<a href="#postgresql" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+
+
+
+  <div class="collapsable-code">
+    <input id="1" type="checkbox" checked />
+    <label for="1">
+      <span class="collapsable-code__language">sql</span>
+      <span class="collapsable-code__title">PostgreSQL</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+-- canonical syntax.
+EXPLAIN SELECT name FROM players WHERE players.games_played &gt; 10;
+</code></pre>
+  </div>
+
+
+<blockquote>
+<p><strong>NOTE</strong>: PostgreSQL supports a vast array of options that can provided to
+<code>EXPLAIN</code>, such as <code>VERBOSE</code>, <code>COSTS</code>, <code>BUFFERS</code>, <code>WAL</code>, etc. For more
+information on these options, check out <a href="https://www.postgresql.org/docs/current/sql-explain.html">this</a>
+documentation.</p>
+</blockquote>
+<h4 id="mysql">MySQL<a href="#mysql" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+
+
+
+  <div class="collapsable-code">
+    <input id="2" type="checkbox" checked />
+    <label for="2">
+      <span class="collapsable-code__language">sql</span>
+      <span class="collapsable-code__title">MySQL</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+-- canonical syntax.
+EXPLAIN SELECT name FROM players WHERE players.games_played &gt; 10;
+
+-- alternative syntax.
+DESCRIBE SELECT name FROM players WHERE players.games_played &gt; 10;
+
+-- alternative syntax.
+DESC SELECT name FROM players WHERE players.games_played &gt; 10;
+</code></pre>
+  </div>
+
+
+<h4 id="sqlite">SQLite<a href="#sqlite" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+
+
+
+  <div class="collapsable-code">
+    <input id="3" type="checkbox" checked />
+    <label for="3">
+      <span class="collapsable-code__language">sql</span>
+      <span class="collapsable-code__title">SQLite</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+-- canonical syntax.
+EXPLAIN SELECT name FROM players WHERE players.games_played &gt; 10;
+
+-- alternative syntax.
+EXPLAIN QUERY PLAN SELECT name FROM players WHERE players.games_played &gt; 10;
+
+</code></pre>
+  </div>
+
+
+<h4 id="sql-server">SQL Server<a href="#sql-server" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+
+
+
+  <div class="collapsable-code">
+    <input id="4" type="checkbox" checked />
+    <label for="4">
+      <span class="collapsable-code__language">sql</span>
+      <span class="collapsable-code__title">SQL Server</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+-- canonical syntax.
+EXPLAIN SELECT name FROM players WHERE players.games_played &gt; 10;
+</code></pre>
+  </div>
+
+
+<blockquote>
+<p><strong>NOTE</strong>: SQL Server supports a <code>WITH_RECOMMENDATIONS</code> option, which results in
+the output containing recommendations to optimize the provided query. For more
+information on this option, check out <a href="https://learn.microsoft.com/en-us/sql/t-sql/queries/explain-transact-sql?view=azure-sqldw-latest#with_recommendations">this</a>
+documentation.</p>
+</blockquote>
+<h3 id="output">Output<a href="#output" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Now that we know how to issue the <code>EXPLAIN</code> statement, it&rsquo;s time to dive into
+the output. In contrast to the common syntax across various relational databases,
+the output format, along with the level of configurability of that format,
+deviates significantly.</p>
+<h4 id="postgresql-1">PostgreSQL<a href="#postgresql-1" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+
+
+
+  <div class="collapsable-code">
+    <input id="1" type="checkbox" checked />
+    <label for="1">
+      <span class="collapsable-code__language">sql</span>
+      <span class="collapsable-code__title">PostgreSQL</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+EXPLAIN SELECT name FROM players WHERE players.games_played &gt; 10;
+</code></pre>
+  </div>
+
+
+<h4 id="mysql-1">MySQL<a href="#mysql-1" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+
+
+
+  <div class="collapsable-code">
+    <input id="2" type="checkbox" checked />
+    <label for="2">
+      <span class="collapsable-code__language">sql</span>
+      <span class="collapsable-code__title">MySQL</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+EXPLAIN SELECT name FROM players WHERE players.games_played &gt; 10;
+</code></pre>
+  </div>
+
+
+<h4 id="sqlite-1">SQLite<a href="#sqlite-1" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+
+
+
+  <div class="collapsable-code">
+    <input id="3" type="checkbox" checked />
+    <label for="3">
+      <span class="collapsable-code__language">sql</span>
+      <span class="collapsable-code__title">SQLite</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+EXPLAIN SELECT name FROM players WHERE players.games_played &gt; 10;
+</code></pre>
+  </div>
+
+
+<h4 id="sql-server-1">SQL Server<a href="#sql-server-1" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+
+
+
+  <div class="collapsable-code">
+    <input id="4" type="checkbox" checked />
+    <label for="4">
+      <span class="collapsable-code__language">sql</span>
+      <span class="collapsable-code__title">SQL Server</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-sql" ><code>
+EXPLAIN SELECT name FROM players WHERE players.games_played &gt; 10;
+</code></pre>
+  </div>
+
+
+<h2 id="when-should-i-use-explain">When should I use <code>EXPLAIN</code>?<a href="#when-should-i-use-explain" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h2 id="comparing-plans-with-actual">Comparing plans with actual<a href="#comparing-plans-with-actual" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h2 id="any-tools-to-help-me-read-the-output">Any tools to help me read the output?<a href="#any-tools-to-help-me-read-the-output" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>OUTLINE</p>
+<ul>
+<li>what circumstances would lead to you wanting to use <code>EXPLAIN</code>?</li>
+<li>what is <code>EXPLAIN</code>?
+<ul>
+<li>talk about how it is an estimate.</li>
+<li>what is a query execution plan?</li>
+<li>what is the optimizer?</li>
+<li>can be used with other things besides <code>SELECT</code>, but let&rsquo;s focus on that.</li>
+</ul>
+</li>
+<li>what does the output look like?
+<ul>
+<li>MySQL?</li>
+<li>SQLLite?</li>
+<li>PostgreSQL?</li>
+</ul>
+</li>
+<li>what about <code>EXPLAIN ANALYZE</code>?
+<ul>
+<li>talk about how it actually runs the query and compares.</li>
+</ul>
+</li>
+<li>optimizer hints?</li>
+<li>what does the output mean?</li>
+<li>example of how <code>EXPLAIN</code> output can help improve query performance.
+<ul>
+<li>create tables related to hockey:
+<ul>
+<li>players
+<ul>
+<li>name</li>
+<li>position</li>
+</ul>
+</li>
+<li>teams
+<ul>
+<li>name</li>
+</ul>
+</li>
+<li>players_teams
+<ul>
+<li>player_id</li>
+<li>team_id</li>
+<li>season_id</li>
+<li>games_played</li>
+<li>icetime</li>
+<li>shifts</li>
+</ul>
+</li>
+<li>season
+<ul>
+<li>year</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>RESOURCES</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/current/sql-explain.html">https://www.postgresql.org/docs/current/sql-explain.html</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/using-explain.html">https://dev.mysql.com/doc/refman/8.0/en/using-explain.html</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/explain.html">https://dev.mysql.com/doc/refman/8.0/en/explain.html</a></li>
+<li><a href="https://www.sqlite.org/eqp.html">https://www.sqlite.org/eqp.html</a></li>
+<li><a href="https://www.sqlite.org/optoverview.html">https://www.sqlite.org/optoverview.html</a></li>
+<li><a href="https://www.postgresql.org/docs/current/planner-optimizer.html">https://www.postgresql.org/docs/current/planner-optimizer.html</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/controlling-query-plan-evaluation.html">https://dev.mysql.com/doc/refman/8.0/en/controlling-query-plan-evaluation.html</a></li>
+<li><a href="https://learn.microsoft.com/en-us/sql/t-sql/queries/explain-transact-sql?view=azure-sqldw-latest">https://learn.microsoft.com/en-us/sql/t-sql/queries/explain-transact-sql?view=azure-sqldw-latest</a></li>
+</ul>
+<hr>
+<p>Perhaps you noticed a slow query when developing a new feature, or maybe
+there is application timing out in your production environment. May</p>
+
+      </div></div>
+
+  
+  
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/etags/">
+                <span class="button__text">Etags: The Secret Sauce to Scalable &amp; Concurrent APIs</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "blog-fr33r-com" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="http://gohugo.io">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
